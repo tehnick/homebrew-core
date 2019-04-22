@@ -27,6 +27,7 @@ class Qca < Formula
   depends_on "pkg-config" => :build
   depends_on "openssl@1.1" # qca-ossl plugin
   depends_on "qt"
+  depends_on "gnupg" # qca-gnupg
 
   def install
     args = std_cmake_args
@@ -38,7 +39,7 @@ class Qca < Formula
     # qca-softstore are always built.
     args << "-DWITH_botan_PLUGIN=NO"
     args << "-DWITH_gcrypt_PLUGIN=NO"
-    args << "-DWITH_gnupg_PLUGIN=NO"
+    args << "-DWITH_gnupg_PLUGIN=ON"
     args << "-DWITH_nss_PLUGIN=NO"
     args << "-DWITH_pkcs11_PLUGIN=NO"
 
