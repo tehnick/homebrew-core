@@ -12,8 +12,6 @@ class Cmake < Formula
     sha256 "4981614f03a1bbf77147f2b5cb2e6f42439e6c41c7e947b0072d8f0401fef749" => :high_sierra
   end
 
-  depends_on "sphinx-doc" => :build
-
   # The completions were removed because of problems with system bash
 
   # The `with-qt` GUI option was removed due to circular dependencies if
