@@ -1,12 +1,12 @@
 class Jruby < Formula
   desc "Ruby implementation in pure Java"
   homepage "https://www.jruby.org/"
-  url "https://search.maven.org/remotecontent?filepath=org/jruby/jruby-dist/9.2.8.0/jruby-dist-9.2.8.0-bin.tar.gz"
-  sha256 "b7c58688093f54acd89d732a8bf40e3ae0ac4c92488d6f5b424c33e4fb09c7bb"
+  url "https://search.maven.org/remotecontent?filepath=org/jruby/jruby-dist/9.2.12.0/jruby-dist-9.2.12.0-bin.tar.gz"
+  sha256 "307f6124c4301d723e2d0ff4c0105fa9eee8950c3f9971e14bbe8862030e6c04"
 
   bottle :unneeded
 
-  depends_on :java => "1.8+"
+  depends_on "openjdk"
 
   def install
     # Remove Windows files
@@ -23,7 +23,8 @@ class Jruby < Formula
     # Only keep the macOS native libraries
     rm_rf Dir["lib/jni/*"] - ["lib/jni/Darwin"]
     libexec.install Dir["*"]
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install Dir["#{libexec}/bin/*"]
+    bin.env_script_all_files libexec/"bin", JAVA_HOME: "${JAVA_HOME:-#{Formula["openjdk"].opt_prefix}}"
   end
 
   test do

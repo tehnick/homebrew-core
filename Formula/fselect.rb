@@ -1,20 +1,21 @@
 class Fselect < Formula
   desc "Find files with SQL-like queries"
   homepage "https://github.com/jhspetersson/fselect"
-  url "https://github.com/jhspetersson/fselect/archive/0.6.6.tar.gz"
-  sha256 "bf97b166b1f0c55e27c85943f3335ccec00219123b364863c0132f7d29d39e29"
+  url "https://github.com/jhspetersson/fselect/archive/0.6.10.tar.gz"
+  sha256 "1fa86cd22fdb4a38338c343f9a917e579a6f680c961e9dca8d1a2178ab4d926b"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "06dcd013ff905155292afb6c59403f360d4e5f87ec0e4ae9f14b9a8f0a8c722a" => :catalina
-    sha256 "2ae76542d41194210969879ef52d905dfda7f1c86e7e37c3406febcfd500c5f6" => :mojave
-    sha256 "b2ef2faf383f377140ee889256267f17be1da42d2c63c469341d7892f0f66ed9" => :high_sierra
+    sha256 "7efd5dc19e81217d688b06223c7803892cd95a906e842ab2000c0992ddf42ca1" => :catalina
+    sha256 "020cb9b7a9a051042deae41ed35583e44af1e00602646a665418e5127f6a3011" => :mojave
+    sha256 "2f25c750b2dbbf58ceddf122cbf681eb9368201bca13ed8f5664978f1eedd22b" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

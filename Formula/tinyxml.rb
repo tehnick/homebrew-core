@@ -24,12 +24,12 @@ class Tinyxml < Formula
   # The third patch adds a CMakeLists.txt file to build a shared library and provide an install target
   #   submitted upstream as https://sourceforge.net/p/tinyxml/patches/66/
   patch do
-    url "https://raw.githubusercontent.com/robotology/yarp/master/extern/tinyxml/patches/enforce-use-stl.patch"
+    url "https://raw.githubusercontent.com/robotology/yarp/59eedfbaa1069aa5f03a4a9980d984d59decd55c/extern/tinyxml/patches/enforce-use-stl.patch"
     sha256 "16a5b5e842eb0336be606131e5fb12a9165970f7bd943780ba09df2e1e8b29b1"
   end
 
   patch do
-    url "https://raw.githubusercontent.com/robotology/yarp/master/extern/tinyxml/patches/entity-encoding.patch"
+    url "https://raw.githubusercontent.com/robotology/yarp/59eedfbaa1069aa5f03a4a9980d984d59decd55c/extern/tinyxml/patches/entity-encoding.patch"
     sha256 "c5128e03933cd2e22eb85554d58f615f4dbc9177bd144cae2913c0bd7b140c2b"
   end
 
@@ -44,18 +44,19 @@ class Tinyxml < Formula
     (lib+"pkgconfig/tinyxml.pc").write pc_file
   end
 
-  def pc_file; <<~EOS
-    prefix=#{opt_prefix}
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${prefix}/include
+  def pc_file
+    <<~EOS
+      prefix=#{opt_prefix}
+      exec_prefix=${prefix}
+      libdir=${exec_prefix}/lib
+      includedir=${prefix}/include
 
-    Name: TinyXml
-    Description: Simple, small, C++ XML parser
-    Version: #{version}
-    Libs: -L${libdir} -ltinyxml
-    Cflags: -I${includedir}
-  EOS
+      Name: TinyXml
+      Description: Simple, small, C++ XML parser
+      Version: #{version}
+      Libs: -L${libdir} -ltinyxml
+      Cflags: -I${includedir}
+    EOS
   end
 
   test do

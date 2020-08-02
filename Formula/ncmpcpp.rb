@@ -3,18 +3,18 @@ class Ncmpcpp < Formula
   homepage "https://rybczak.net/ncmpcpp/"
   url "https://rybczak.net/ncmpcpp/stable/ncmpcpp-0.8.2.tar.bz2"
   sha256 "650ba3e8089624b7ad9e4cc19bc1ac6028edb7523cc111fa1686ea44c0921554"
-  revision 7
+  license "GPL-2.0"
+  revision 11
 
   bottle do
     cellar :any
-    sha256 "a77106eabbfef44dbf38663e8d98d6581459e6caee18496cf4843ce234576245" => :catalina
-    sha256 "2b7a5d50cef5070b97c9ff6ce8eeabb99881356adf20442b46d25f80b33a4dff" => :mojave
-    sha256 "578660663ea2c0376158bed05bb0ccdd4ba4100f9c69bcba6f291e1fdc40aba0" => :high_sierra
-    sha256 "2cbd13d035e4aef1fffca5ef5994bbaa0a1fb058d54870ac4fcc04854b705e51" => :sierra
+    sha256 "db9ad1bc5d6e88b167abc341b4d8aa3528a79311f4f53ce3b73baabc649e2182" => :catalina
+    sha256 "e701adbdc62fd5059d7671279928ea4ace0e42d489899a409ae1f1914a38b68e" => :mojave
+    sha256 "5bc263041e6cba45e161a4f5efebc87598a0721b2103fd71a34abe252b92a98c" => :high_sierra
   end
 
   head do
-    url "https://github.com/arybczak/ncmpcpp.git"
+    url "https://github.com/ncmpcpp/ncmpcpp.git"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build

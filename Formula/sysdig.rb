@@ -1,13 +1,15 @@
 class Sysdig < Formula
   desc "System-level exploration and troubleshooting tool"
-  homepage "https://www.sysdig.org/"
-  url "https://github.com/draios/sysdig/archive/0.26.4.tar.gz"
-  sha256 "7c15ee25abf6cca850eaf6f4e42e25a1d9ad2b775ae794028f94afbd1ce9d271"
+  homepage "https://sysdig.com/"
+  url "https://github.com/draios/sysdig/archive/0.26.7.tar.gz"
+  sha256 "c82aa4201e8ad37e22c780c27c28ac28359a8e677b4dc0ea295eb1452115d6c0"
+  license "Apache-2.0"
+  revision 1
 
   bottle do
-    sha256 "b9a7d0cbbbe218af6cd21aceda2770aa329cbf1634738f63258be86760340eb6" => :mojave
-    sha256 "403ae83a910f96c3ac445ab65c1214840ff1df3831f565adf1c253592c6877d7" => :high_sierra
-    sha256 "8a74e6797c271830849807a677523f600c9f69eb97c9faba91ed1bdfb7b436cf" => :sierra
+    sha256 "c3b1b55e16c9e7d143138c0b824872f000e92a9323c43683877da83c0eeeeda0" => :catalina
+    sha256 "de3c1cedda2cdc14ba06892f556161c25f023975ff4a9b8a38ad47a13bcdc13d" => :mojave
+    sha256 "41b0016def49ba75c9d48dcc4d017fe684aedb79e2a35132952cee85ec1c0b33" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -25,6 +27,7 @@ class Sysdig < Formula
     mkdir "build" do
       system "cmake", "..", "-DSYSDIG_VERSION=#{version}",
                             "-DUSE_BUNDLED_DEPS=OFF",
+                            "-DCREATE_TEST_TARGETS=OFF",
                             *std_cmake_args
       system "make"
       system "make", "install"

@@ -3,8 +3,10 @@ class CmuPocketsphinx < Formula
   homepage "https://cmusphinx.sourceforge.io/"
   url "https://downloads.sourceforge.net/project/cmusphinx/pocketsphinx/0.8/pocketsphinx-0.8.tar.gz"
   sha256 "874c4c083d91c8ff26a2aec250b689e537912ff728923c141c4dac48662cce7a"
+  license "BSD-2-Clause"
 
   bottle do
+    sha256 "f2fc23a67634f26befdd128d21e886d7b3789484a14d498a40949e0e100d8afa" => :catalina
     sha256 "cc655d82bfce35b2976e4dd0867fceb02b233363e7e101c62b09e60e2be9f8bb" => :mojave
     sha256 "628d162751962337c769090867c3f9921d10b09f704f8f208b63abbefef205eb" => :high_sierra
     sha256 "12abc8b527906e7ed0d2f6f0a6b6cb5c00f548fe94fcce995bdc80f43b4cf17b" => :sierra

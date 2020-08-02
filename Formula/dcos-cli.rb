@@ -1,35 +1,29 @@
 class DcosCli < Formula
   desc "The DC/OS command-line interface"
   homepage "https://docs.d2iq.com/mesosphere/dcos/latest/cli"
-  url "https://github.com/dcos/dcos-cli/archive/1.1.0.tar.gz"
-  sha256 "35aed62b9fee23c96dea835d4022a4ca04d18a8e81d0bc5a6a003e41aaf75d88"
+  url "https://github.com/dcos/dcos-cli/archive/1.1.3.tar.gz"
+  sha256 "cc423272e08a15d30e13c60b2245350c0b7d027649a6a01d44a58596a5ed8b20"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "004913024b18bff15db109f677059b7978d8711998d6e676fd177e24f5f7e044" => :catalina
-    sha256 "1564dcdc6371477863f0d3dc949b7251b143ba3f688c611b527f07c3a0a9b6e0" => :mojave
-    sha256 "521a123affe226746d70186894209529be71e3186195e3122bf7fc2dc62e0433" => :high_sierra
+    sha256 "1f98490af0a9ce9a22e7de6f764d887342e11bbd25ca70131e2987a93131170f" => :catalina
+    sha256 "d38aab9ff56007a19cc5a6e16546ac852b10a08d9b951c32dc36fd10642a15c0" => :mojave
+    sha256 "a44dadc1335fa9f20ef25f10cd6a6ef826b7d34cf20de7261b3e67d5c86f3474" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
     ENV["NO_DOCKER"] = "1"
+    ENV["VERSION"] = version.to_s
 
-    ENV["VERSION"] = "1.1.0"
-
-    bin_path = buildpath/"src/github.com/dcos/dcos-cli"
-
-    bin_path.install Dir["*"]
-    cd bin_path do
-      system "make", "darwin"
-      bin.install "build/darwin/dcos"
-    end
+    system "make", "darwin"
+    bin.install "build/darwin/dcos"
   end
 
   test do
     run_output = shell_output("#{bin}/dcos --version 2>&1")
-    assert_match "dcoscli.version=1.1.0", run_output
+    assert_match "dcoscli.version=#{version}", run_output
   end
 end

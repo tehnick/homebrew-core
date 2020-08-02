@@ -1,15 +1,15 @@
 class Calcurse < Formula
   desc "Text-based personal organizer"
   homepage "https://calcurse.org/"
-  url "https://calcurse.org/files/calcurse-4.5.0.tar.gz"
-  sha256 "c372ef16abcacb33a1aca99d0d4eba7c5cc8121fa96360f9d6edc0506e655cee"
+  url "https://calcurse.org/files/calcurse-4.6.0.tar.gz"
+  sha256 "fa090307a157e24e790819b20c93e037b89c6132f473abaaa7b21c3be76df043"
+  license "BSD-2-Clause"
   head "https://git.calcurse.org/calcurse.git"
 
   bottle do
-    sha256 "246b45c9315fe11ab9ef726684282e8fa18929e4c6a4bbb0e48a757754be8f77" => :catalina
-    sha256 "738613d3eef794062e61163897d5d7b66c7420221f386fa9614d44d6389d0dae" => :mojave
-    sha256 "b1334c12ada2d1aab070efa8d61c93cbc4f3e2a6ad1b5ad61513279c128782d4" => :high_sierra
-    sha256 "8da520260dc4b5612d5b9e2a83497e1227a0126195692b48d0842f971df904dd" => :sierra
+    sha256 "21cb64443bbffe19f0adb8dfc8f5e49eabed5fc5c0347215bbb7aa3383126719" => :catalina
+    sha256 "0d114c613163c192e9f156750ffa9c3c9a4a303c103a7bc7091c369da151a4c4" => :mojave
+    sha256 "41886cc820da1133c6c5f57fea4f9fbe072a0735e3ef8522a9301736216f4e70" => :high_sierra
   end
 
   depends_on "gettext"

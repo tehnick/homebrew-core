@@ -2,7 +2,7 @@ class Dc3dd < Formula
   desc "Patched GNU dd that is intended for forensic acquisition of data"
   homepage "https://sourceforge.net/projects/dc3dd/"
   url "https://downloads.sourceforge.net/project/dc3dd/dc3dd/7.2.646/dc3dd%207.2.646/dc3dd-7.2.646.zip",
-      :using => :nounzip
+      using: :nounzip
   sha256 "c4e325e5cbdae49e3855b0849ea62fed17d553428724745cea53fe6d91fd2b7f"
   revision 2
 
@@ -38,7 +38,8 @@ class Dc3dd < Formula
       # Fixes error: 'Illegal instruction: 4'; '%n used in a non-immutable format string' on 10.13
       # Patch comes from gnulib upstream (see https://sourceforge.net/p/dc3dd/bugs/17/)
       inreplace "lib/vasnprintf.c",
-                "# if !(__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3) || ((defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__))",
+                "# if !(__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3) " \
+                "|| ((defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__))",
                 "# if !(defined __APPLE__ && defined __MACH__)"
 
       chmod 0555, ["build-aux/install-sh", "configure"]

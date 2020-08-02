@@ -1,30 +1,25 @@
 class Ripgrep < Formula
   desc "Search tool like grep and The Silver Searcher"
   homepage "https://github.com/BurntSushi/ripgrep"
-  url "https://github.com/BurntSushi/ripgrep/archive/11.0.2.tar.gz"
-  sha256 "0983861279936ada8bc7a6d5d663d590ad34eb44a44c75c2d6ccd0ab33490055"
+  url "https://github.com/BurntSushi/ripgrep/archive/12.1.1.tar.gz"
+  sha256 "2513338d61a5c12c8fea18a0387b3e0651079ef9b31f306050b1f0aaa926271e"
+  license "Unlicense"
   head "https://github.com/BurntSushi/ripgrep.git"
 
   bottle do
     cellar :any
-    sha256 "780e74bc09f13e5ac6a38894cf46e6b09e3ea0e1d5b24bb8f516f7c395363edf" => :catalina
-    sha256 "8a9673593698833a3e79407423c549499c2096c206f2309baf3a6a1fa58bc83c" => :mojave
-    sha256 "e0f43c540165eb7c181328c9e18a28f9fb65ca6e178a2d898915760c212bfcd6" => :high_sierra
-    sha256 "3bb6e27a3adaf94129c18491a552899a354ce36846ec2a849ca5ad40e848ad62" => :sierra
+    sha256 "60460d422253113af3ed60332104f309638942821c655332211a6bc2213c472c" => :catalina
+    sha256 "de4b18789f5d9bc4aaa4d906501200ae4ece7a1971dd1b86e2b2d0a2c8e0d764" => :mojave
+    sha256 "cfea5335bf4eccfb7cd1d93bec234d96bd49dce8d593ea966687f777909ba291" => :high_sierra
   end
 
-  depends_on "asciidoc" => :build
-  depends_on "docbook-xsl" => :build
+  depends_on "asciidoctor" => :build
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
   depends_on "pcre2"
 
   def install
-    ENV["XML_CATALOG_FILES"] = etc/"xml/catalog"
-
-    system "cargo", "install", "--root", prefix,
-                               "--path", ".",
-                               "--features", "pcre2"
+    system "cargo", "install", "--features", "pcre2", *std_cargo_args
 
     # Completion scripts and manpage are generated in the crate's build
     # directory, which includes a fingerprint hash. Try to locate it first

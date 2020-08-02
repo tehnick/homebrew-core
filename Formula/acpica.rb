@@ -1,16 +1,20 @@
 class Acpica < Formula
   desc "OS-independent implementation of the ACPI specification"
   homepage "https://www.acpica.org/"
-  url "https://acpica.org/sites/acpica/files/acpica-unix-20191018.tar.gz"
-  sha256 "029db4014600e4b771b11a84276d2d76eb40fb26eabc85864852ef1f962be95f"
+  url "https://acpica.org/sites/acpica/files/acpica-unix-20200528.tar.gz"
+  sha256 "e69f81c6924c8d30f9b9005bb002307f07b5a1538e13c909bea2f8a44e0d8610"
   head "https://github.com/acpica/acpica.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d2fb3b1810659d78691bdb2a184c9160d901eca267ff0b95cd34b460e6fa2b17" => :catalina
-    sha256 "597666a9b6c06fcf02e990681f9dca68a46cf4a9cc87ffb16f5a0d2ffa556526" => :mojave
-    sha256 "cace68099063a2a9aca3277aa6e4ee074714c624c13752c3f2cc89af5ba841a1" => :high_sierra
+    sha256 "cd77c7ab262dccd3cb56bb5685ef94aabb63a0f3bffb1834504a12fb910bf0ed" => :catalina
+    sha256 "d5be4c0ca5c62d26063618cd358b552f13bde291c68792016b8d3ec3e74579ef" => :mojave
+    sha256 "b6b6ae7b98a9450ac248d85bee082743f749a95320550028198af6f2c6e0681f" => :high_sierra
   end
+
+  uses_from_macos "bison" => :build
+  uses_from_macos "flex" => :build
+  uses_from_macos "m4" => :build
 
   def install
     ENV.deparallelize

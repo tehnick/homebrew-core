@@ -2,37 +2,30 @@ class ConsulTemplate < Formula
   desc "Generic template rendering and notifications with Consul"
   homepage "https://github.com/hashicorp/consul-template"
   url "https://github.com/hashicorp/consul-template.git",
-      :tag      => "v0.22.0",
-      :revision => "005b42eb2414a945dfe205dba58f64cc3546a7b5"
+      tag:      "v0.25.1",
+      revision: "171d54d1d3e732a7e960988b72ff9c2fddb3cd8f"
+  license "MPL-2.0"
   head "https://github.com/hashicorp/consul-template.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "700b4b2fff421649b3b905446cdff6ef14d7b32b0f4513795170f06ee1b89e8f" => :catalina
-    sha256 "5dd743db1a5ae5266d442be1c0c796a96438af5af93c0a7290a8b5077d918441" => :mojave
-    sha256 "c801baee22d8143ed9b9fa1a6e632e88c1cc0f989ad8352e372ca3037c90378e" => :high_sierra
-    sha256 "182b3fc4162d1ad2975a6c022ef4274c54725134c7e0a795c6eb07997fd22d79" => :sierra
+    sha256 "79c0b42239bae3e2771b9cce86d2e816654126aa6c5907be3999eadec34ecd8a" => :catalina
+    sha256 "169f7d647729d546330b8268f5e07eb378fc95e35831fb6f24d508901f607499" => :mojave
+    sha256 "37f32e5b0d9e2ffc20846be7f4e97607e76f5b27b29cf015c941c9c03cc506f4" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-    ENV["XC_OS"] = "darwin"
-    ENV["XC_ARCH"] = "amd64"
-
-    dir = buildpath/"src/github.com/hashicorp/consul-template"
-    dir.install buildpath.children - [buildpath/".brew_home"]
-
-    cd dir do
-      project = "github.com/hashicorp/consul-template"
-      commit = Utils.popen_read("git rev-parse --short HEAD").chomp
-      ldflags = ["-X #{project}/version.Name=consul-template",
-                 "-X #{project}/version.GitCommit=#{commit}"]
-      system "go", "build", "-o", bin/"consul-template", "-ldflags",
-             ldflags.join(" ")
-      prefix.install_metafiles
-    end
+    project = "github.com/hashicorp/consul-template"
+    commit = Utils.safe_popen_read("git", "rev-parse", "--short", "HEAD").chomp
+    ldflags = %W[
+      -s -w
+      -X #{project}/version.Name=consul-template
+      -X #{project}/version.GitCommit=#{commit}
+    ]
+    system "go", "build", "-ldflags", ldflags.join(" "), *std_go_args
+    prefix.install_metafiles
   end
 
   test do

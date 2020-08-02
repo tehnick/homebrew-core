@@ -3,6 +3,7 @@ class Smimesign < Formula
   homepage "https://github.com/github/smimesign"
   url "https://github.com/github/smimesign/archive/v0.0.13.tar.gz"
   sha256 "baf3e1c0a64ca1d49be8a4e99640679ba2b2870e907e88be1e9c7f1566d0f206"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
@@ -13,7 +14,7 @@ class Smimesign < Formula
   end
 
   depends_on "go" => :build
-  depends_on :macos => :sierra
+  depends_on macos: :sierra
 
   def install
     ENV["GOPATH"] = buildpath
@@ -28,6 +29,7 @@ class Smimesign < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/smimesign --version")
     system "#{bin}/smimesign", "--list-keys"
-    assert_match "could not find identity matching specified user-id: bad@identity", shell_output("#{bin}/smimesign -su bad@identity 2>&1", 1)
+    assert_match "could not find identity matching specified user-id: bad@identity",
+      shell_output("#{bin}/smimesign -su bad@identity 2>&1", 1)
   end
 end

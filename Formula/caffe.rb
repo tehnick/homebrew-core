@@ -3,12 +3,13 @@ class Caffe < Formula
   homepage "https://caffe.berkeleyvision.org/"
   url "https://github.com/BVLC/caffe/archive/1.0.tar.gz"
   sha256 "71d3c9eb8a183150f965a465824d01fe82826c22505f7aa314f700ace03fa77f"
-  revision 15
+  license "BSD-2-Clause"
+  revision 24
 
   bottle do
-    sha256 "b48ecaa34cfa9d0fd7207c48f73bae7e13dd350b46d1242cdcca9e5deba764a8" => :catalina
-    sha256 "94ac9647308a9de9281e676d8ecfdb4e696972f0b71f9e5509d585fba9560aaa" => :mojave
-    sha256 "547152fc04024cc95a02bc91668a020e05f6d7d6878f70d8f894e8d1f725608e" => :high_sierra
+    sha256 "4a7874768a55e36db9e988a7060eec013aade446d1f9262c5b1f8122f4066da0" => :catalina
+    sha256 "54bf1c7683d0a7da1db594f894f0379174def228f90d394241d0b34b46fea886" => :mojave
+    sha256 "edbc23a9df5422051538d9c8749b10592c56aab81d0d5773493c571a0022d400" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -24,14 +25,14 @@ class Caffe < Formula
   depends_on "szip"
 
   resource "test_model_weights" do
-    url "http://dl.caffe.berkeleyvision.org/bvlc_reference_caffenet.caffemodel"
+    url "https://bintray.com/homebrew/mirror/download_file?file_path=bvlc_reference_caffenet.caffemodel"
     sha256 "472d4a06035497b180636d8a82667129960371375bd10fcb6df5c6c7631f25e0"
   end
 
   # Fix compilation with OpenCV 4
   # https://github.com/BVLC/caffe/issues/6652
   patch do
-    url "https://github.com/BVLC/caffe/pull/6638.diff?full_index=1"
+    url "https://github.com/BVLC/caffe/commit/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.diff?full_index=1"
     sha256 "6a6368d715284fabfa96660b6d24d1f4f419f3e6cdddab9a7293954fee4ec2bc"
   end
 

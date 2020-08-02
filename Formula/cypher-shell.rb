@@ -1,14 +1,14 @@
 class CypherShell < Formula
   desc "Command-line shell where you can execute Cypher against Neo4j"
   homepage "https://github.com/neo4j/cypher-shell"
-  url "https://github.com/neo4j/cypher-shell/releases/download/1.1.12/cypher-shell.zip"
-  version "1.1.12"
-  sha256 "af051eb6e1cba342ca7b4c2bc5d0372aca443ef738efea0febf6d397deec2118"
+  url "https://github.com/neo4j/cypher-shell/releases/download/4.1.1/cypher-shell.zip"
+  sha256 "5216e57490fe95ff5e677f1790444bd0fda7522f81c5ffca133bb9edb8fddd25"
+  license "GPL-3.0"
   version_scheme 1
 
   bottle :unneeded
 
-  depends_on :java => "1.8"
+  depends_on java: "1.8"
 
   def install
     rm_f Dir["bin/*.bat"]
@@ -18,7 +18,7 @@ class CypherShell < Formula
 
     # Copy the bin
     bin.install ["cypher-shell"]
-    bin.env_script_all_files(share, :NEO4J_HOME => ENV["NEO4J_HOME"])
+    bin.env_script_all_files(share, NEO4J_HOME: ENV["NEO4J_HOME"])
   end
 
   test do

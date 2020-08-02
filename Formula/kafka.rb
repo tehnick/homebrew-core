@@ -1,15 +1,16 @@
 class Kafka < Formula
   desc "Publish-subscribe messaging rethought as a distributed commit log"
   homepage "https://kafka.apache.org/"
-  url "https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.12-2.3.0.tgz"
-  sha256 "d86f5121a9f0c44477ae6b6f235daecc3f04ecb7bf98596fd91f402336eee3e7"
+  url "https://www.apache.org/dyn/closer.lua?path=kafka/2.5.0/kafka_2.12-2.5.0.tgz"
+  mirror "https://archive.apache.org/dist/kafka/2.5.0/kafka_2.12-2.5.0.tgz"
+  sha256 "4a857fe348e39d1cefa71bc4f61da9ffa59efbb1ff79d41709dc3dbca5f04baf"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d38c73a5ab8e9589aa4773007d9df0757ca1773b071b02b8c5d031628098064f" => :catalina
-    sha256 "1483beca512a1121491d8890290826e80f87d6630c37b15207db1d0cf39c805c" => :mojave
-    sha256 "1483beca512a1121491d8890290826e80f87d6630c37b15207db1d0cf39c805c" => :high_sierra
-    sha256 "84e51f5c33a35333e3da125076fa9f566e647ff9a555716ac478123a81d4186b" => :sierra
+    sha256 "73988ab14de02fa338846206583dacadeea66585d23efbebbaf9180b8542cc29" => :catalina
+    sha256 "73988ab14de02fa338846206583dacadeea66585d23efbebbaf9180b8542cc29" => :mojave
+    sha256 "73988ab14de02fa338846206583dacadeea66585d23efbebbaf9180b8542cc29" => :high_sierra
   end
 
   # Related to https://issues.apache.org/jira/browse/KAFKA-2034
@@ -20,8 +21,10 @@ class Kafka < Formula
     satisfy { quiet_system("/usr/libexec/java_home --version 1.8 --failfast") }
   end
 
-  depends_on :java => "1.8"
+  depends_on java: "1.8"
   depends_on "zookeeper"
+
+  conflicts_with "confluent-platform", because: "both install identically named Kafka related executables"
 
   def install
     data = var/"lib"
@@ -48,33 +51,34 @@ class Kafka < Formula
     (var+"log/kafka").mkpath
   end
 
-  plist_options :manual => "zookeeper-server-start #{HOMEBREW_PREFIX}/etc/kafka/zookeeper.properties & kafka-server-start #{HOMEBREW_PREFIX}/etc/kafka/server.properties"
+  plist_options manual: "zookeeper-server-start #{HOMEBREW_PREFIX}/etc/kafka/zookeeper.properties & kafka-server-start #{HOMEBREW_PREFIX}/etc/kafka/server.properties"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>WorkingDirectory</key>
-        <string>#{HOMEBREW_PREFIX}</string>
-        <key>ProgramArguments</key>
-        <array>
-            <string>#{opt_bin}/kafka-server-start</string>
-            <string>#{etc}/kafka/server.properties</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>KeepAlive</key>
-        <true/>
-        <key>StandardErrorPath</key>
-        <string>#{var}/log/kafka/kafka_output.log</string>
-        <key>StandardOutPath</key>
-        <string>#{var}/log/kafka/kafka_output.log</string>
-    </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>WorkingDirectory</key>
+          <string>#{HOMEBREW_PREFIX}</string>
+          <key>ProgramArguments</key>
+          <array>
+              <string>#{opt_bin}/kafka-server-start</string>
+              <string>#{etc}/kafka/server.properties</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>KeepAlive</key>
+          <true/>
+          <key>StandardErrorPath</key>
+          <string>#{var}/log/kafka/kafka_output.log</string>
+          <key>StandardOutPath</key>
+          <string>#{var}/log/kafka/kafka_output.log</string>
+      </dict>
+      </plist>
+    EOS
   end
 
   test do
@@ -88,13 +92,15 @@ class Kafka < Formula
 
     begin
       fork do
-        exec "#{bin}/zookeeper-server-start #{testpath}/kafka/zookeeper.properties > #{testpath}/test.zookeeper-server-start.log 2>&1"
+        exec "#{bin}/zookeeper-server-start #{testpath}/kafka/zookeeper.properties " \
+             "> #{testpath}/test.zookeeper-server-start.log 2>&1"
       end
 
       sleep 15
 
       fork do
-        exec "#{bin}/kafka-server-start #{testpath}/kafka/server.properties > #{testpath}/test.kafka-server-start.log 2>&1"
+        exec "#{bin}/kafka-server-start #{testpath}/kafka/server.properties " \
+             "> #{testpath}/test.kafka-server-start.log 2>&1"
       end
 
       sleep 30

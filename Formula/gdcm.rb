@@ -1,13 +1,15 @@
 class Gdcm < Formula
   desc "Grassroots DICOM library and utilities for medical files"
   homepage "https://sourceforge.net/projects/gdcm/"
-  url "https://github.com/malaterre/GDCM/archive/v3.0.3.tar.gz"
-  sha256 "62d038c15454dd3f03f8c9d1bba9268ff15635527f0cb11a08f31a1010756cb7"
+  url "https://github.com/malaterre/GDCM/archive/v3.0.7.tar.gz"
+  sha256 "e00881f0a93d2db4a686231d5f1092a4bc888705511fe5d90114f2226147a18d"
+  license "BSD-3-Clause"
 
   bottle do
-    sha256 "bc4aa24db86c1b37a5c1c7373fb11e0a65d3ef64504f0ff559a50ed6220ae882" => :catalina
-    sha256 "acfda9b32bd0990ecb581056267259a1a9913fd306b5a6e0c3dab6773284749b" => :mojave
-    sha256 "23a2d89084831eb4b48b557b97b4b17b47d6d1852cfbd3efbee32451a140b064" => :high_sierra
+    rebuild 1
+    sha256 "b4fcbfc9a2dd14f8d5b0cc1fd1f5900465b469a1f05fbae51f09bc209a578dac" => :catalina
+    sha256 "67a12632e5705ed9ce8b72061b88b16246114d89a9e0594c1dd60100869e7412" => :mojave
+    sha256 "6210fcdf8afd786ec2b49c74f1d5bd6d4e0f40e1404ffdbb0ee40c66ef53715d" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -16,15 +18,18 @@ class Gdcm < Formula
   depends_on "swig" => :build
   depends_on "openjpeg"
   depends_on "openssl@1.1"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "vtk"
 
   def install
     ENV.cxx11
 
-    xy = Language::Python.major_minor_version "python3"
-    python_include = Utils.popen_read("python3 -c 'from distutils import sysconfig;print(sysconfig.get_python_inc(True))'").chomp
-    python_executable = Utils.popen_read("python3 -c 'import sys;print(sys.executable)'").chomp
+    python3 = Formula["python@3.8"].opt_bin/"python3"
+    xy = Language::Python.major_minor_version python3
+    python_include =
+      Utils.safe_popen_read(python3, "-c", "from distutils import sysconfig;print(sysconfig.get_python_inc(True))")
+           .chomp
+    python_executable = Utils.safe_popen_read(python3, "-c", "import sys;print(sys.executable)").chomp
 
     args = std_cmake_args + %W[
       -GNinja
@@ -67,6 +72,6 @@ class Gdcm < Formula
     system ENV.cxx, "-std=c++11", "test.cxx.o", "-o", "test", "-L#{lib}", "-lgdcmDSED"
     system "./test"
 
-    system "python3", "-c", "import gdcm"
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import gdcm"
   end
 end

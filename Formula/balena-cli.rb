@@ -3,14 +3,15 @@ require "language/node"
 class BalenaCli < Formula
   desc "The official balena CLI tool"
   homepage "https://www.balena.io/docs/reference/cli/"
-  # Frequent upstream releases, do not update more than once a week
-  url "https://registry.npmjs.org/balena-cli/-/balena-cli-11.16.6.tgz"
-  sha256 "486352da640d98647fafebed9b9ec1094ec75ba917b389268f8982096a4fbfe8"
+  # balena-cli should only be updated every 10 releases on multiples of 10
+  url "https://registry.npmjs.org/balena-cli/-/balena-cli-12.10.0.tgz"
+  sha256 "87c35b105d2f158862c1b891d49375296062db685db6a64ca2a039c942480553"
+  license "Apache-2.0"
 
   bottle do
-    sha256 "ba4b02f4e867f348b9bfb3ef58d0ab5a87ab7de1b71aa29cc7d04de31360a399" => :catalina
-    sha256 "3cfe94b9b6b2c5525b713ec4eb117b99761ab38a7e481e2017573526171eb790" => :mojave
-    sha256 "fd8eb92409fe2ee4167164dbe3d199511f42fbb3035208b68bd4284a91e15013" => :high_sierra
+    sha256 "a53852605dad9e673aa53cb2d8cec741fbb97a0cd109454ceb95a95cf2046991" => :catalina
+    sha256 "966ed6d3d0ff76c200309714b2efe7b20cf3a556766c30a1c90f0e6b34451172" => :mojave
+    sha256 "ea44244e6ecb7d7f2dfa32c3466ca99808c20b6b67a5352547a1806a7eb8bee9" => :high_sierra
   end
 
   depends_on "node"
@@ -21,7 +22,7 @@ class BalenaCli < Formula
   end
 
   test do
-    output = shell_output("#{bin}/balena login --credentials --email johndoe@gmail.com --password secret 2>/dev/null", 1)
-    assert_match "Logging in to balena-cloud.com", output
+    assert_match "Logging in to balena-cloud.com",
+      shell_output("#{bin}/balena login --credentials --email johndoe@gmail.com --password secret 2>/dev/null", 1)
   end
 end

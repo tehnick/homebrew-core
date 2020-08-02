@@ -1,14 +1,14 @@
 class CurlOpenssl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server"
   homepage "https://curl.haxx.se/"
-  url "https://curl.haxx.se/download/curl-7.66.0.tar.bz2"
-  sha256 "6618234e0235c420a21f4cb4c2dd0badde76e6139668739085a70c4e2fe7a141"
+  url "https://curl.haxx.se/download/curl-7.71.1.tar.bz2"
+  sha256 "9d52a4d80554f9b0d460ea2be5d7be99897a1a9f681ffafe739169afd6b4f224"
+  license "curl"
 
   bottle do
-    sha256 "2b28a8ee69e76187811d91d30a249227565530a39835774fde5f9b833d545e1d" => :catalina
-    sha256 "48f2ce8c1ad64e221740f893e82b71511c4715283dc663128ad744f2ffa569f2" => :mojave
-    sha256 "a93f3fe64c64afa6d3ffedaccfb1d3afc5f933ee475dc5a57e91ca151d05fc7a" => :high_sierra
-    sha256 "fd3deb1cc6de9f34a727cfa545891bd56818595872f46b5c305435d234f77620" => :sierra
+    sha256 "3eb7b47868af07e3b766a325a2576749dc2f10ea1ff7ff6ccca3be59d1345712" => :catalina
+    sha256 "1bb271e14654750ec19a61283af0865b7f3ea18c2310bf6c7fd235ff294986b4" => :mojave
+    sha256 "8706151f228258eb6a75d98a661f9ab498025261b56d4fe6b44d0b3cc9967d6a" => :high_sierra
   end
 
   head do
@@ -19,7 +19,7 @@ class CurlOpenssl < Formula
     depends_on "libtool" => :build
   end
 
-  keg_only :provided_by_macos
+  keg_only :shadowed_by_macos, "macOS provides curl"
 
   depends_on "pkg-config" => :build
   depends_on "brotli"
@@ -35,20 +35,21 @@ class CurlOpenssl < Formula
   def install
     system "./buildconf" if build.head?
 
+    openssl = Formula["openssl@1.1"]
     args = %W[
       --disable-debug
       --disable-dependency-tracking
       --disable-silent-rules
       --prefix=#{prefix}
       --enable-ares=#{Formula["c-ares"].opt_prefix}
-      --with-ca-bundle=#{etc}/openssl@1.1/cert.pem
-      --with-ca-path=#{etc}/openssl@1.1/certs
+      --with-ca-bundle=#{openssl.pkgetc}/cert.pem
+      --with-ca-path=#{openssl.pkgetc}/certs
       --with-gssapi
       --with-libidn2
       --with-libmetalink
       --with-librtmp
       --with-libssh2
-      --with-ssl=#{Formula["openssl@1.1"].opt_prefix}
+      --with-ssl=#{openssl.opt_prefix}
       --without-libpsl
     ]
 

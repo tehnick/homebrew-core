@@ -1,56 +1,60 @@
 class Skopeo < Formula
   desc "Work with remote images registries"
   homepage "https://github.com/containers/skopeo"
-  url "https://github.com/containers/skopeo/archive/v0.1.39.tar.gz"
-  sha256 "e9d70f7f7b891675a816f06a22df0490285ad20eefbd91f5da69ca12f56c29f2"
+  url "https://github.com/containers/skopeo/archive/v1.1.1.tar.gz"
+  sha256 "9e0fdca1f2663f5a07bc1d932fec734578c5fffdb27faa8f847a393a44b072df"
+  license "Apache-2.0"
 
   bottle do
-    cellar :any
-    sha256 "894487ea7a4ff00ceaae25c0aadea4405954d4b3ea9dbcd8bbe66a8521dd33b1" => :catalina
-    sha256 "840eab0e0f58502e5162629c880cc293952fe8feb9fdac09309430153dff5b13" => :mojave
-    sha256 "3c11f82391e9aa4ef6e6becb8005a002323dde8668efb5bc7f3e52892de7838e" => :high_sierra
-    sha256 "b776102170a389e39002c0dceac6b38e802b45bc513add1cacbacd9182742378" => :sierra
+    sha256 "4d31286940caac405ba936c66c5f1e5c97daaa79a761f1bb8ed715eb1da0b046" => :catalina
+    sha256 "87b9ee585ee1fd5d8843726425da1b4880da1d92d55844562db736f439cc3618" => :mojave
+    sha256 "0d716998a47a2ecfc3abca2406a9b3a9ea02137250788fcb3e8c7f0e74337b38" => :high_sierra
   end
 
   depends_on "go" => :build
   depends_on "gpgme"
 
+  on_linux do
+    depends_on "pkg-config" => :build
+  end
+
   def install
-    ENV["GOPATH"] = buildpath
     ENV["CGO_ENABLED"] = "1"
     ENV.append "CGO_FLAGS", ENV.cppflags
-    ENV.append "CGO_FLAGS", Utils.popen_read("#{Formula["gpgme"].bin}/gpgme-config --cflags")
+    ENV.append "CGO_FLAGS", Utils.safe_popen_read("#{Formula["gpgme"].bin}/gpgme-config", "--cflags")
 
-    (buildpath/"src/github.com/containers/skopeo").install buildpath.children
-    cd buildpath/"src/github.com/containers/skopeo" do
-      buildtags = [
-        "containers_image_ostree_stub",
-        Utils.popen_read("hack/btrfs_tag.sh").chomp,
-        Utils.popen_read("hack/btrfs_installed_tag.sh").chomp,
-        Utils.popen_read("hack/libdm_tag.sh").chomp,
-        Utils.popen_read("hack/ostree_tag.sh").chomp,
-      ].uniq.join(" ")
+    buildtags = [
+      "containers_image_ostree_stub",
+      Utils.safe_popen_read("hack/btrfs_tag.sh").chomp,
+      Utils.safe_popen_read("hack/btrfs_installed_tag.sh").chomp,
+      Utils.safe_popen_read("hack/libdm_tag.sh").chomp,
+    ].uniq.join(" ")
 
-      ldflags = [
-        "-X main.gitCommit=",
-        "-X github.com/containers/skopeo/vendor/github.com/containers/image/docker.systemRegistriesDirPath=#{etc/"containers/registries.d"}",
-        "-X github.com/containers/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=#{ENV["TEMPDIR"]}",
-        "-X github.com/containers/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=#{etc/"containers/policy.json"}",
-        "-X github.com/containers/skopeo/vendor/github.com/containers/image/sysregistries.systemRegistriesConfPath=#{etc/"containers/registries.conf"}",
-      ].join(" ")
+    ldflags = [
+      "-X main.gitCommit=",
+      "-X github.com/containers/image/v5/docker.systemRegistriesDirPath=#{etc/"containers/registries.d"}",
+      "-X github.com/containers/image/v5/internal/tmpdir.unixTempDirForBigFiles=/var/tmp",
+      "-X github.com/containers/image/v5/signature.systemDefaultPolicyPath=#{etc/"containers/policy.json"}",
+      "-X github.com/containers/image/v5/pkg/sysregistriesv2.systemRegistriesConfPath=" \
+                                            "#{etc/"containers/registries.conf"}",
+    ].join(" ")
 
-      system "go", "build", "-v", "-x", "-tags", buildtags, "-ldflags", ldflags, "-o", bin/"skopeo", "./cmd/skopeo"
+    system "go", "build", "-tags", buildtags, "-ldflags", ldflags, *std_go_args, "./cmd/skopeo"
 
-      (etc/"containers").install "default-policy.json" => "policy.json"
-      (etc/"containers/registries.d").install "default.yaml"
+    (etc/"containers").install "default-policy.json" => "policy.json"
+    (etc/"containers/registries.d").install "default.yaml"
 
-      prefix.install_metafiles
-    end
+    bash_completion.install "completions/bash/skopeo"
   end
 
   test do
     cmd = "#{bin}/skopeo --override-os linux inspect docker://busybox"
     output = shell_output(cmd)
     assert_match "docker.io/library/busybox", output
+
+    # https://github.com/Homebrew/homebrew-core/pull/47766
+    # https://github.com/Homebrew/homebrew-core/pull/45834
+    assert_match /Invalid destination name test: Invalid image name .+, expected colon-separated transport:reference/,
+                 shell_output("#{bin}/skopeo copy docker://alpine test 2>&1", 1)
   end
 end

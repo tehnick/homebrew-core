@@ -2,30 +2,33 @@ class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
   # vim should only be updated every 50 releases on multiples of 50
-  url "https://github.com/vim/vim/archive/v8.1.2150.tar.gz"
-  sha256 "0ab3a2656f3f2a4e9b9834ce2c119aaa6c895847f7df779f3aeaa3e87f974b75"
+  url "https://github.com/vim/vim/archive/v8.2.1350.tar.gz"
+  sha256 "beb7257c0c143b5aeacb0a1deede7c8f234a647c0b69b2ad80664d178e9c6352"
+  license "Vim"
   head "https://github.com/vim/vim.git"
 
   bottle do
-    sha256 "88f19ef2085b516c339cbd7379191ec9e07c8ea53b136d6a0d23c48919087c5b" => :catalina
-    sha256 "1ed3f18174dc5eabb6be3b8deb95b2630f87657b99d5f9ebd6db718c81d37cfd" => :mojave
-    sha256 "f937b322f9a9eb53d1780560f916de1b04660410af5dc0fe0d175627c6e41e0c" => :high_sierra
+    sha256 "c11b2ee2b11413959388ec7880aa42b54ee878be0a3566f6ec58165e73b1092a" => :catalina
+    sha256 "ae3aa4ea3eac4b1620c3ce89f11c752a59970de6c5e49c8030470e8188d2f16a" => :mojave
+    sha256 "dbd0a8368850b210dd17ef8c7cda478ace5046fc9068e3425ba37b31ef5fd8e1" => :high_sierra
   end
 
   depends_on "gettext"
   depends_on "lua"
   depends_on "perl"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "ruby"
 
+  uses_from_macos "ncurses"
+
   conflicts_with "ex-vi",
-    :because => "vim and ex-vi both install bin/ex and bin/view"
+    because: "vim and ex-vi both install bin/ex and bin/view"
 
   conflicts_with "macvim",
-    :because => "vim and macvim both install vi* binaries"
+    because: "vim and macvim both install vi* binaries"
 
   def install
-    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+    ENV.prepend_path "PATH", Formula["python@3.8"].opt_libexec/"bin"
 
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")

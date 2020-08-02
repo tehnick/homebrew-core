@@ -1,21 +1,21 @@
 class Libssh < Formula
   desc "C library SSHv1/SSHv2 client and server protocols"
   homepage "https://www.libssh.org/"
-  url "https://www.libssh.org/files/0.9/libssh-0.9.0.tar.xz"
-  sha256 "25303c2995e663cd169fdd902bae88106f48242d7e96311d74f812023482c7a5"
-  revision 1
+  url "https://www.libssh.org/files/0.9/libssh-0.9.4.tar.xz"
+  sha256 "150897a569852ac05aac831dc417a7ba8e610c86ca2e0154a99c6ade2486226b"
   head "https://git.libssh.org/projects/libssh.git"
 
   bottle do
     cellar :any
-    sha256 "1742283631a4c1aa68e0072670533562743d1b59f4503f5462ff11d510693123" => :catalina
-    sha256 "e1d446593d5686f340c2d3f625a94499c34bcdde92e2931afeb164f22c183c05" => :mojave
-    sha256 "577a696d90762ad7b931d5b6fcbaff093bc96f2e720ff7650fa5a3cd1b0ea3b4" => :high_sierra
-    sha256 "0693e4930230e6674876a55b2de201b362e85f3931167cfc93f651262848301b" => :sierra
+    sha256 "80a7241688554d68ba4dfdcc04a69711ed02dde72f496603565ab9f0c5198df3" => :catalina
+    sha256 "25fbc3fa80454fb8cc8733d26dd811840020cb301e2515a45866325520905039" => :mojave
+    sha256 "afc9749026ce1c566415227e36f6e528e90d79e11a650718ed9d3a51bb3027f0" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "openssl@1.1"
+
+  uses_from_macos "zlib"
 
   def install
     mkdir "build" do

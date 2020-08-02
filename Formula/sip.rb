@@ -1,22 +1,21 @@
 class Sip < Formula
   desc "Tool to create Python bindings for C and C++ libraries"
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.19/sip-4.19.19.tar.gz"
-  sha256 "5436b61a78f48c7e8078e93a6b59453ad33780f80c644e5f3af39f94be1ede44"
-  revision 1
-  head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
+  url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.23/sip-4.19.23.tar.gz"
+  sha256 "22ca9bcec5388114e40d4aafd7ccd0c4fe072297b628d0c5cdfa2f010c0bc7e7"
+  head "https://www.riverbankcomputing.com/hg/sip", using: :hg
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ba3355ad200e1f9386171fcbf895fd57fb0fe63a450611942b822d5920296932" => :catalina
-    sha256 "ce13e1599a99f64e0b76048fb6082359e6721a2455d172cb63391abbd08d7fc8" => :mojave
-    sha256 "7d58704f2abdd6d07b69284c800f4ecd3096b8c4733aad77f4718b5083d728d1" => :high_sierra
+    sha256 "b2dcfcc119e157da7aa3865e90f4f7a083129b2a4e4a30523570aa54ca3db47f" => :catalina
+    sha256 "6a092e82f96e2898713e83aca3ee9d9782fc2a9baa1d6a4ac665cb784fdef5a1" => :mojave
+    sha256 "85cfd373309794850293defa3921a23d010b2ef011bb4a93851fd45349bf2a27" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
-    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+    ENV.prepend_path "PATH", Formula["python@3.8"].opt_bin
     ENV.delete("SDKROOT") # Avoid picking up /Application/Xcode.app paths
 
     if build.head?
@@ -33,19 +32,14 @@ class Sip < Formula
                       "--destdir=#{lib}/python#{version}/site-packages",
                       "--bindir=#{bin}",
                       "--incdir=#{include}",
-                      "--sipdir=#{HOMEBREW_PREFIX}/share/sip"
+                      "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
+                      "--sip-module", "PyQt5.sip"
     system "make"
     system "make", "install"
-    system "make", "clean"
   end
 
   def post_install
     (HOMEBREW_PREFIX/"share/sip").mkpath
-  end
-
-  def caveats; <<~EOS
-    The sip-dir for Python is #{HOMEBREW_PREFIX}/share/sip.
-  EOS
   end
 
   test do
@@ -77,26 +71,9 @@ class Sip < Formula
         void test();
       };
     EOS
-    (testpath/"generate.py").write <<~EOS
-      from sipconfig import SIPModuleMakefile, Configuration
-      m = SIPModuleMakefile(Configuration(), "test.build")
-      m.extra_libs = ["test"]
-      m.extra_lib_dirs = ["."]
-      m.generate()
-    EOS
-    (testpath/"run.py").write <<~EOS
-      from test import Test
-      t = Test()
-      t.test()
-    EOS
+
     system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
                     "-o", "libtest.dylib", "test.cpp"
     system bin/"sip", "-b", "test.build", "-c", ".", "test.sip"
-
-    version = Language::Python.major_minor_version "python3"
-    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-    system "python3", "generate.py"
-    system "make", "-j1", "clean", "all"
-    system "python3", "run.py"
   end
 end

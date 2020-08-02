@@ -1,21 +1,24 @@
 class GitAbsorb < Formula
   desc "Automatic git commit --fixup"
   homepage "https://github.com/tummychow/git-absorb"
-  url "https://github.com/tummychow/git-absorb/archive/0.5.0.tar.gz"
-  sha256 "c4ef4fa28222773d695aab7711abbfac7e81c35a37eafe45f79d045516df28b1"
+  url "https://github.com/tummychow/git-absorb/archive/0.6.3.tar.gz"
+  sha256 "d62ba36150d1113ea9216b8dc8f1f749c97a468cb41b2d1cd5c019158915ca70"
+  license "BSD-3-Clause"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0eb9c509d984ad2345f3d5b3bd8e6fb28fb4590bc937350dbc39990452c9e638" => :catalina
-    sha256 "4a8e3e6fa101306c8d99bf95634a7fbe08fcb80d46742161b972e9f5ab1031b5" => :mojave
-    sha256 "6723320cdbcef35818dc58ce6e0fcd3be87606ae59fc355d9179e5690bc90540" => :high_sierra
-    sha256 "d51c5da6ae0c17b416d0fb2bf1f043c7d0e3cb8535a47dc0afea56ef96a50f1f" => :sierra
+    sha256 "bdf7c3b57f49dc9ccd83d9fed9f089f994f20c3591c6f18900f4e70ee80627e6" => :catalina
+    sha256 "63d50725c92837dbd25b63560ee2b8061c8b335288230c9f3f5976b94aed6248" => :mojave
+    sha256 "c6dc732ac254cc9d5aa2ebfe5ecc4e65c95b6ed860efc22b443c1911911099f4" => :high_sierra
   end
 
   depends_on "rust" => :build
 
+  uses_from_macos "zlib"
+
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
+    man1.install "Documentation/git-absorb.1"
   end
 
   test do

@@ -3,6 +3,7 @@ class Sdlpop < Formula
   homepage "https://github.com/NagyD/SDLPoP"
   url "https://github.com/NagyD/SDLPoP/archive/v1.20.tar.gz"
   sha256 "dbb75398dee2224bcee648602ad23e469b936a2b7ea962a8a01b091b989f25b6"
+  license "GPL-3.0"
 
   bottle do
     cellar :any
@@ -32,9 +33,10 @@ class Sdlpop < Formula
     EOS
   end
 
-  def caveats; <<~EOS
-    Save and replay files are stored in the following directory:
-      #{var}/sdlpop
-  EOS
+  def caveats
+    <<~EOS
+      Save and replay files are stored in the following directory:
+        #{var}/sdlpop
+    EOS
   end
 end

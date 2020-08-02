@@ -1,21 +1,21 @@
 class Rargs < Formula
   desc "Util like xargs + awk with pattern matching support"
   homepage "https://github.com/lotabout/rargs"
-  url "https://github.com/lotabout/rargs/archive/v0.2.2.tar.gz"
-  sha256 "ac6cf3a31ff5b55f86487fa3d3266edf8f562cc6b548d6e636daf373534388ad"
+  url "https://github.com/lotabout/rargs/archive/v0.3.0.tar.gz"
+  sha256 "22d9aa4368a0f9d1fd82391439d3aabf4ddfb24ad674a680d6407c9e22969da3"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "61300f0d8d770b58077ef97efdf5f50bf2f5df244cfc1dcd7c75d940948bdb0f" => :catalina
-    sha256 "eb92709c9127872b57c807c5a110329bea94cc43a6c6a030ff6fee6fe8240100" => :mojave
-    sha256 "7d5d38da14e10453dfac30d784f7bf4f7c75e7f188c7b3df556ebd5f2df8e76c" => :high_sierra
+    sha256 "37d5a3c2a5608eb4a10df0814a1334b88602a7200fdf99db60113f7aea598489" => :catalina
+    sha256 "1c24f60f8b91301cd167b0040e2c9ec7895fe818eeb21f13d40fca94e6f4f08b" => :mojave
+    sha256 "9cea3ec1abc342281b94649496e0d28275eead691238a2d03e47c2621afc9801" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

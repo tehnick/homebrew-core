@@ -1,16 +1,16 @@
 class VapoursynthImwri < Formula
   desc "VapourSynth filters - ImageMagick HDRI writer/reader"
   homepage "http://www.vapoursynth.com"
-  url "https://github.com/vapoursynth/vapoursynth/archive/R47.2.tar.gz"
-  sha256 "8ce4553f9fc5e5bbfb26ec9c0c5bf94be307530f947424c713ef67bc8a6d22b2"
+  url "https://github.com/vapoursynth/vapoursynth/archive/R50.tar.gz"
+  sha256 "b9dc7ce904c6a3432df7491b7052bc4cf09ccf1e7a703053f8079a2267522f97"
+  license "LGPL-2.1"
   head "https://github.com/vapoursynth/vapoursynth.git"
 
   bottle do
     cellar :any
-    sha256 "c44e2fff06ebddfe56ac9bc0ab1ca6d7879f6cc242ed47fdd9181b1e2b594095" => :catalina
-    sha256 "9a38930b60fdad8781f39e4daed3fb41425180b14e430ba2fa392ea4fd12326c" => :mojave
-    sha256 "5b15ff78ec77412e2d646d9f627b10d60c55da4d5a0d30c5ceaab2fae1be5380" => :high_sierra
-    sha256 "152ac072c27212c8de5bd8a6910a0bfdaa1c3ebd3d46c3e068792251a3a8ed10" => :sierra
+    sha256 "2fc13589c05a71af92cd1bb8b522f88651bbfcf21b1756cbb0f7133eb4177111" => :catalina
+    sha256 "45e9e716004b4b55da0d49df18d47ac3ccea18c26450d5b9fc71f16b4eacaf79" => :mojave
+    sha256 "5600dda1f2e5bca8bdb4a580eb14dcd691f4f5d3f865d4bdf2c8a91595465ade" => :high_sierra
   end
 
   depends_on "autoconf" => :build
@@ -18,7 +18,6 @@ class VapoursynthImwri < Formula
   depends_on "libtool" => :build
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
-
   depends_on "imagemagick"
   depends_on "vapoursynth"
 
@@ -40,8 +39,8 @@ class VapoursynthImwri < Formula
   end
 
   test do
-    py3 = Language::Python.major_minor_version "python3"
-    ENV.prepend_path "PYTHONPATH", lib/"python#{py3}/site-packages"
-    system "python3", "-c", "from vapoursynth import core; core.imwri"
+    xy = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
+    ENV.prepend_path "PYTHONPATH", lib/"python#{xy}/site-packages"
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "from vapoursynth import core; core.imwri"
   end
 end

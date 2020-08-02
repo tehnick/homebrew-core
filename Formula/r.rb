@@ -1,15 +1,15 @@
 class R < Formula
   desc "Software environment for statistical computing"
   homepage "https://www.r-project.org/"
-  url "https://cran.r-project.org/src/base/R-3/R-3.6.1.tar.gz"
-  sha256 "5baa9ebd3e71acecdcc3da31d9042fb174d55a42829f8315f2457080978b1389"
+  url "https://cran.r-project.org/src/base/R-4/R-4.0.2.tar.gz"
+  sha256 "d3bceab364da0876625e4097808b42512395fdf41292f4915ab1fd257c1bbe75"
+  license "GPL-2.0"
   revision 1
 
   bottle do
-    sha256 "daa26a653216abd86a51e09ce4e3ebedacbabb40f91aaec932dbe956d6f66909" => :catalina
-    sha256 "84d387b39408df62be83884fe70f4a6b40eb6f0154de1ab1d20398c1e2af2407" => :mojave
-    sha256 "910931f2feed30e33b8dd0044bf38e42bc85b57ea161d29ca25e80cfd22c4249" => :high_sierra
-    sha256 "5bcfa36f3be460d11af215712e3a9b00237d8fc6d4f963a1ef7b85091d465ba7" => :sierra
+    sha256 "4d2073c7d93e1117cc35fcc375f6eb112f16c311cc4400d703a805d57f0de71a" => :catalina
+    sha256 "e337fd3411cd1dffc9be88c1e116d87acac55021b3a5c70af0feba1b1a2c7259" => :mojave
+    sha256 "9040c02a85ac2c37007f066cb3c388c41ea5f4e9e7cfde864f249999b0ce4026" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
@@ -18,18 +18,12 @@ class R < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "openblas"
-  depends_on "pcre"
+  depends_on "pcre2"
   depends_on "readline"
   depends_on "xz"
 
   # needed to preserve executable permissions on files without shebangs
-  skip_clean "lib/R/bin"
-
-  resource "gss" do
-    url "https://cloud.r-project.org/src/contrib/gss_2.1-10.tar.gz", :using => :nounzip
-    mirror "https://mirror.las.iastate.edu/CRAN/src/contrib/gss_2.1-10.tar.gz"
-    sha256 "26c47ecae6a9b7854a1b531c09f869cf8b813462bd8093e3618e1091ace61ee2"
-  end
+  skip_clean "lib/R/bin", "lib/R/doc"
 
   def install
     # Fix dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
@@ -42,6 +36,7 @@ class R < Formula
       "--prefix=#{prefix}",
       "--enable-memory-profiling",
       "--without-cairo",
+      "--without-tcltk",
       "--without-x",
       "--with-aqua",
       "--with-lapack",
@@ -99,8 +94,7 @@ class R < Formula
     assert_equal "[1] 2", shell_output("#{bin}/Rscript -e 'print(1+1)'").chomp
     assert_equal ".dylib", shell_output("#{bin}/R CMD config DYLIB_EXT").chomp
 
-    testpath.install resource("gss")
-    system bin/"R", "CMD", "INSTALL", "--library=.", Dir["gss*"].first
+    system bin/"Rscript", "-e", "install.packages('gss', '.', 'https://cloud.r-project.org')"
     assert_predicate testpath/"gss/libs/gss.so", :exist?,
                      "Failed to install gss package"
   end

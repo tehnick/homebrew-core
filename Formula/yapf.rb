@@ -3,18 +3,18 @@ class Yapf < Formula
 
   desc "Formatter for python code"
   homepage "https://github.com/google/yapf"
-  url "https://files.pythonhosted.org/packages/89/41/7f7c884531730c0cb471764e1ddf50f59d25bb2ab258ede633264344e9cb/yapf-0.28.0.tar.gz"
-  sha256 "6f94b6a176a7c114cfa6bad86d40f259bbe0f10cf2fa7f2f4b3596fc5802a41b"
+  url "https://files.pythonhosted.org/packages/65/44/c2aa8743cada222eaede6b9bd4b644e84f04eaa6dede2258ec7562b705d3/yapf-0.30.0.tar.gz"
+  sha256 "3000abee4c28daebad55da6c85f3cd07b8062ce48e2e9943c8da1b9667d48427"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "c22d7f03bd8c89b8b1d4fc150bc24839c70dc994207d9cda55ec2a722eee4e24" => :catalina
-    sha256 "c8de7e9be2a3c5c8a09501199d4beea2accbd5a62471a6def5495899b8facc33" => :mojave
-    sha256 "a819475f27f0182bfee9ae5c3a63fb60af1119c78fbea7509954fb1fe035986a" => :high_sierra
-    sha256 "c5be10b759aaa579aeafb7b6a0d941aced581d9ab5428198ea588f367c37809b" => :sierra
+    sha256 "d01c7c5f1bf9e9aa845dc219215902089bd4840058207b886699b6aaffa89e95" => :catalina
+    sha256 "2382d1e94fa1ee30967decf41c62bf83d9d72ac7be41ae6d267fee68b52297c7" => :mojave
+    sha256 "0827bfff5c9ea969e54f97302298d4fb2861d91b6baae4f8c4cf3f6e84f44cc2" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     virtualenv_install_with_resources

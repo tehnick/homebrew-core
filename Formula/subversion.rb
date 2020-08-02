@@ -1,30 +1,32 @@
 class Subversion < Formula
   desc "Version control system designed to be a better CVS"
   homepage "https://subversion.apache.org/"
-  url "https://www.apache.org/dyn/closer.cgi?path=subversion/subversion-1.12.2.tar.bz2"
-  sha256 "3bd0b5c8e4c5175263dc9a92fd9aef94ce917e80af034f26fe5c45fde7e0f771"
-  revision 1
+  url "https://www.apache.org/dyn/closer.lua?path=subversion/subversion-1.14.0.tar.bz2"
+  mirror "https://archive.apache.org/dist/subversion/subversion-1.14.0.tar.bz2"
+  sha256 "6ba8e218f9f97a83a799e58a3c6da1221d034b18d9d8cbbcb6ec52ab11722102"
+  license "Apache-2.0"
+  revision 2
 
   bottle do
     rebuild 1
-    sha256 "8b6f9a588d09d642d8384fa3d331c8d6d1951af7c07dd98af2f6c1bc413ba80d" => :catalina
-    sha256 "645a3295fda5daaa6e640180e3a14bd67ae995623b2b217111aa7e9f01359382" => :mojave
-    sha256 "d84a139907231b750f9defd9e6e4e08357e6892ae99f93297eedc318059efca6" => :high_sierra
-    sha256 "682ed0a48848860718baed5b975ef985628431765f5fef53d9ac4f39bb8e5320" => :sierra
+    sha256 "84dfd162eaa16691be6605ae5b2aa30ede25483c2a3da54bf05ff0f6b5767864" => :catalina
+    sha256 "0f84bf07d4a1949129d1be29e3e2d991f4fbec4c38acfd4757918fe9eafbcf6c" => :mojave
+    sha256 "cc20920a8095c8ba91f722f6d3fc5dc392fa075afdcc2d5055df677e8260312a" => :high_sierra
   end
 
   head do
-    url "https://github.com/apache/subversion.git", :branch => "trunk"
+    url "https://github.com/apache/subversion.git", branch: "trunk"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "gettext" => :build
   end
 
-  depends_on :java => ["1.8+", :build]
+  depends_on "openjdk" => :build
   depends_on "pkg-config" => :build
+  depends_on "python@3.8" => :build
   depends_on "scons" => :build # For Serf
-  depends_on "swig@3" => :build # https://issues.apache.org/jira/browse/SVN-4818
+  depends_on "swig" => :build
   depends_on "apr"
   depends_on "apr-util"
 
@@ -37,25 +39,41 @@ class Subversion < Formula
   depends_on "sqlite"
   depends_on "utf8proc"
 
+  uses_from_macos "expat"
+  uses_from_macos "krb5"
+  uses_from_macos "ruby"
+  uses_from_macos "zlib"
+
+  resource "py3c" do
+    url "https://github.com/encukou/py3c/archive/v1.1.tar.gz"
+    sha256 "c7ffc22bc92dded0ca859db53ef3a0b466f89a9f8aad29359c9fe4ff18ebdd20"
+  end
+
   resource "serf" do
-    url "https://www.apache.org/dyn/closer.cgi?path=serf/serf-1.3.9.tar.bz2"
+    url "https://www.apache.org/dyn/closer.lua?path=serf/serf-1.3.9.tar.bz2"
     mirror "https://archive.apache.org/dist/serf/serf-1.3.9.tar.bz2"
     sha256 "549c2d21c577a8a9c0450facb5cca809f26591f048e466552240947bdf7a87cc"
   end
 
-  # Fix #23993 by stripping flags swig can't handle from SWIG_CPPFLAGS
   # Prevent "-arch ppc" from being pulled in from Perl's $Config{ccflags}
-  # Prevent linking into a Python Framework
   patch :DATA
 
   def install
-    ENV.prepend_path "PATH", "/System/Library/Frameworks/Python.framework/Versions/2.7/bin"
-    # Fix #33530 by ensuring the system Ruby can build test programs.
-    ENV.delete "SDKROOT"
-
+    py3c_prefix = buildpath/"py3c"
     serf_prefix = libexec/"serf"
 
+    resource("py3c").unpack py3c_prefix
     resource("serf").stage do
+      inreplace "SConstruct" do |s|
+        s.gsub! "print 'Warning: Used unknown variables:', ', '.join(unknown.keys())",
+        "print('Warning: Used unknown variables:', ', '.join(unknown.keys()))"
+        s.gsub! "match = re.search('SERF_MAJOR_VERSION ([0-9]+).*'",
+        "match = re.search(b'SERF_MAJOR_VERSION ([0-9]+).*'"
+        s.gsub! "'SERF_MINOR_VERSION ([0-9]+).*'",
+        "b'SERF_MINOR_VERSION ([0-9]+).*'"
+        s.gsub! "'SERF_PATCH_VERSION ([0-9]+)'",
+        "b'SERF_PATCH_VERSION ([0-9]+)'"
+      end
       # scons ignores our compiler and flags unless explicitly passed
       args = %W[
         PREFIX=#{serf_prefix} GSSAPI=/usr CC=#{ENV.cc}
@@ -80,7 +98,9 @@ class Subversion < Formula
       --with-apr-util=#{Formula["apr-util"].opt_prefix}
       --with-apr=#{Formula["apr"].opt_prefix}
       --with-apxs=no
+      --with-jdk=#{Formula["openjdk"].opt_prefix}
       --with-ruby-sitedir=#{lib}/ruby
+      --with-py3c=#{py3c_prefix}
       --with-serf=#{serf_prefix}
       --with-sqlite=#{Formula["sqlite"].opt_prefix}
       --with-zlib=#{MacOS.sdk_path_if_needed}/usr
@@ -89,12 +109,9 @@ class Subversion < Formula
       --without-gpg-agent
       --enable-javahl
       --without-jikes
+      PYTHON=#{Formula["python@3.8"].opt_bin}/python3
       RUBY=/usr/bin/ruby
     ]
-
-    # The system Python is built with llvm-gcc, so we override this
-    # variable to prevent failures due to incompatible CFLAGS
-    ENV["ac_cv_python_compile"] = ENV.cc
 
     inreplace "Makefile.in",
               "toolsdir = @bindir@/svn-tools",
@@ -111,11 +128,7 @@ class Subversion < Formula
 
     system "make", "swig-py"
     system "make", "install-swig-py"
-    (lib/"python2.7/site-packages").install_symlink Dir["#{lib}/svn-python/*"]
-
-    # Peg to system Ruby
-    system "make", "swig-rb", "EXTRA_SWIG_LDFLAGS=-L/usr/lib"
-    system "make", "install-swig-rb"
+    (lib/"python3.8/site-packages").install_symlink Dir["#{lib}/svn-python/*"]
 
     # Java and Perl support don't build correctly in parallel:
     # https://github.com/Homebrew/homebrew/issues/20415
@@ -123,13 +136,14 @@ class Subversion < Formula
     system "make", "javahl"
     system "make", "install-javahl"
 
-    archlib = Utils.popen_read("perl -MConfig -e 'print $Config{archlib}'")
+    archlib = Utils.safe_popen_read("perl", "-MConfig", "-e", "print $Config{archlib}")
     perl_core = Pathname.new(archlib)/"CORE"
     onoe "'#{perl_core}' does not exist" unless perl_core.exist?
 
     inreplace "Makefile" do |s|
       s.change_make_var! "SWIG_PL_INCLUDES",
-        "$(SWIG_INCLUDES) -arch #{MacOS.preferred_arch} -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -I#{HOMEBREW_PREFIX}/include -I#{perl_core}"
+        "$(SWIG_INCLUDES) -arch x86_64 -g -pipe -fno-common " \
+        "-DPERL_DARWIN -fno-strict-aliasing -I#{HOMEBREW_PREFIX}/include -I#{perl_core}"
     end
     system "make", "swig-pl"
     system "make", "install-swig-pl"
@@ -148,10 +162,6 @@ class Subversion < Formula
 
       The perl bindings are located in various subdirectories of:
         #{opt_lib}/perl5
-
-      If you wish to use the Ruby bindings you may need to add:
-        #{HOMEBREW_PREFIX}/lib/ruby
-      to your RUBYLIB.
 
       You may need to link the Java bindings into the Java Extensions folder:
         sudo mkdir -p /Library/Java/Extensions
@@ -186,17 +196,3 @@ index a60430b..bd9b017 100644
      INC  => join(' ', $includes, $cppflags,
                   " -I$swig_srcdir/perl/libsvn_swig_perl",
                   " -I$svnlib_srcdir/include",
-
-diff --git a/build/get-py-info.py b/build/get-py-info.py
-index 29a6c0a..dd1a5a8 100644
---- a/build/get-py-info.py
-+++ b/build/get-py-info.py
-@@ -83,7 +83,7 @@ def link_options():
-   options = sysconfig.get_config_var('LDSHARED').split()
-   fwdir = sysconfig.get_config_var('PYTHONFRAMEWORKDIR')
-
--  if fwdir and fwdir != "no-framework":
-+  if fwdir and fwdir != "no-framework" and sys.platform != 'darwin':
-
-     # Setup the framework prefix
-     fwprefix = sysconfig.get_config_var('PYTHONFRAMEWORKPREFIX')

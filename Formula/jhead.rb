@@ -1,21 +1,23 @@
 class Jhead < Formula
   desc "Extract Digicam setting info from EXIF JPEG headers"
-  homepage "http://www.sentex.net/~mwandel/jhead/"
-  url "http://www.sentex.net/~mwandel/jhead/jhead-3.03.tar.gz"
-  sha256 "82194e0128d9141038f82fadcb5845391ca3021d61bc00815078601619f6c0c2"
+  homepage "https://www.sentex.net/~mwandel/jhead/"
+  url "https://www.sentex.net/~mwandel/jhead/jhead-3.04.tar.gz"
+  sha256 "ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "449ddd95273bb9287758c6ba58aed81a2002f2eba95031027c97b615ce93ed49" => :catalina
-    sha256 "1fdaa2ab0e5066688f1d3ff80821447f0957f95ba37c4c1c8d8f40b6d3a38ee9" => :mojave
-    sha256 "d62f1ed9f99df061893021df1f5dc8928e52eb6ac73cfe47b41cf50bc2369f49" => :high_sierra
-    sha256 "b5af56763e92712207332e51208c918b71c1b46985cb9df44eb1d8a30f59348f" => :sierra
+    sha256 "1d7d67316306e727fd5b5df4949eb66039462a6887276130a380fa81f17453f7" => :catalina
+    sha256 "bfc94a4d1c62e2df62ef63298c0ecff674a2cf5cb5d58e75b03dfa947485df6e" => :mojave
+    sha256 "09cf431f5e58b7c07e0cab702c1f38c3c9ce10ca22c749e496b4947207157952" => :high_sierra
   end
 
   # Patch to provide a proper install target to the Makefile. The patch has
   # been submitted upstream through email. We need to carry this patch until
   # upstream decides to incorporate it.
-  patch :DATA
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/e37226eb9575636a728461fdc469c6706d81f564/jhead/3.04.patch"
+    sha256 "2812e109fff8c0215faaa5a443d4b0aaa2b3a913aaac6b42c106903f1d62381b"
+  end
 
   def install
     system "make", "install", "PREFIX=#{prefix}"
@@ -26,37 +28,3 @@ class Jhead < Formula
     system "#{bin}/jhead", "-autorot", "test.jpg"
   end
 end
-
-__END__
---- a/makefile	2015-02-02 23:24:06.000000000 +0100
-+++ b/makefile	2015-02-25 16:31:21.000000000 +0100
-@@ -1,12 +1,18 @@
- #--------------------------------
- # jhead makefile for Unix
- #--------------------------------
-+PREFIX=$(DESTDIR)/usr/local
-+BINDIR=$(PREFIX)/bin
-+DOCDIR=$(PREFIX)/share/doc/jhead
-+MANDIR=$(PREFIX)/share/man/man1
- OBJ=.
- SRC=.
- CFLAGS:= $(CFLAGS) -O3 -Wall
-
- all: jhead
-
-+docs = $(SRC)/usage.html
-+
- objs = $(OBJ)/jhead.o $(OBJ)/jpgfile.o $(OBJ)/jpgqguess.o $(OBJ)/paths.o \
-	$(OBJ)/exif.o $(OBJ)/iptc.o $(OBJ)/gpsinfo.o $(OBJ)/makernote.o
-
-@@ -19,5 +25,8 @@
- clean:
-	rm -f $(objs) jhead
-
--install:
--	cp jhead ${DESTDIR}/usr/local/bin/
-+install: all
-+	install -d $(BINDIR) $(DOCDIR) $(MANDIR)
-+	install -m 0755 jhead $(BINDIR)
-+	install -m 0644 $(docs) $(DOCDIR)
-+	install -m 0644 jhead.1 $(MANDIR)

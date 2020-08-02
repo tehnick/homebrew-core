@@ -1,13 +1,14 @@
 class Vte3 < Formula
   desc "Terminal emulator widget used by GNOME terminal"
   homepage "https://developer.gnome.org/vte/"
-  url "https://download.gnome.org/sources/vte/0.58/vte-0.58.2.tar.xz"
-  sha256 "33c966d2b1f2c3b0f9416dbca883fd746159b5bd040350e3b78f8104b2a42bc0"
+  url "https://download.gnome.org/sources/vte/0.60/vte-0.60.3.tar.xz"
+  sha256 "feb76e1181a357d86112d447a08d127e2081438df76ece83243b18609dd9822a"
+  revision 1
 
   bottle do
-    sha256 "ff98e6695262b0a5a9577f7dd488197d5ab46347a6a7000ae100992e11470506" => :catalina
-    sha256 "ab0bac4db500c1da6d61839f83613bb214d73cafc5ab43ea6b1c6943a27b2615" => :mojave
-    sha256 "4090c5d0e97526711d26ea7d2e6aff4873c985e4e890490b0acbb1a249c3b849" => :high_sierra
+    sha256 "783483804a85b6616bea1754e8c9f7695938eb34ce5ea86723b23221e508fcf2" => :catalina
+    sha256 "69ecc587660a67fa8138063a7152af533fa6dd9841a8b84021f78099380f043f" => :mojave
+    sha256 "a06d9e99ed510244171aaee721971bb9b7a2ac33c4dcfa354ec0b68e56b7bd2e" => :high_sierra
   end
 
   depends_on "gobject-introspection" => :build
@@ -26,12 +27,12 @@ class Vte3 < Formula
   def install
     ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
 
-    args = [
-      "--prefix=#{prefix}",
-      "-Dgir=true",
-      "-Dgtk3=true",
-      "-Dgnutls=true",
-      "-Dvapi=true",
+    args = std_meson_args + %w[
+      -Dgir=true
+      -Dgtk3=true
+      -Dgnutls=true
+      -Dvapi=true
+      -D_b_symbolic_functions=false
     ]
 
     mkdir "build" do
@@ -119,10 +120,10 @@ end
 
 __END__
 diff --git a/meson.build b/meson.build
-index 82266cf7..2e49d669 100644
+index e2200a75..df98872f 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -72,6 +72,8 @@ lt_age = vte_minor_version * 100 + vte_micro_version - lt_revision
+@@ -78,6 +78,8 @@ lt_age = vte_minor_version * 100 + vte_micro_version - lt_revision
  lt_current = vte_major_version + lt_age
 
  libvte_gtk3_soversion = '@0@.@1@.@2@'.format(libvte_soversion, lt_current, lt_revision)
@@ -132,34 +133,14 @@ index 82266cf7..2e49d669 100644
 
  # i18n
 diff --git a/src/meson.build b/src/meson.build
-index 1481c089..b9590d26 100644
+index 79d4a702..0495dea8 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -178,6 +178,7 @@ if get_option('gtk3')
+@@ -224,6 +224,7 @@ if get_option('gtk3')
      vte_gtk3_api_name,
      sources: libvte_gtk3_sources,
      version: libvte_gtk3_soversion,
 +    darwin_versions: libvte_gtk3_osxversions,
      include_directories: incs,
      dependencies: libvte_gtk3_deps,
-     cpp_args: libvte_common_cppflags,
-
-diff --git a/meson.build b/meson.build
-index 2e49d669..ed8c2ab4 100644
---- a/meson.build
-+++ b/meson.build
-@@ -359,13 +359,8 @@ linker_flags = [
-   '-Wl,-Bsymbolic-functions'
- ]
-
--foreach flag: linker_flags
--  assert(cc.has_link_argument(flag), flag + ' is required but not supported')
--  add_project_link_arguments(flag, language: 'c')
--
--  assert(cxx.has_link_argument(flag), flag + ' is required but not supported')
--  add_project_link_arguments(flag, language: 'cpp')
--endforeach
-+add_project_link_arguments(cc.get_supported_link_arguments(linker_flags), language: 'c')
-+add_project_link_arguments(cxx.get_supported_link_arguments(linker_flags), language: 'cpp')
-
- # Dependencies
+     cpp_args: libvte_gtk3_cppflags,

@@ -2,17 +2,19 @@ class Pulumi < Formula
   desc "Cloud native development platform"
   homepage "https://pulumi.io/"
   url "https://github.com/pulumi/pulumi.git",
-      :tag      => "v1.3.4",
-      :revision => "fa20d88e12d95c70273c71ff41d510858610f2bc"
+      tag:      "v2.7.1",
+      revision: "2798bf0ede368cad3f09326276862cf5d4b147a4"
+  license "Apache-2.0"
+  head "https://github.com/pulumi/pulumi.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "5a3f59eaaf444f14541e2f858f5d27fd4c6eacf5a926db531284196637011971" => :catalina
-    sha256 "813143cb98aa724cddf604a5f86da729feb7b5c5ecbd2bd3ca276df62c42b7e0" => :mojave
-    sha256 "8cf8fcd82c8612bf8c0a41eb005ca9aebb87dec7280c3e9449510d1c1e8efb36" => :high_sierra
+    sha256 "8ba377034e61c20b337778e306d25fed6020941465446b06a227c95a91403de3" => :catalina
+    sha256 "e429d2912b36eeb630755517ada25e582ccc1cbcfbe85aaec0a3f51ddea6828d" => :mojave
+    sha256 "c77753442fd48cd7eddb8a17c6b3e24cbdca33d100695d83d567e6f427096e12" => :high_sierra
   end
 
-  depends_on "go@1.12" => :build
+  depends_on "go" => :build
 
   def install
     ENV["GOPATH"] = buildpath
@@ -22,18 +24,20 @@ class Pulumi < Formula
     dir.install buildpath.children
 
     cd dir do
-      system "go", "mod", "vendor"
-      system "make", "dist"
+      cd "./sdk" do
+        system "go", "mod", "download"
+      end
+      cd "./pkg" do
+        system "go", "mod", "download"
+      end
+      system "make", "brew"
       bin.install Dir["#{buildpath}/bin/*"]
       prefix.install_metafiles
 
-      # Install bash completion
-      output = Utils.popen_read("#{bin}/pulumi gen-completion bash")
-      (bash_completion/"pulumi").write output
-
-      # Install zsh completion
-      output = Utils.popen_read("#{bin}/pulumi gen-completion zsh")
-      (zsh_completion/"_pulumi").write output
+      # Install shell completions
+      (bash_completion/"pulumi.bash").write `#{bin}/pulumi gen-completion bash`
+      (zsh_completion/"_pulumi").write `#{bin}/pulumi gen-completion zsh`
+      (fish_completion/"pulumi.fish").write `#{bin}/pulumi gen-completion fish`
     end
   end
 

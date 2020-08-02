@@ -1,19 +1,21 @@
 class Openexr < Formula
   desc "High dynamic-range image file format"
   homepage "https://www.openexr.com/"
-  url "https://github.com/openexr/openexr/releases/download/v2.3.0/openexr-2.3.0.tar.gz"
-  sha256 "fd6cb3a87f8c1a233be17b94c74799e6241d50fc5efd4df75c7a4b9cf4e25ea6"
+  url "https://github.com/openexr/openexr/archive/v2.5.2.tar.gz"
+  sha256 "5da8dff448d0c4a529e52c97daf238a461d01cd233944f75095668d6d7528761"
+  license "BSD-3-Clause"
 
   bottle do
-    cellar :any
-    sha256 "253c51ec98e9bd038d47d8482ea15e85183cc8dd718e5cf41facdfe9555f3717" => :catalina
-    sha256 "111658d105dc894ea67e1fdc98597c73c1bf1fa64ac52f1287372ded53a1cdab" => :mojave
-    sha256 "5673dfdc40bfc3f3495ec2fcff9ea5d5b65b244940f5bf686f79b838b97fdf3d" => :high_sierra
-    sha256 "1418b449d38fbe7f37071ab6bf8f383d53d3540d41597be97eefdcc08749b7e3" => :sierra
+    sha256 "cd7b32d91f6e70711a4010f2027be140189d8fc92f5fcdb12331228a9e762817" => :catalina
+    sha256 "057ebb08dfa17cefc33121b6fe39af3ac43b59b4c197abba473a0e4724f07802" => :mojave
+    sha256 "a5d9520a67acdb84ac3593290d2d65d3f4dd0c4db4ed4fe9f5c07c4b5a441ae2" => :high_sierra
   end
 
+  depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "ilmbase"
+
+  uses_from_macos "zlib"
 
   resource "exr" do
     url "https://github.com/openexr/openexr-images/raw/master/TestImages/AllHalfValues.exr"
@@ -21,10 +23,10 @@ class Openexr < Formula
   end
 
   def install
-    system "./configure", "--disable-debug",
-                          "--disable-dependency-tracking",
-                          "--prefix=#{prefix}"
-    system "make", "install"
+    cd "OpenEXR" do
+      system "cmake", ".", *std_cmake_args
+      system "make", "install"
+    end
   end
 
   test do

@@ -3,13 +3,15 @@ class Jabba < Formula
   homepage "https://github.com/shyiko/jabba"
   url "https://github.com/shyiko/jabba/archive/0.11.2.tar.gz"
   sha256 "33874c81387f03fe1a27c64cb6fb585a458c1a2c1548b4b86694da5f81164355"
+  license "Apache-2.0"
   head "https://github.com/shyiko/jabba.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4214658f6ce8d3e2f364ba5859278e6f32ed1dee5afe9f692103dd0d430e3205" => :mojave
-    sha256 "fa50cc2c872c5e8241c986f1ee0237e549a51340d3896901076e5baee77ae6b7" => :high_sierra
-    sha256 "65736798d127fbad2f048dada9e46399454e784bc009e266be55a328ea526010" => :sierra
+    rebuild 2
+    sha256 "7eddb409c7bb2784db21756e624a18b19977bb4df53ab547eaedd8abe876651e" => :catalina
+    sha256 "3101ea25ce49c3ed96b3c8595a5441fec3aeb536b56eca21c1dea56f6c1fd86b" => :mojave
+    sha256 "8454f5aa9b8832908b1c889531118ea058b2e675ef7f7f37eeb282f454aeec1e" => :high_sierra
   end
 
   depends_on "glide" => :build
@@ -30,9 +32,9 @@ class Jabba < Formula
 
   test do
     ENV["JABBA_HOME"] = testpath/"jabba_home"
-    system bin/"jabba", "install", "1.11.0"
-    jdk_path = Utils.popen_read("#{bin}/jabba which 1.11.0").strip
-    assert_match 'java version "11.0',
+    system bin/"jabba", "install", "openjdk@1.14.0"
+    jdk_path = shell_output("#{bin}/jabba which openjdk@1.14.0").strip
+    assert_match 'openjdk version "14',
                  shell_output("#{jdk_path}/Contents/Home/bin/java -version 2>&1")
   end
 end

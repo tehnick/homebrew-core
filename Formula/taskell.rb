@@ -5,25 +5,27 @@ class Taskell < Formula
 
   desc "Command-line Kanban board/task manager with support for Trello"
   homepage "https://taskell.app"
-  url "https://github.com/smallhadroncollider/taskell/archive/1.6.1.tar.gz"
-  sha256 "66f4b80c5f5a79f7f796bac7f24834879f30492dcf420041ea4f005bedf656d3"
+  url "https://github.com/smallhadroncollider/taskell/archive/1.9.4.tar.gz"
+  sha256 "8027af294eacc4e483a7dd6d8d510e10ae377510cf45ae1caf286b4022c5edd0"
+  license "BSD-3-Clause"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "baa3bdfa34942bc24d117265911acf485b2653d30419fd7b92e86eecf72e5d3d" => :mojave
-    sha256 "5cefc442114d0e3f7bd06eb84285c6f61c5c6730b346eb80c02d72d21e552e5a" => :high_sierra
-    sha256 "94210ead7c255058a381a46fee0bd06166737173e208b0ced933849950d4589e" => :sierra
+    sha256 "d5200196154ab64b1a13f30db9817404fb77f79711ff89baa9ce85847d445dcb" => :catalina
+    sha256 "70b0634eb2c510398866d27ff49256055a0ec68ba26945e53991ba460970b862" => :mojave
+    sha256 "ea408b6153f32196363a71c920c240b95d2fbc8d86de3c88e9d22afd645972e7" => :high_sierra
   end
 
   depends_on "cabal-install" => :build
-  depends_on "ghc" => :build
+  depends_on "ghc@8.8" => :build
+  depends_on "hpack" => :build
+
+  uses_from_macos "ncurses"
+  uses_from_macos "zlib"
 
   def install
-    cabal_sandbox do
-      cabal_install "hpack"
-      system "./.cabal-sandbox/bin/hpack"
-      install_cabal_package
-    end
+    system "hpack"
+    install_cabal_package
   end
 
   test do

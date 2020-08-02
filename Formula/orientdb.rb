@@ -1,15 +1,21 @@
 class Orientdb < Formula
   desc "Graph database"
   homepage "https://orientdb.com/"
-  url "https://orientdb.com/download.php?file=orientdb-community-importers-2.2.29.tar.gz"
-  sha256 "ed6e65b18fed70ace3afa780a125100a19899e9b18f4d6e9bc1111e7ee88d752"
+  url "https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.1.1/orientdb-3.1.1.zip"
+  sha256 "1538bfcc5d1a83e8a686be37950a69a2466d19eb824f754367a7b254c56b748f"
 
-  bottle :unneeded
+  bottle do
+    cellar :any_skip_relocation
+    sha256 "4dd8ac529ac0d88ebe0924e4c67ab6ec12e516286a503997061586e1c4a19164" => :catalina
+    sha256 "4dd8ac529ac0d88ebe0924e4c67ab6ec12e516286a503997061586e1c4a19164" => :mojave
+    sha256 "4dd8ac529ac0d88ebe0924e4c67ab6ec12e516286a503997061586e1c4a19164" => :high_sierra
+  end
 
-  depends_on :java => "1.6+"
+  depends_on "maven" => :build
+  depends_on "openjdk"
 
   def install
-    rm_rf Dir["{bin,benchmarks}/*.{bat,exe}"]
+    rm_rf Dir["bin/*.bat"]
 
     chmod 0755, Dir["bin/*"]
     libexec.install Dir["*"]
@@ -27,9 +33,9 @@ class Orientdb < Formula
     inreplace "#{libexec}/bin/orientdb.sh", 'su $ORIENTDB_USER -c "cd \"$ORIENTDB_DIR/bin\";', ""
     inreplace "#{libexec}/bin/orientdb.sh", '&"', "&"
 
-    bin.install_symlink "#{libexec}/bin/orientdb.sh" => "orientdb"
-    bin.install_symlink "#{libexec}/bin/console.sh" => "orientdb-console"
-    bin.install_symlink "#{libexec}/bin/gremlin.sh" => "orientdb-gremlin"
+    (bin/"orientdb").write_env_script "#{libexec}/bin/orientdb.sh", JAVA_HOME: Formula["openjdk"].opt_prefix
+    (bin/"orientdb-console").write_env_script "#{libexec}/bin/console.sh", JAVA_HOME: Formula["openjdk"].opt_prefix
+    (bin/"orientdb-gremlin").write_env_script "#{libexec}/bin/gremlin.sh", JAVA_HOME: Formula["openjdk"].opt_prefix
   end
 
   def post_install
@@ -48,41 +54,43 @@ class Orientdb < Formula
     system "#{bin}/orientdb", "stop"
   end
 
-  def caveats; <<~EOS
-    The OrientDB root password was set to 'orientdb'. To reset it:
-      https://orientdb.com/docs/2.2/Server-Security.html#restoring-the-servers-user-root
-  EOS
+  def caveats
+    <<~EOS
+      The OrientDB root password was set to 'orientdb'. To reset it:
+        https://orientdb.com/docs/last/security/Server-Security.html#restoring-the-servers-user-root
+    EOS
   end
 
-  plist_options :manual => "orientdb start"
+  plist_options manual: "orientdb start"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-          <dict>
-            <key>SuccessfulExit</key>
-            <false/>
-          </dict>
-        <key>Label</key>
-        <string>homebrew.mxcl.orientdb</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>/usr/local/opt/orientdb/libexec/bin/server.sh</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>/usr/local/var</string>
-        <key>StandardErrorPath</key>
-        <string>/usr/local/var/log/orientdb/serror.log</string>
-        <key>StandardOutPath</key>
-        <string>/usr/local/var/log/orientdb/sout.log</string>
-      </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>KeepAlive</key>
+            <dict>
+              <key>SuccessfulExit</key>
+              <false/>
+            </dict>
+          <key>Label</key>
+          <string>homebrew.mxcl.orientdb</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>/usr/local/opt/orientdb/libexec/bin/server.sh</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>WorkingDirectory</key>
+          <string>/usr/local/var</string>
+          <key>StandardErrorPath</key>
+          <string>/usr/local/var/log/orientdb/serror.log</string>
+          <key>StandardOutPath</key>
+          <string>/usr/local/var/log/orientdb/sout.log</string>
+        </dict>
+      </plist>
+    EOS
   end
 
   test do

@@ -1,16 +1,15 @@
 class Sundials < Formula
   desc "Nonlinear and differential/algebraic equations solver"
   homepage "https://computation.llnl.gov/casc/sundials/main.html"
-  url "https://computation.llnl.gov/projects/sundials/download/sundials-4.1.0.tar.gz"
-  sha256 "280de1c27b2360170a6f46cb3799b2aee9dff3bddbafc8b08c291a47ab258aa5"
-  revision 2
+  url "https://computation.llnl.gov/projects/sundials/download/sundials-5.3.0.tar.gz"
+  sha256 "88dff7e11a366853d8afd5de05bf197a8129a804d9d4461fb64297f1ef89bca7"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "de1b2b9fa513d372b7f53a9354b1d0ff4675b6055f9bf0d42a4dad0a693064ac" => :catalina
-    sha256 "da83304cfc31d4b07693b64271dcceb940446616551aaf3ccd82945be923116c" => :mojave
-    sha256 "15e9971b298bfaf56193a982e161e3011f7af31717486343892a1186f56466d3" => :high_sierra
-    sha256 "93bdbe8c2cef3dbd89358a3c92ad19f4ed51e9060dafb2d04196c4333ebd8da3" => :sierra
+    sha256 "fff1df3841c80eb3c2a6471e53ad2e8f29f97eb1e8498f8e85dc919616c68d0f" => :catalina
+    sha256 "63e63e0f7f928cd656613dc6344aaaaf11acd25e8c3148d3ac9a5b86dfe6c3df" => :mojave
+    sha256 "04f549daeb21124cfa74aeddb7c7baf58f7f482faec96cd4f5bc96f206414896" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -19,10 +18,12 @@ class Sundials < Formula
   depends_on "openblas"
   depends_on "suite-sparse"
 
+  uses_from_macos "libpcap"
+  uses_from_macos "m4"
+
   def install
     blas = "-L#{Formula["openblas"].opt_lib} -lopenblas"
     args = std_cmake_args + %W[
-      -DCMAKE_C_COMPILER=#{ENV["CC"]}
       -DBUILD_SHARED_LIBS=ON
       -DKLU_ENABLE=ON
       -DKLU_LIBRARY_DIR=#{Formula["suite-sparse"].opt_lib}
@@ -37,10 +38,15 @@ class Sundials < Formula
       system "cmake", "..", *args
       system "make", "install"
     end
+
+    # Only keep one example for testing purposes
+    (pkgshare/"examples").install Dir[prefix/"examples/nvector/serial/*"] \
+                                  - Dir[prefix/"examples/nvector/serial/{CMake*,Makefile}"]
+    rm_rf prefix/"examples"
   end
 
   test do
-    cp Dir[prefix/"examples/nvector/serial/*"], testpath
+    cp Dir[pkgshare/"examples/*"], testpath
     system ENV.cc, "-I#{include}", "test_nvector.c", "sundials_nvector.c",
                    "test_nvector_serial.c", "-L#{lib}", "-lsundials_nvecserial"
     assert_match "SUCCESS: NVector module passed all tests",

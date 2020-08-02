@@ -1,14 +1,15 @@
 class Dav1d < Formula
   desc "AV1 decoder targeted to be small and fast"
   homepage "https://code.videolan.org/videolan/dav1d"
-  url "https://code.videolan.org/videolan/dav1d/-/archive/0.4.0/dav1d-0.4.0.tar.bz2"
-  sha256 "18bf96c5168b8c704422387620fefaa953e8dbd4eacb0f0796c03d6e741f8924"
+  url "https://code.videolan.org/videolan/dav1d/-/archive/0.7.1/dav1d-0.7.1.tar.bz2"
+  sha256 "9eac4f50089f54a9f562827bda4a21187d68c01d8b20055eef1d7efca9f84cf8"
+  license "BSD-2-Clause"
 
   bottle do
     cellar :any
-    sha256 "27deef5c5fb949caede94841ecb6f68c21f84f86a5251b3f5ea6b677abfaedab" => :mojave
-    sha256 "af6fd10a3a742d96e099994bf9731505e569d4354d79d964bbe62b4125b6e932" => :high_sierra
-    sha256 "00bc367af9e2af989a7106eb9cf710511ed5d9b9a95d29b4edf897decad7c96f" => :sierra
+    sha256 "72583c13b3f1a20ebf5bb51a44d23e29cbb19de60ee3cd9b2530dfd5f3061283" => :catalina
+    sha256 "457283e7f7e3066bcbacff2fda7c7630ccd476dc34908ab1e150f759d88dbe42" => :mojave
+    sha256 "9cadd5bf4b109037700161dcc12376d5f05a6ba73df925c592a01392f2247db6" => :high_sierra
   end
 
   depends_on "meson" => :build
@@ -21,7 +22,7 @@ class Dav1d < Formula
   end
 
   def install
-    system "meson", "--prefix=#{prefix}", "build", "--buildtype", "release"
+    system "meson", *std_meson_args, "build"
     system "ninja", "install", "-C", "build"
   end
 

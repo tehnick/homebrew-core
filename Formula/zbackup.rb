@@ -3,13 +3,13 @@ class Zbackup < Formula
   homepage "http://zbackup.org"
   url "https://github.com/zbackup/zbackup/archive/1.4.4.tar.gz"
   sha256 "efccccd2a045da91576c591968374379da1dc4ca2e3dec4d3f8f12628fa29a85"
-  revision 12
+  revision 14
 
   bottle do
     cellar :any
-    sha256 "036ce8ce7718ff59acfafa78de97b4d0df6e5480e415894d493d92eb138399d2" => :catalina
-    sha256 "fd35ccb5e8b3c0473c7466e6ad4a109addca069d3f7b62bbbad7a49471816fca" => :mojave
-    sha256 "4dd584f0681545a326ea0e2e68cf5258f37053790c170ddd268e2da775ddc939" => :high_sierra
+    sha256 "faad049e7738a4eeefd904de33d4fb430a6e743d1da3aa5ff5dcf0f1a901256e" => :catalina
+    sha256 "cfacb7cce0ef145c0cb0d4668a11bd745ee84bdff0e5fed181093401f785332f" => :mojave
+    sha256 "04983e28ea73a359a248e685e9fb8395ea89af5cd71ebfde3d5fd45963e45639" => :high_sierra
   end
 
   depends_on "cmake" => :build

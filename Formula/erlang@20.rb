@@ -2,17 +2,19 @@ class ErlangAT20 < Formula
   desc "Programming language for highly scalable real-time systems"
   homepage "https://www.erlang.org/"
   # Download tarball from GitHub; it is served faster than the official tarball.
-  url "https://github.com/erlang/otp/archive/OTP-20.3.8.22.tar.gz"
-  sha256 "d2c36130938659a63d8de094c3d4f8a1d3ea33d4d993d0723ba9c745df2a2753"
-  revision 1
+  url "https://github.com/erlang/otp/archive/OTP-20.3.8.26.tar.gz"
+  sha256 "dce78b60938a48b887317e5222cff946fd4af36666153ab2f0f022aa91755813"
+  license "Apache-2.0"
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "17977ee7419a273aebbbc4802b975b1a8030df59d909bad74718716e1a50beae" => :catalina
-    sha256 "18c0e4a277c6c1e5c416e3f6da7d3eabf537b9551071fd2c4413a773a0054e06" => :mojave
-    sha256 "9d0265b401a37d2080a6af22830d20bc4d7d3adf065176934b224e14f722ecc8" => :high_sierra
+    sha256 "130019a8e459654a92e7267b60932867c8c27957d5bd5b791e358407e6d2755b" => :catalina
+    sha256 "5e1003bf97321f4cf5cd57b062b752c2d92bcbb457ab5e992309790b7827fd1f" => :mojave
+    sha256 "a401feb22927ecc0e649f3f2f7aeba331725b6390985f826ed5639d59732ee6a" => :high_sierra
   end
+
+  # Deprecated with OTP-23 release (https://erlang.org/pipermail/erlang-questions/2020-July/099747.html)
+  deprecate! date: "2020-05-13"
 
   keg_only :versioned_formula
 
@@ -21,6 +23,8 @@ class ErlangAT20 < Formula
   depends_on "libtool" => :build
   depends_on "openssl@1.1"
   depends_on "wxmac"
+
+  uses_from_macos "m4" => :build
 
   resource "man" do
     url "https://www.erlang.org/download/otp_doc_man_20.3.tar.gz"
@@ -73,12 +77,13 @@ class ErlangAT20 < Formula
     doc.install resource("html")
   end
 
-  def caveats; <<~EOS
-    Man pages can be found in:
-      #{opt_lib}/erlang/man
+  def caveats
+    <<~EOS
+      Man pages can be found in:
+        #{opt_lib}/erlang/man
 
-    Access them with `erl -man`, or add this directory to MANPATH.
-  EOS
+      Access them with `erl -man`, or add this directory to MANPATH.
+    EOS
   end
 
   test do

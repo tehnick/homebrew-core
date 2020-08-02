@@ -2,34 +2,27 @@ class Helmsman < Formula
   desc "Helm Charts as Code tool"
   homepage "https://github.com/Praqma/helmsman"
   url "https://github.com/Praqma/helmsman.git",
-    :tag      => "v1.12.0",
-    :revision => "6b62ea3941dc9be9cfb9eed457074152f809405e"
+    tag:      "v3.4.4",
+    revision: "9568064b9f1e0bbcb208f1083355861a63da86ba"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0bea12f035c1fe0f7c849bdab3415c25f62759945dcd85e35bb019721714ceea" => :catalina
-    sha256 "c48c7f7263f4888c70fd01050b09c1353fc3ec9ff94d890a1b91201ff7fd2dd7" => :mojave
-    sha256 "12c21c1446a0c7664d7e184463d1507880a6118d89019fa0d3523e3dc52aece1" => :high_sierra
-    sha256 "0712878d28acc0efc4ef596801cc5a378712fd22007bf4d6592cef9687573e3c" => :sierra
+    sha256 "124144b8d17651350350433fe6e65dcb6025146b27919c171fd6d4c6d37a7cf7" => :catalina
+    sha256 "6b279f354d6c1b1ba6d9340750fca9b7809823354f892f4f941a8fcbd3f10d82" => :mojave
+    sha256 "a7a21e2b4f07b283c989f0ce373ecbfe805788025656bdcfbbe3d74f9114419d" => :high_sierra
   end
 
-  depends_on "dep" => :build
   depends_on "go" => :build
+  depends_on "helm"
   depends_on "kubernetes-cli"
-  depends_on "kubernetes-helm"
 
   def install
-    ENV["GOPATH"] = buildpath
-
-    dir = buildpath/"src/github.com/Praqma/helmsman"
-    dir.install buildpath.children
-
-    cd dir do
-      system "dep", "ensure", "-vendor-only"
-      system "go", "build", "-o", bin/"helmsman"
-      prefix.install_metafiles
-      pkgshare.install "example.yaml"
-    end
+    system "go", "build",
+      "-ldflags", "-s -w -X main.version=#{version}",
+      "-trimpath", "-o", bin/"helmsman", "cmd/helmsman/main.go"
+    prefix.install_metafiles
+    pkgshare.install "examples/example.yaml"
   end
 
   test do

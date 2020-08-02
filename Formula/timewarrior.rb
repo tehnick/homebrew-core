@@ -1,17 +1,16 @@
 class Timewarrior < Formula
   desc "Command-line time tracking application"
-  homepage "https://taskwarrior.org/docs/timewarrior/"
-  url "https://taskwarrior.org/download/timew-1.1.1.tar.gz"
-  sha256 "1f7d9a62e55fc5a3126433654ccb1fd7d2d135f06f05697f871897c9db77ccc9"
+  homepage "https://timewarrior.net/"
+  url "https://github.com/GothenburgBitFactory/timewarrior/releases/download/v1.3.0/timew-1.3.0.tar.gz"
+  sha256 "1f3b9166a96637d3c098a7cfcff74ca61c41f13e2ca21f6c7ad6dd54cc74ac70"
+  license "MIT"
   head "https://github.com/GothenburgBitFactory/timewarrior.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "021d9b46180d9644c6c5096c8b687c01ddc8fdf517e323870116bc02cbcfdeff" => :catalina
-    sha256 "48af9bcedd665d7c2541eb3edc9ed14bccf26a1b3861e295b971ed1d8c2cedc6" => :mojave
-    sha256 "add032f6bd1e1b67ff81902522473f6c46e232a097d338b711110a8dea7fc622" => :high_sierra
-    sha256 "79da22a5383fdd5e22eff38ac9deb005c745e78764e1278909b8488cc770dd0d" => :sierra
-    sha256 "71c77b016f36f2aa46d7aa823b9c7dead64f99d6a7458561caa76bb6c8d1c11f" => :el_capitan
+    sha256 "b31a1b3ffe25ae8e006e172a228a6c02b749fc0a121957b076a2ed0125ad434e" => :catalina
+    sha256 "b09c7933fd20dae4a309a6cf278b63ff6317944e2298a3dd290acbb62dc87fb6" => :mojave
+    sha256 "6a4ec380d1c382da7e67bed6072ebe20365a72a1f098e62e25d4840488e5718c" => :high_sierra
   end
 
   depends_on "cmake" => :build

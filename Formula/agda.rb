@@ -5,23 +5,24 @@ class Agda < Formula
 
   desc "Dependently typed functional programming language"
   homepage "https://wiki.portal.chalmers.se/agda/"
-  revision 1
+  license "BSD-3-Clause"
 
   stable do
-    url "https://hackage.haskell.org/package/Agda-2.6.0.1/Agda-2.6.0.1.tar.gz"
-    sha256 "7bb88a9cd4a556259907ccc71d54e2acc9d3e9ce05486ffdc83f721c7c06c0e8"
+    url "https://hackage.haskell.org/package/Agda-2.6.1/Agda-2.6.1.tar.gz"
+    sha256 "678f416af8f30d017825309f15fac41d239b07f66a4c40497e8435a6bdb7c129"
 
     resource "stdlib" do
+      # version needed to build with ghc-8.10.1
       url "https://github.com/agda/agda-stdlib.git",
-          :tag      => "v1.1",
-          :revision => "dffb8023a63e7e66a90a8664752245971a915e66"
+          revision: "b859bd363a96bc862ead0509bdf5869837651896"
     end
   end
 
   bottle do
-    sha256 "2baa8f12e01c319b627c0638fb507ab17e413836f8baf0eb8fc97f9fd6093e32" => :mojave
-    sha256 "9cd4769e7bb29ff52854efcdbba60a52efc69ac97c938667ae0aa424f11ea4e6" => :high_sierra
-    sha256 "9504f8bc0bf5fa728f97411307458945c8b29a6927e998794bcab8ca4506be1c" => :sierra
+    rebuild 1
+    sha256 "a7a95a514b445fcb561ac0ed5be267327c111507f367add5d726c0a6b96afa7b" => :catalina
+    sha256 "b617423569007baea1876abe6c34f4c5524ad050a8c93185f815f62e968d1750" => :mojave
+    sha256 "7808d30de9683ed16057e9c5508587db60e7fbcd5a7d7674afc51016c5f68327" => :high_sierra
   end
 
   head do
@@ -32,20 +33,21 @@ class Agda < Formula
     end
   end
 
-  depends_on "cabal-install" => [:build, :test]
+  depends_on "cabal-install"
   depends_on "emacs"
-  depends_on "ghc"
+  depends_on "ghc@8.8"
+
   uses_from_macos "zlib"
 
   def install
     # install Agda core
-    install_cabal_package :using => ["alex", "happy", "cpphs"]
+    install_cabal_package using: ["alex", "happy", "cpphs"]
 
     resource("stdlib").stage lib/"agda"
 
     # generate the standard library's bytecode
     cd lib/"agda" do
-      cabal_sandbox :home => buildpath, :keep_lib => true do
+      cabal_sandbox home: buildpath, keep_lib: true do
         cabal_install "--only-dependencies"
         cabal_install
         system "GenerateEverything"
@@ -62,12 +64,13 @@ class Agda < Formula
     elisp.install_symlink Dir["#{share}/*/Agda-#{version}/emacs-mode/*"]
   end
 
-  def caveats; <<~EOS
-    To use the Agda standard library by default:
-      mkdir -p ~/.agda
-      echo #{HOMEBREW_PREFIX}/lib/agda/standard-library.agda-lib >>~/.agda/libraries
-      echo standard-library >>~/.agda/defaults
-  EOS
+  def caveats
+    <<~EOS
+      To use the Agda standard library by default:
+        mkdir -p ~/.agda
+        echo #{HOMEBREW_PREFIX}/lib/agda/standard-library.agda-lib >>~/.agda/libraries
+        echo standard-library >>~/.agda/defaults
+    EOS
   end
 
   test do
@@ -145,7 +148,7 @@ class Agda < Formula
 
     # test the GHC backend
     cabal_sandbox do
-      cabal_install "text", "ieee754"
+      cabal_install "ieee754"
       dbpath = Dir["#{testpath}/.cabal-sandbox/*-packages.conf.d"].first
       dbopt = "--ghc-flag=-package-db=#{dbpath}"
 

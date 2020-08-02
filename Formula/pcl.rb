@@ -1,16 +1,16 @@
 class Pcl < Formula
   desc "Library for 2D/3D image and point cloud processing"
-  homepage "http://www.pointclouds.org/"
+  homepage "https://pointclouds.org/"
   url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.9.1.tar.gz"
   sha256 "0add34d53cd27f8c468a59b8e931a636ad3174b60581c0387abb98a9fc9cddb6"
-  revision 4
+  license "BSD-3-Clause"
+  revision 9
   head "https://github.com/PointCloudLibrary/pcl.git"
 
   bottle do
-    rebuild 1
-    sha256 "5da061dd836baffd99b01afeec969793d4df2e1f1c7ea764de9317974723de46" => :mojave
-    sha256 "7b9941caff2bd52be9eb15db1ede5f31529a6f77082ad99bcbd49b0b19e08eee" => :high_sierra
-    sha256 "05b133c4e3e03ae77a84fe70bc1fbec2fc91f64516534c521a72e09772c034f2" => :sierra
+    sha256 "f7a89d9b04578cbfcf21160d5ebd78fa6feeab3ded876678b7bfc23f989a8f2e" => :catalina
+    sha256 "593a588bbdce10f083057cb56a2c66abd632f066ab90f35c40facf6b152ee5b9" => :mojave
+    sha256 "d14889b636e81d1427a7d0300c028b571ac038e54b3760eba8900a7175d210c1" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -50,10 +50,10 @@ class Pcl < Formula
       -DWITH_TUTORIALS:BOOL=OFF
     ]
 
-    if build.head?
-      args << "-DBUILD_apps_modeler=AUTO_OFF"
+    args << if build.head?
+      "-DBUILD_apps_modeler=AUTO_OFF"
     else
-      args << "-DBUILD_apps_modeler:BOOL=OFF"
+      "-DBUILD_apps_modeler:BOOL=OFF"
     end
 
     mkdir "build" do

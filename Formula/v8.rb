@@ -2,57 +2,68 @@ class V8 < Formula
   desc "Google's JavaScript engine"
   homepage "https://github.com/v8/v8/wiki"
   # Track V8 version from Chrome stable: https://omahaproxy.appspot.com
-  url "https://github.com/v8/v8/archive/7.7.299.13.tar.gz"
-  sha256 "1f5939fcd74464ba43e3445d3e3f82b5bbf2efe7314dde06b3fb12b65ba7d5f9"
+  url "https://github.com/v8/v8/archive/8.4.371.22.tar.gz"
+  sha256 "4151426813aea1a3d330da9538e5e8e8fc34cfac0b5e65067f36e4f39030c59c"
 
   bottle do
     cellar :any
-    sha256 "19454ea74b27155ffd92fe69122dba3aceabb0fd06dc47b9e49249e8a9a1911d" => :catalina
-    sha256 "5c7172c88d66ff913f72c208bddc245dd8ac721413ca0751bd6e52867efde545" => :mojave
-    sha256 "c3a0c2e343cf6176e54cedcc0a0bed4243b52e7bc9a666bdf2ddd48efe382d9a" => :high_sierra
+    sha256 "dcc1d7149c70500c4b0d96ef15a6410360a60dd6942ac02d75001a1feed20b33" => :catalina
+    sha256 "303a2b21c8c99d70cf77a31e6840f4ac352dc6d0ec485d679d51ea28701db8b8" => :mojave
+    sha256 "15b934b0061194e8e69c1bf41e348dd78141c0460969bc7ed495e91170606c5f" => :high_sierra
   end
 
-  depends_on "llvm" => :build if DevelopmentTools.clang_build_version < 1001 # 1100 with v8 7.9+
+  depends_on "llvm" => :build
   depends_on "ninja" => :build
 
-  depends_on :xcode => ["9.0", :build] # required by v8 (bump to 10.0 with v8 7.9+)
+  depends_on xcode: ["10.0", :build] # required by v8
 
   # Look up the correct resource revisions in the DEP file of the specific releases tag
   # e.g. for CIPD dependency gn: https://github.com/v8/v8/blob/7.6.303.27/DEPS#L15
   resource "gn" do
     url "https://gn.googlesource.com/gn.git",
-      :revision => "972ed755f8e6d31cae9ba15fcd08136ae1a7886f"
+      revision: "5ed3c9cc67b090d5e311e4bd2aba072173e82db9"
   end
 
   # e.g.: https://github.com/v8/v8/blob/7.6.303.27/DEPS#L60 for the revision of build for v8 7.6.303.27
   resource "v8/build" do
     url "https://chromium.googlesource.com/chromium/src/build.git",
-      :revision => "1e5d7d692f816af8136c738b79fe9e8dde8057f6"
+      revision: "1b904cc30093c25d5fd48389bd58e3f7409bcf80"
+
+    # revert usage of unsuported libtool option -D (fixes High Sierra support)
+    patch do
+      url "https://github.com/denoland/chromium_build/commit/56551e71dc0281cc1d9471caf6a02d02f18c830e.patch?full_index=1"
+      sha256 "46fea09483c8b5699f47ae5886d933b61bed11bb3cda88212a7467767db0be3c"
+    end
   end
 
   resource "v8/third_party/icu" do
     url "https://chromium.googlesource.com/chromium/deps/icu.git",
-      :revision => "fd97d4326fac6da84452b2d5fe75ff0949368dab"
+      revision: "f2223961702f00a8833874b0560d615a2cc42738"
   end
 
   resource "v8/base/trace_event/common" do
     url "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
-      :revision => "cfe8887fa6ac3170e23a68949930e28d4705a16f"
+      revision: "dab187b372fc17e51f5b9fad8201813d0aed5129"
   end
 
   resource "v8/third_party/googletest/src" do
     url "https://chromium.googlesource.com/external/github.com/google/googletest.git",
-      :revision => "6077f444da944d96d311d358d761164261f1cdd0"
+      revision: "a09ea700d32bab83325aff9ff34d0582e50e3997"
   end
 
   resource "v8/third_party/jinja2" do
     url "https://chromium.googlesource.com/chromium/src/third_party/jinja2.git",
-      :revision => "b41863e42637544c2941b574c7877d3e1f663e25"
+      revision: "3f90fa05c85718505e28c9c3426c1ba52843b9b7"
   end
 
   resource "v8/third_party/markupsafe" do
     url "https://chromium.googlesource.com/chromium/src/third_party/markupsafe.git",
-      :revision => "8f45f5cfa0009d2a70589bcda0349b8cb2b72783"
+      revision: "8f45f5cfa0009d2a70589bcda0349b8cb2b72783"
+  end
+
+  resource "v8/third_party/zlib" do
+    url "https://chromium.googlesource.com/chromium/src/third_party/zlib.git",
+      revision: "90fc47e6eed7bd1a59ad1603761303ef24705593"
   end
 
   def install
@@ -62,6 +73,7 @@ class V8 < Formula
     (buildpath/"third_party/googletest/src").install resource("v8/third_party/googletest/src")
     (buildpath/"base/trace_event/common").install resource("v8/base/trace_event/common")
     (buildpath/"third_party/icu").install resource("v8/third_party/icu")
+    (buildpath/"third_party/zlib").install resource("v8/third_party/zlib")
 
     # Build gn from source and add it to the PATH
     (buildpath/"gn").install resource("gn")
@@ -73,20 +85,21 @@ class V8 < Formula
 
     # Enter the v8 checkout
     gn_args = {
-      :is_debug                     => false,
-      :is_component_build           => true,
-      :v8_use_external_startup_data => false,
-      :v8_enable_i18n_support       => true,        # enables i18n support with icu
-      :clang_base_path              => "\"/usr/\"", # uses Apples system clang instead of Google's custom one
-      :clang_use_chrome_plugins     => false,       # disable the usage of Google's custom clang plugins
-      :use_custom_libcxx            => false,       # uses system libc++ instead of Google's custom one
+      is_debug:                     false,
+      is_component_build:           true,
+      v8_use_external_startup_data: false,
+      v8_enable_i18n_support:       true, # enables i18n support with icu
+      # uses homebrew llvm clang instead of Google's custom one
+      clang_base_path:              "\"#{Formula["llvm"].prefix}\"",
+      clang_use_chrome_plugins:     false, # disable the usage of Google's custom clang plugins
+      use_custom_libcxx:            false, # uses system libc++ instead of Google's custom one
+      treat_warnings_as_errors:     false,
     }
 
-    # use clang from homebrew llvm formula on <= High Sierra, because the system clang is to old for V8
-    if DevelopmentTools.clang_build_version < 1001 # 1100 with v8 7.9+
-      ENV.remove "HOMEBREW_LIBRARY_PATHS", Formula["llvm"].opt_lib # but link against system libc++
-      gn_args[:clang_base_path] = "\"#{Formula["llvm"].prefix}\""
-    end
+    # overwrite Chromium minimum sdk version of 10.15
+    ENV["FORCE_MAC_SDK_MIN"] = "10.13"
+    # link against system libc++ instead of llvm provided libc++
+    ENV.remove "HOMEBREW_LIBRARY_PATHS", Formula["llvm"].opt_lib
 
     # Transform to args string
     gn_args_string = gn_args.map { |k, v| "#{k}=#{v}" }.join(" ")

@@ -1,17 +1,23 @@
 class Nss < Formula
   desc "Libraries for security-enabled client and server applications"
   homepage "https://developer.mozilla.org/docs/NSS"
-  url "https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/nss-3.46.1.tar.gz"
-  sha256 "3bf7e0ed7db98803f134c527c436cc68415ff17257d34bd75de14e9a09d13651"
+  url "https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_55_RTM/src/nss-3.55.tar.gz"
+  sha256 "fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004"
+  license "MPL-2.0"
 
   bottle do
     cellar :any
-    sha256 "c31ef6b7f76d89faf95cfa0ab027c86582d569ba66c64e330a34c98b3f7818b0" => :catalina
-    sha256 "8e6cbd5d07633ed44a1e313906c64e65e748a303d5ec476ae4be5dc674091b64" => :mojave
-    sha256 "b1e2940f4621927fff50d9e60cce9b04edf9af5e39dad9322776063ca3df347a" => :high_sierra
+    sha256 "4eeac799c7c64280aad53b5e773edb9d1f071a0a25b784e36f4e7091377c5709" => :catalina
+    sha256 "0b6b8048c6e9126fbe80cd47001aa1e42659a163b9d0805d1b69905789c478e3" => :mojave
+    sha256 "0605ee3d39875c3447887d38fea27efb50924a2251c18a97f577bcedba4b8917" => :high_sierra
   end
 
   depends_on "nspr"
+
+  uses_from_macos "sqlite"
+  uses_from_macos "zlib"
+
+  conflicts_with "resty", because: "both install `pp` binaries"
 
   def install
     ENV.deparallelize
@@ -70,30 +76,32 @@ class Nss < Formula
 
   # A very minimal nss-config for configuring firefox etc. with this nss,
   # see https://bugzil.la/530672 for the progress of upstream inclusion.
-  def config_file; <<~EOS
-    #!/bin/sh
-    for opt; do :; done
-    case "$opt" in
-      --version) opt="--modversion";;
-      --cflags|--libs) ;;
-      *) exit 1;;
-    esac
-    pkg-config "$opt" nss
-  EOS
+  def config_file
+    <<~EOS
+      #!/bin/sh
+      for opt; do :; done
+      case "$opt" in
+        --version) opt="--modversion";;
+        --cflags|--libs) ;;
+        *) exit 1;;
+      esac
+      pkg-config "$opt" nss
+    EOS
   end
 
-  def pc_file; <<~EOS
-    prefix=#{prefix}
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${prefix}/include/nss
+  def pc_file
+    <<~EOS
+      prefix=#{prefix}
+      exec_prefix=${prefix}
+      libdir=${exec_prefix}/lib
+      includedir=${prefix}/include/nss
 
-    Name: NSS
-    Description: Mozilla Network Security Services
-    Version: #{version}
-    Requires: nspr >= 4.12
-    Libs: -L${libdir} -lnss3 -lnssutil3 -lsmime3 -lssl3
-    Cflags: -I${includedir}
-  EOS
+      Name: NSS
+      Description: Mozilla Network Security Services
+      Version: #{version}
+      Requires: nspr >= 4.12
+      Libs: -L${libdir} -lnss3 -lnssutil3 -lsmime3 -lssl3
+      Cflags: -I${includedir}
+    EOS
   end
 end

@@ -1,23 +1,27 @@
 class Languagetool < Formula
   desc "Style and grammar checker"
   homepage "https://www.languagetool.org/"
-  url "https://languagetool.org/download/LanguageTool-4.7.zip"
-  sha256 "4f00f71930871600cb8fe53a8c4d4c9c60f05711c979fd313be1c6c674efde3c"
+  url "https://languagetool.org/download/LanguageTool-5.0.zip"
+  sha256 "212eb275cf9df8b6f49d8ce2bb386246081be7f01d907577fbd09a9f27055628"
 
   bottle :unneeded
-  depends_on :java => "1.8+"
 
-  def server_script(server_jar); <<~EOS
-    #!/bin/bash
-    exec java -cp #{server_jar} org.languagetool.server.HTTPServer "$@"
-  EOS
-  end
+  depends_on "openjdk"
 
   def install
     libexec.install Dir["*"]
-    bin.write_jar_script libexec/"languagetool-commandline.jar", "languagetool"
-    (bin+"languagetool-server").write server_script(libexec/"languagetool-server.jar")
-    bin.write_jar_script libexec/"languagetool.jar", "languagetool-gui"
+    (bin/"languagetool").write <<~EOS
+      #!/bin/bash
+      exec "#{Formula["openjdk"].opt_bin}/java" -jar "#{libexec}/languagetool-commandline.jar" "$@"
+    EOS
+    (bin/"languagetool-server").write <<~EOS
+      #!/bin/bash
+      exec "#{Formula["openjdk"].opt_bin}/java" -cp "#{libexec}/languagetool-server.jar" org.languagetool.server.HTTPServer "$@"
+    EOS
+    (bin/"languagetool-gui").write <<~EOS
+      #!/bin/bash
+      exec "#{Formula["openjdk"].opt_bin}/java" -jar "#{libexec}/languagetool.jar" "$@"
+    EOS
   end
 
   test do

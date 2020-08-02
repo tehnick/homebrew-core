@@ -15,6 +15,9 @@ class Inetutils < Formula
 
   depends_on "libidn"
 
+  conflicts_with "telnet", because: "both install `telnet` binaries"
+  conflicts_with "tnftp", because: "both install `ftp` binaries"
+
   def noshadow
     # List of binaries that do not shadow macOS utils
     list = %w[dnsdomainname rcp rexec rlogin rsh]
@@ -53,16 +56,17 @@ class Inetutils < Formula
     libexec.install_symlink "gnuman" => "man"
   end
 
-  def caveats; <<~EOS
-    The following commands have been installed with the prefix 'g'.
+  def caveats
+    <<~EOS
+      The following commands have been installed with the prefix 'g'.
 
-        #{noshadow.sort.join("\n    ")}
+          #{noshadow.sort.join("\n    ")}
 
-    If you really need to use these commands with their normal names, you
-    can add a "gnubin" directory to your PATH from your bashrc like:
+      If you really need to use these commands with their normal names, you
+      can add a "gnubin" directory to your PATH from your bashrc like:
 
-        PATH="#{opt_libexec}/gnubin:$PATH"
-  EOS
+          PATH="#{opt_libexec}/gnubin:$PATH"
+    EOS
   end
 
   test do

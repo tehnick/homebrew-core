@@ -5,17 +5,18 @@ class Ghc < Formula
 
   desc "Glorious Glasgow Haskell Compilation System"
   homepage "https://haskell.org/ghc/"
-  url "https://downloads.haskell.org/ghc/8.8.1/ghc-8.8.1-src.tar.xz"
-  sha256 "908a83d9b814da74585de9d39687189e6260ec3848131f9d9236cab8a123721a"
+  url "https://downloads.haskell.org/~ghc/8.10.1/ghc-8.10.1-src.tar.xz"
+  sha256 "4e3b07f83a266b3198310f19f71e371ebce97c769b14f0d688f4cbf2a2a1edf5"
+  license "BSD-3-Clause"
 
   bottle do
-    sha256 "5b385157fd0c96164d7156d3ec9ce2819f0f5fa93442f6b6951ab22e6f909479" => :mojave
-    sha256 "4b7a91539914e3db24f88d9c946ff7ae994c22d1929b4940384822eb86e70792" => :high_sierra
-    sha256 "f81254c63b1b95eb82d2ce681c828672e06ae95aabe3178ea004e8fb3a84bb0c" => :sierra
+    sha256 "0771a43a5fd75ac8f3814367e0b99b27881b6730ced580eca109516aa250be4a" => :catalina
+    sha256 "12b0bfdf7570a348bda4ff916f3319a30c8cd82957725a78ba0ef25a1e42fdcc" => :mojave
+    sha256 "ab8ed6381773c90a5687843743b67e80ea7305cbebf056d0c1cceedb0ecc3490" => :high_sierra
   end
 
   head do
-    url "https://gitlab.haskell.org/ghc/ghc.git", :branch => "ghc-8.8"
+    url "https://gitlab.haskell.org/ghc/ghc.git", branch: "ghc-8.10"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
@@ -27,7 +28,7 @@ class Ghc < Formula
     end
   end
 
-  depends_on "python" => :build
+  depends_on "python@3.8" => :build
   depends_on "sphinx-doc" => :build
 
   resource "gmp" do
@@ -37,21 +38,22 @@ class Ghc < Formula
     sha256 "87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912"
   end
 
-  # https://www.haskell.org/ghc/download_ghc_8_6_5.html#macosx_x86_64
+  # https://www.haskell.org/ghc/download_ghc_8_10_1.html#macosx_x86_64
   # "This is a distribution for Mac OS X, 10.7 or later."
-  # Need to use 8.6.5 to build 8.8.1 because of
-  # https://gitlab.haskell.org/ghc/ghc/issues/17146
+  # A binary of ghc is needed to bootstrap ghc
   resource "binary" do
-    url "https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-apple-darwin.tar.xz"
-    sha256 "dfc1bdb1d303a87a8552aa17f5b080e61351f2823c2b99071ec23d0837422169"
+    url "https://downloads.haskell.org/~ghc/8.10.1/ghc-8.10.1-x86_64-apple-darwin.tar.xz"
+    sha256 "65b1ca361093de4804a7e40b3e68178e1ef720f84f743641ec8d95e56a45b3a8"
   end
 
-  # workaround for https://gitlab.haskell.org/ghc/ghc/issues/17114
-  patch :DATA
-
   def install
+    # Work around Xcode 11 clang bug
+    # https://bitbucket.org/multicoreware/x265/issues/514/wrong-code-generated-on-macos-1015
+    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
+
     ENV["CC"] = ENV.cc
     ENV["LD"] = "ld"
+    ENV["PYTHON"] = Formula["python@3.8"].opt_bin/"python3"
 
     # Build a static gmp rather than in-tree gmp, otherwise all ghc-compiled
     # executables link to Homebrew's GMP.
@@ -63,7 +65,6 @@ class Ghc < Formula
       system "./configure", "--prefix=#{gmp}", "--with-pic", "--disable-shared",
                             "--build=#{Hardware.oldest_cpu}-apple-darwin#{`uname -r`.to_i}"
       system "make"
-      system "make", "check"
       system "make", "install"
     end
 
@@ -123,28 +124,6 @@ class Ghc < Formula
 
   test do
     (testpath/"hello.hs").write('main = putStrLn "Hello Homebrew"')
-    system "#{bin}/runghc", testpath/"hello.hs"
+    assert_match "Hello Homebrew", shell_output("#{bin}/runghc hello.hs")
   end
 end
-__END__
-diff --git a/configure b/configure
-index e00a480..6db08ee 100755
---- a/configure
-+++ b/configure
-@@ -11525,6 +11525,8 @@ fi;
- fi
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $fptools_cv_alex_version" >&5
- $as_echo "$fptools_cv_alex_version" >&6; }
-+if test ! -f compiler/cmm/CmmLex.hs || test ! -f compiler/parser/Lexer.hs
-+then
- fp_version1=$fptools_cv_alex_version; fp_version2=3.1.7
- fp_save_IFS=$IFS; IFS='.'
- while test x"$fp_version1" != x || test x"$fp_version2" != x
-@@ -11548,6 +11550,7 @@ IFS=$fp_save_IFS
- if test "$fp_num1" -lt "$fp_num2"; then :
-   as_fn_error $? "Alex version 3.1.7 or later is required to compile GHC." "$LINENO" 5
- fi
-+fi
- AlexVersion=$fptools_cv_alex_version;
- 
- 

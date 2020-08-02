@@ -1,18 +1,22 @@
 class Maxima < Formula
   desc "Computer algebra system"
   homepage "https://maxima.sourceforge.io/"
-  url "https://downloads.sourceforge.net/project/maxima/Maxima-source/5.43.0-source/maxima-5.43.0.tar.gz"
-  sha256 "dcfda54511035276fd074ac736e97d41905171e43a5802bb820914c3c885ca77"
+  url "https://downloads.sourceforge.net/project/maxima/Maxima-source/5.44.0-source/maxima-5.44.0.tar.gz"
+  sha256 "d93f5e48c4daf8f085d609cb3c7b0bdf342c667fd04cf750c846426874c9d2ec"
+  license "GPL-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7e0dd3068febc291a3806eacb7501e739dbff8c26abbfb126388e0c61b4984c2" => :catalina
-    sha256 "aa7bf5470e9e6dc540338417bab19f9f30cce70d6d9c337e9277d7c1ff8162a0" => :mojave
-    sha256 "a1d945ec5aed4fe25d784cfdf0982cd5ebca17ea677a8b3c60685e0438932c66" => :high_sierra
-    sha256 "60ea4ce05f296dc1ffd595224eba11dabf13f7692ffb53289606241d80fc76fb" => :sierra
+    sha256 "f873f22d3e0540feb2a696cb2ec18ca7786742ae2a00faafcce968bbda56e5a9" => :catalina
+    sha256 "b6d47595e2d411752408890c331efba31819cc006284b849d8473f80dfa12948" => :mojave
+    sha256 "bb6196d4dafeacd3060782b7d46e32df9281cb8d0c5d4eb5ea280c3531ab0ab3" => :high_sierra
   end
 
+  depends_on "gawk" => :build
+  depends_on "gnu-sed" => :build
+  depends_on "perl" => :build
   depends_on "sbcl" => :build
+  depends_on "texinfo" => :build
   depends_on "gettext"
   depends_on "gnuplot"
   depends_on "rlwrap"

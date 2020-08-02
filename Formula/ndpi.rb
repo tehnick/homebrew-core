@@ -1,16 +1,17 @@
 class Ndpi < Formula
   desc "Deep Packet Inspection (DPI) library"
   homepage "https://www.ntop.org/products/deep-packet-inspection/ndpi/"
-  url "https://github.com/ntop/nDPI/archive/2.8.tar.gz"
-  sha256 "f98def4d0e43818317b20e2887ce500b2d6a5a9c8ddb28cf57ae51caae0f33cc"
-  head "https://github.com/ntop/nDPI.git", :branch => "dev"
+  url "https://github.com/ntop/nDPI/archive/3.2.tar.gz"
+  sha256 "6808c8c4495343e67863f4d30bb261c1e2daec5628ae0be257ba2a2dea7ec70a"
+  license "LGPL-3.0"
+  revision 1
+  head "https://github.com/ntop/nDPI.git", branch: "dev"
 
   bottle do
     cellar :any
-    sha256 "cf2ff87a20aa68e4ebc4777c121c963d9b0edb4bcdb3192ef915fd769795f713" => :catalina
-    sha256 "dc154d9707bbf0243c811e455307778a237fa04f970c677021ddce99a6dc75ed" => :mojave
-    sha256 "ab792cab341a8ba89aae05273d6082d79e758901362ae256e04a3aa9900a4174" => :high_sierra
-    sha256 "1cccc0b5ae55ff767aeea7553c5a8ae063b92535ec1f06e575d8b8637b0cbf97" => :sierra
+    sha256 "51abcf1acf93e23b6c9ac4394546b3c4cf10728ab4ddaeeedfb1113652c4df5d" => :catalina
+    sha256 "022d0450ad519fb8bab4399ad40cef22421162b44b138e4279cdc1588f49c985" => :mojave
+    sha256 "e5dd2608031a9fee47f714c8795b013c645c05ad573d64fdd603accc9c878a1a" => :high_sierra
   end
 
   depends_on "autoconf" => :build

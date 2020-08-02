@@ -2,15 +2,15 @@ class K6 < Formula
   desc "Modern load testing tool, using Go and JavaScript"
   homepage "https://k6.io"
   url "https://github.com/loadimpact/k6.git",
-    :tag      => "v0.25.1",
-    :revision => "515452f1a93a271ed8a3785111726c7cfe92232d"
+    tag:      "v0.27.1",
+    revision: "4ee1ca9624bdd9fa68a0d534be11ac22328f1821"
+  license "AGPL-3.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e6a4f10a33ce1f4c5860643afcd1a3a5a1c23bb4f481c59d02bbd4f7a41836de" => :catalina
-    sha256 "a06505e1d2e7cc083acc511d6f1d9d710186561d9ae8a7dbf884b3a62f649ae4" => :mojave
-    sha256 "47718cefff5ce85d27e09914590b26c13f4a37d26096f971e0cff059cd74166e" => :high_sierra
-    sha256 "d88317a09fddc7343bfedc774decd5b679284298bcf37dac0f3372e76e429c38" => :sierra
+    sha256 "afa071cb66ffb37e6718ee52be4b58b707b935765f6527415da7dc15c2297658" => :catalina
+    sha256 "78bad35beeaa7d16a8f55aa2f9980b74c07fdec191c7ca52085ff0a2f8aa476c" => :mojave
+    sha256 "8f66f1625d3e95c011ead1d2fdfc3aed6102d9f9a475f9ec093cb50fa40503c4" => :high_sierra
   end
 
   depends_on "dep" => :build
@@ -30,8 +30,13 @@ class K6 < Formula
   end
 
   test do
-    output = "Test finished"
-    assert_match output, shell_output("#{bin}/k6 run github.com/loadimpact/k6/samples/http_get.js 2>&1")
+    (testpath/"whatever.js").write <<~EOS
+      export default function() {
+        console.log("whatever");
+      }
+    EOS
+
+    assert_match "whatever", shell_output("#{bin}/k6 run whatever.js 2>&1")
     assert_match version.to_s, shell_output("#{bin}/k6 version")
   end
 end

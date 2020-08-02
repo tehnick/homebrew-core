@@ -1,21 +1,28 @@
 class Sd < Formula
   desc "Intuitive find & replace CLI"
   homepage "https://github.com/chmln/sd"
-  url "https://github.com/chmln/sd/archive/0.6.5.tar.gz"
-  sha256 "ed38e5103080373b00443f72683ac2785b18e354ab6ef4797e27af028be9baf2"
+  url "https://github.com/chmln/sd/archive/v0.7.6.tar.gz"
+  sha256 "faf33a97797b95097c08ebb7c2451ac9835907254d89863b10ab5e0813b5fe5f"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a2270c4330760007e369fc9da739abacc3744e9a9cc987dc90fc7fc830d36ec8" => :catalina
-    sha256 "bae6022d6efa72ce65337baa1be8a1b5d569905c13958be7bab9191239123297" => :mojave
-    sha256 "404bbedfd604f51148f33dd9441dd93611def5ddf93c91466f44921507353e4a" => :high_sierra
-    sha256 "010317dec38d6fead368fbc2b3d26c9eab2a0ea6d833ccc419484c76989e55e8" => :sierra
+    sha256 "649c660b6e8a4a77e5fc9dd12b1aa28a59212f676d2394f7e3ea682a9d3cc533" => :catalina
+    sha256 "1b451f55b69988e53a7699005f5aac1e50ed30e466ea0bbf1b30d382887360b1" => :mojave
+    sha256 "971451d1dd8fb3340c9c5a74ea20769e114362e84b0f9bb9a0ead52881c71196" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
+
+    # Completion scripts and manpage are generated in the crate's build
+    # directory, which includes a fingerprint hash. Try to locate it first
+    out_dir = Dir["target/release/build/sd-*/out"].first
+    man1.install "#{out_dir}/sd.1"
+    bash_completion.install "#{out_dir}/sd.bash"
+    zsh_completion.install "#{out_dir}/_sd"
   end
 
   test do

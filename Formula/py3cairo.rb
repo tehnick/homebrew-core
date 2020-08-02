@@ -1,26 +1,27 @@
 class Py3cairo < Formula
   desc "Python 3 bindings for the Cairo graphics library"
   homepage "https://cairographics.org/pycairo/"
-  url "https://github.com/pygobject/pycairo/releases/download/v1.18.1/pycairo-1.18.1.tar.gz"
-  sha256 "70172e58b6bad7572a3518c26729b074acdde15e6fee6cbab6d3528ad552b786"
+  url "https://github.com/pygobject/pycairo/releases/download/v1.19.1/pycairo-1.19.1.tar.gz"
+  sha256 "2c143183280feb67f5beb4e543fd49990c28e7df427301ede04fc550d3562e84"
+  license "LGPL-2.1"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "78631983372e2d3916edcd85c0ad5b06e2f1ef37bfd4437d056c89408de64ac1" => :catalina
-    sha256 "c3d966320ca66c24c01fa3dd2dd867329e9b6d817895fc5466b8280ea806d093" => :mojave
-    sha256 "f285ea47d9693b403080decdc94c0ae60364ec554c44a61473480ca0f420ebc3" => :high_sierra
-    sha256 "099809cc80cfd67838454bc57787ca647d2c1b52c6bdea17c317bc9797ac4cd6" => :sierra
+    sha256 "bd80a6817e090c490c828d22359fbd97c38b46cca2b325c7c69e38de9df0e6ea" => :catalina
+    sha256 "0b586e4cb4e391fcc263c2892d533dda388c1ca139082a486939b2bbc3953d0a" => :mojave
+    sha256 "e440b8405e3fd9c0d964e74ce0cb02b421077e91f84fbb9d10b6c68f51be328b" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
   depends_on "cairo"
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
-    system "python3", *Language::Python.setup_install_args(prefix)
+    system Formula["python@3.8"].bin/"python3", *Language::Python.setup_install_args(prefix)
   end
 
   test do
-    system "python3", "-c", "import cairo; print(cairo.version)"
+    system Formula["python@3.8"].bin/"python3", "-c", "import cairo; print(cairo.version)"
   end
 end

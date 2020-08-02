@@ -2,21 +2,26 @@ class Wtfutil < Formula
   desc "The personal information dashboard for your terminal"
   homepage "https://wtfutil.com"
   url "https://github.com/wtfutil/wtf.git",
-    :tag      => "v0.23.0",
-    :revision => "e98b15ca2cefddb285ad9d73b4fd2b35ca2c1d32"
+    tag:      "v0.31.0",
+    revision: "d493c4d16f09cada889b1d323e01ea2f6ecdad80"
+  license "MPL-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ac07538f6d6aca1cdcba7af5fe5f5a788671566cdc4d173483e352db0f935b73" => :catalina
-    sha256 "c0aca34e02f80f79d4b00fd65d01af6e84d7b6be616420f551be068e94495c11" => :mojave
-    sha256 "44279429caa2cc05d6af048268ed471aefa67846e1a1fd47ef1f6dd70dfbff44" => :high_sierra
+    sha256 "c1f56bdf436ae115cad763fc2c4f49af6d4eda587ed93fefcc182117fa5e2528" => :catalina
+    sha256 "e2f7a9e3b02e580e415b2ffdc95f478a88f404486124a3ee19e85e71f2c6735f" => :mojave
+    sha256 "9a37aab1279b87b91428584ee1bd1740c682d404486f003d7d3384169305c3f5" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPROXY"] = "https://gocenter.io"
-    system "go", "build", "-o", bin/"wtfutil"
+    ldflags = %W[
+      -s -w
+      -X main.version=#{version}
+      -X main.date=#{Time.now.iso8601}
+    ]
+    system "go", "build", "-trimpath", "-ldflags", ldflags.join(" "), "-o", bin/"wtfutil"
   end
 
   test do

@@ -2,57 +2,63 @@ class Etcd < Formula
   desc "Key value store for shared configuration and service discovery"
   homepage "https://github.com/etcd-io/etcd"
   url "https://github.com/etcd-io/etcd.git",
-    :tag      => "v3.4.2",
-    :revision => "bbe86b066c0c714fa2a17ee93a37882553cf2394"
+    tag:      "v3.4.10",
+    revision: "18dfb9cca345bb2b2fbe73d5fc31028c2477bef1"
+  license "Apache-2.0"
   head "https://github.com/etcd-io/etcd.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "088c4137fbcb519181f0117c4a5656c292cb745a191c3fc5de7fad3271bdb0d2" => :catalina
-    sha256 "60b6336487db73217991d34f0d2ada198c3249e2948ae7b38b77f75bb7769059" => :mojave
-    sha256 "10e687f0309226c8bc065247575f839a27c03d89c1c2c293abf9fd878f41ac19" => :high_sierra
+    sha256 "fc23b5d35f29b1c36af2c9bd52073a5c135cfeca73ae3d497b153e5157716d10" => :catalina
+    sha256 "c0bc859d50bf26f2850189806b0a0a2966189cb51a7cbcf5563d7f2803b94a25" => :mojave
+    sha256 "7d85f49b8a8aeaf5c23ed97dddf6ca37ef74d1ff92289eb8823d94afd296534a" => :high_sierra
   end
 
   depends_on "go" => :build
 
-  def install
-    ENV["GOPATH"] = buildpath
-
-    dir = buildpath/"src/github.com/etcd-io/etcd"
-    dir.install buildpath.children
-
-    cd dir do
-      system "go", "build", "-ldflags", "-X main.version=#{version}", "-o", bin/"etcd"
-      system "go", "build", "-ldflags", "-X main.version=#{version}", "-o", bin/"etcdctl", "etcdctl/main.go"
-      prefix.install_metafiles
-    end
+  # See https://github.com/etcd-io/etcd/pull/11937
+  patch do
+    url "https://github.com/etcd-io/etcd/commit/45297c8790bef13baf5b905b3927029a701848c4.patch?full_index=1"
+    sha256 "90f44278806323ddb8cc8160cb0bd00dd892698d90f27db505dca57e3c773df2"
   end
 
-  plist_options :manual => "etcd"
+  def install
+    # Fix vendored deps issue (remove this in the next release)
+    system "go", "mod", "vendor"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
+    system "go", "build", "-mod=vendor", "-ldflags", "-s -w -X main.version=#{version}", "-trimpath", "-o",
+      bin/"etcd"
+    system "go", "build", "-mod=vendor", "-ldflags", "-s -w -X main.version=#{version}", "-trimpath", "-o",
+      bin/"etcdctl", "etcdctl/main.go"
+    prefix.install_metafiles
+  end
+
+  plist_options manual: "etcd"
+
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
         <dict>
-          <key>SuccessfulExit</key>
-          <false/>
+          <key>KeepAlive</key>
+          <dict>
+            <key>SuccessfulExit</key>
+            <false/>
+          </dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_bin}/etcd</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>WorkingDirectory</key>
+          <string>#{var}</string>
         </dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/etcd</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{var}</string>
-      </dict>
-    </plist>
-  EOS
+      </plist>
+    EOS
   end
 
   test do

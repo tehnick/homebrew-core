@@ -1,17 +1,20 @@
 class Sqldiff < Formula
   desc "Displays the differences between SQLite databases"
   homepage "https://www.sqlite.org/sqldiff.html"
-  url "https://sqlite.org/2019/sqlite-src-3290000.zip"
-  version "3.29.0"
-  sha256 "a1533d97504e969ca766da8ff393e71edd70798564813fc2620b0708944c8817"
+  url "https://sqlite.org/2020/sqlite-src-3320300.zip"
+  version "3.32.3"
+  sha256 "9312f0865d3692384d466048f746d18f88e7ffd1758b77d4f07904e03ed5f5b9"
+  license "blessing"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9de57d5f8b8987ac1ce43bdb33ec5828de8a9703622e947910823b91b6be62f8" => :catalina
-    sha256 "3e735bcfea41e0f5f0926e08eff62fb73ac2b8a437b91e6ec8beeb695f6aef92" => :mojave
-    sha256 "b17c9aa91489f090ccf743e212378d981b1b343171bf81e944310300e96ca443" => :high_sierra
-    sha256 "b16e9dd0f1d5cbb97fe6c709768777bd5de338a4a2f7d085bcc2b34b8e90d1c5" => :sierra
+    sha256 "505cf291b499c91daa6613435ed54e1d19f6d84fa3bd7a664c8b60d2040125d0" => :catalina
+    sha256 "430b27651e0dcdff06eae788c238b42a7ec4b2779eb3aaa7987287b6269e686f" => :mojave
+    sha256 "29e1767b313f6983f2481077710ffbff2ebc71e48f31b855df12376df9b4bf6a" => :high_sierra
   end
+
+  uses_from_macos "tcl-tk" => :build
+  uses_from_macos "sqlite" => :test
 
   def install
     system "./configure", "--disable-debug", "--prefix=#{prefix}"

@@ -1,40 +1,36 @@
 class Algernon < Formula
   desc "Pure Go web server with Lua, Markdown, HTTP/2 and template support"
   homepage "https://algernon.roboticoverlords.org/"
-  url "https://github.com/xyproto/algernon.git",
-      :tag      => "1.12.5",
-      :revision => "206912d922bb8ab96e23708d1cf222d572741ebe"
+  url "https://github.com/xyproto/algernon/archive/1.12.8.tar.gz"
+  sha256 "562d6f1145980d5e4c8eaefc2780801b163d228720599f22165135182018d6bf"
+  license "MIT"
   version_scheme 1
   head "https://github.com/xyproto/algernon.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "fa5efc4b459178262db04e6cf12f24ebdc7540eae749e8b86b4d01e4b74a856b" => :mojave
-    sha256 "01ffdc4770c149a2be689b33235eff7838352ad20d11f1ff1c2c9c0a40f3fc24" => :high_sierra
-    sha256 "abeffa6872984c9c33550a267379c79ae2e4fe3f1370fa67391c6ca3040bf3e4" => :sierra
+    sha256 "19d76d366a23558e40e5dc37cb8be6807afafebc2b85549bd61df488b4b8ace7" => :catalina
+    sha256 "2f7d73a7d99ea6ca4d406388ea7475f53ac022ca11f9df7ce5e7ff6bf629a634" => :mojave
+    sha256 "fcc2b783a77662cc1831dec57d1895cc078746ecaf4dc618b7df1e165254979d" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/xyproto/algernon").install buildpath.children
-    cd "src/github.com/xyproto/algernon" do
-      system "go", "build", "-o", "algernon"
+    system "go", "build", "-trimpath", "-mod=vendor", "-o", bin/"algernon"
 
-      bin.install "desktop/mdview"
-      bin.install "algernon"
-      prefix.install_metafiles
-    end
+    bin.install "desktop/mdview"
+    prefix.install_metafiles
   end
 
   test do
+    port = free_port
     pid = fork do
       exec "#{bin}/algernon", "-s", "-q", "--httponly", "--boltdb", "tmp.db",
-                              "--addr", ":45678"
+                              "--addr", ":#{port}"
     end
     sleep 20
-    output = shell_output("curl -sIm3 -o- http://localhost:45678")
+    output = shell_output("curl -sIm3 -o- http://localhost:#{port}")
     assert_match /200 OK.*Server: Algernon/m, output
   ensure
     Process.kill("HUP", pid)

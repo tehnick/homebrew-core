@@ -1,24 +1,24 @@
 class S6 < Formula
   desc "Small & secure supervision software suite"
   homepage "https://skarnet.org/software/s6/"
-  url "https://skarnet.org/software/s6/s6-2.8.0.1.tar.gz"
-  sha256 "dbe08f5b76c15fa32a090779b88fb2de9a9a107c3ac8ce488931dd39aa1c31d8"
+  url "https://skarnet.org/software/s6/s6-2.9.2.0.tar.gz"
+  sha256 "363db72af8fffba764b775c872b0749d052805b893b07888168f59a841e9dddd"
+  license "ISC"
 
   bottle do
-    sha256 "e10f7001d61d1e9effd0c5bceef485301ce37fcf7efb84b77297621df70d31d7" => :catalina
-    sha256 "4c1819aca5030161f69a0e8ff7a1c70ca7056e0226b173e3c7098709c2fb03a9" => :mojave
-    sha256 "8600da62dfe7099ba8526addf7dda2a09d9eeb63e7cbe6e5602b1944967b5ea3" => :high_sierra
-    sha256 "a72070b37a6b2d9ae738f32e7970e748c9d354b921718c2ea8d27b6cc5bdb0fc" => :sierra
+    sha256 "94906378d458e78a0909dc89bd5672ca8d33645b1b070be4974ac7ebe0f3aa15" => :catalina
+    sha256 "e4024234358147987f7f6f599b73ddfd9bbe5e5fd414efcbc53577045a1dbb78" => :mojave
+    sha256 "d6be4dd0697c711c1e35fe25e4f1365bcb1c198ab8fc8c3f3d7169b29ccb4372" => :high_sierra
   end
 
   resource "skalibs" do
-    url "https://skarnet.org/software/skalibs/skalibs-2.8.1.0.tar.gz"
-    sha256 "431c6507b4a0f539b6463b4381b9b9153c86ad75fa3c6bfc9dc4722f00b166ba"
+    url "https://skarnet.org/software/skalibs/skalibs-2.9.2.1.tar.gz"
+    sha256 "250b99b53dd413172db944b31c1b930aa145ac79fe6c5d7e6869ef804228c539"
   end
 
   resource "execline" do
-    url "https://skarnet.org/software/execline/execline-2.5.1.0.tar.gz"
-    sha256 "b1a756842947488404db8173bbae179d6e78b6ef551ec683acca540ecaf22677"
+    url "https://skarnet.org/software/execline/execline-2.6.1.0.tar.gz"
+    sha256 "a24c76f097ff44fe50b63b89bcde5d6ba9a481aecddbe88ee01b0e5a7b314556"
   end
 
   def install
@@ -54,9 +54,9 @@ class S6 < Formula
     system "make", "install"
 
     # Some S6 tools expect execline binaries to be on the path
-    bin.env_script_all_files(libexec/"bin", :PATH => "#{libexec}/execline:$PATH")
-    sbin.env_script_all_files(libexec/"sbin", :PATH => "#{libexec}/execline:$PATH")
-    (bin/"execlineb").write_env_script libexec/"execline/execlineb", :PATH => "#{libexec}/execline:$PATH"
+    bin.env_script_all_files(libexec/"bin", PATH: "#{libexec}/execline:$PATH")
+    sbin.env_script_all_files(libexec/"sbin", PATH: "#{libexec}/execline:$PATH")
+    (bin/"execlineb").write_env_script libexec/"execline/execlineb", PATH: "#{libexec}/execline:$PATH"
   end
 
   test do

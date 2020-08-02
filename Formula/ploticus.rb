@@ -2,7 +2,6 @@ class Ploticus < Formula
   desc "Scriptable plotting and graphing utility"
   homepage "https://ploticus.sourceforge.io/"
   url "https://downloads.sourceforge.net/project/ploticus/ploticus/2.42/ploticus242_src.tar.gz"
-  version "2.42"
   sha256 "3f29e4b9f405203a93efec900e5816d9e1b4381821881e241c08cab7dd66e0b0"
   revision 1
 
@@ -30,9 +29,10 @@ class Ploticus < Formula
     pkgshare.install Dir["prefabs/*"]
   end
 
-  def caveats; <<~EOS
-    Ploticus prefabs have been installed to #{opt_pkgshare}
-  EOS
+  def caveats
+    <<~EOS
+      Ploticus prefabs have been installed to #{opt_pkgshare}
+    EOS
   end
 
   test do

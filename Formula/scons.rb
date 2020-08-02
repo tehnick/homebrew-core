@@ -1,35 +1,23 @@
 class Scons < Formula
+  include Language::Python::Virtualenv
+
   desc "Substitute for classic 'make' tool with autoconf/automake functionality"
   homepage "https://www.scons.org/"
-  url "https://downloads.sourceforge.net/project/scons/scons/3.1.1/scons-3.1.1.tar.gz"
-  sha256 "4cea417fdd7499a36f407923d03b4b7000b0f9e8fd7b31b316b9ce7eba9143a5"
+  url "https://files.pythonhosted.org/packages/ae/a4/2eb8d05b0ac9e168e8ff0681624c123a123c743487e528757c68ea995d20/SCons-4.0.1.tar.gz"
+  mirror "https://downloads.sourceforge.net/project/scons/scons/4.0.1/scons-4.0.1.tar.gz"
+  sha256 "722ed104b5c624ecdc89bd4e02b094d2b14d99d47b5d0501961e47f579a2007c"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3ad10b009525d47c7bb51a0c743c55a7f10aba46b9b19d107b9a9e0e6d121990" => :catalina
-    sha256 "7a13e185a9fbdc22c2766738254ad968e44b414780ccb7700be7ca8e4a5a0b98" => :mojave
-    sha256 "7a13e185a9fbdc22c2766738254ad968e44b414780ccb7700be7ca8e4a5a0b98" => :high_sierra
-    sha256 "9d7566fc25fd4c27d37cb5252bf2f63cc467f8a80dfb20e58f084e29d9d1fa30" => :sierra
+    sha256 "304947ac78f6fb291360bca97c7ba495a82f999511fb3d3860c135ad73ca47d3" => :catalina
+    sha256 "9a9b2241fd86340b88542b562a1083e999010d7cc856268b62e3f0db8ec01cf4" => :mojave
+    sha256 "80eeb9e673e901db3e9a2e040f438e8cece45a5ca9d38e39f504bfe8bcbf7ea4" => :high_sierra
   end
 
-  def install
-    man1.install gzip("scons-time.1", "scons.1", "sconsign.1")
-    system "/usr/bin/python", "setup.py", "install",
-             "--prefix=#{prefix}",
-             "--standalone-lib",
-             # SCons gets handsy with sys.path---`scons-local` is one place it
-             # will look when all is said and done.
-             "--install-lib=#{libexec}/scons-local",
-             "--install-scripts=#{bin}",
-             "--install-data=#{libexec}",
-             "--no-version-script", "--no-install-man"
+  depends_on "python@3.8"
 
-    # Re-root scripts to libexec so they can import SCons and symlink back into
-    # bin. Similar tactics are used in the duplicity formula.
-    bin.children.each do |p|
-      mv p, "#{libexec}/#{p.basename}.py"
-      bin.install_symlink "#{libexec}/#{p.basename}.py" => p.basename
-    end
+  def install
+    virtualenv_install_with_resources
   end
 
   test do

@@ -3,6 +3,7 @@ class Luabind < Formula
   homepage "https://github.com/luabind/luabind"
   url "https://downloads.sourceforge.net/project/luabind/luabind/0.9.1/luabind-0.9.1.tar.gz"
   sha256 "80de5e04918678dd8e6dac3b22a34b3247f74bf744c719bae21faaa49649aaae"
+  license "MIT"
   revision 2
 
   bottle do
@@ -49,9 +50,10 @@ class Luabind < Formula
     ENV["LUA_PATH"] = Formula["lua@5.1"].opt_prefix
 
     args = %w[release install]
-    if ENV.compiler == :clang
+    case ENV.compiler
+    when :clang
       args << "--toolset=clang"
-    elsif ENV.compiler == :gcc
+    when :gcc
       args << "--toolset=darwin"
     end
     args << "--prefix=#{prefix}"
@@ -60,18 +62,19 @@ class Luabind < Formula
     (lib/"pkgconfig/luabind.pc").write pc_file
   end
 
-  def pc_file; <<~EOS
-    prefix=#{HOMEBREW_PREFIX}
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${exec_prefix}/include
+  def pc_file
+    <<~EOS
+      prefix=#{HOMEBREW_PREFIX}
+      exec_prefix=${prefix}
+      libdir=${exec_prefix}/lib
+      includedir=${exec_prefix}/include
 
-    Name: luabind
-    Description: Library for bindings between C++ and Lua
-    Version: 0.9.1
-    Libs: -L${libdir} -lluabind
-    Cflags: -I${includedir}
-  EOS
+      Name: luabind
+      Description: Library for bindings between C++ and Lua
+      Version: 0.9.1
+      Libs: -L${libdir} -lluabind
+      Cflags: -I${includedir}
+    EOS
   end
 
   test do

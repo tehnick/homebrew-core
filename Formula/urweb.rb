@@ -1,14 +1,14 @@
 class Urweb < Formula
   desc "Ur/Web programming language"
   homepage "http://www.impredicative.com/ur/"
-  url "https://github.com/urweb/urweb/releases/download/20180616/urweb-20180616.tar.gz"
-  sha256 "211793601c3ba958f45b81c30035cf5e3c236650e23bdf4503dc6074fc143e12"
+  url "https://github.com/urweb/urweb/releases/download/20200209/urweb-20200209.tar.gz"
+  sha256 "ac3010c57f8d90f09f49dfcd6b2dc4d5da1cdbb41cbf12cb386e96e93ae30662"
+  revision 2
 
   bottle do
-    rebuild 1
-    sha256 "229ca69ebdea39e502031c08c9823bda5dc1dd37cd7dcaef00efea29439ac6a7" => :mojave
-    sha256 "7667e5b9837ff7ef824540ac5301e5bdc555a0edd4bc431c9b23d82e1a6c2d17" => :high_sierra
-    sha256 "c06a916a0b775eaf2a183ddace6ca55ca8098338f672925b43a721871af588d4" => :sierra
+    sha256 "ea2ccdf37715d601fb22b301e9646d8a56bd408b88c8f83e2feda08d3695712c" => :catalina
+    sha256 "edfad2dea9f27c87d7a68396f50cbbf6d345edf6059abf555ad6c7d2d0bc2177" => :mojave
+    sha256 "ccc6d329298c6d3f3f4ba7e67b8be51017b7f95dad00de35d63fe49c670f1ee2" => :high_sierra
   end
 
   depends_on "autoconf" => :build
@@ -16,6 +16,7 @@ class Urweb < Formula
   depends_on "libtool" => :build
   depends_on "mlton" => :build
   depends_on "gmp"
+  depends_on "icu4c"
   depends_on "openssl@1.1"
 
   def install
@@ -26,6 +27,8 @@ class Urweb < Formula
       --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --prefix=#{prefix}
       SITELISP=$prefix/share/emacs/site-lisp/urweb
+      ICU_INCLUDES=-I#{Formula["icu4c"].opt_include}
+      ICU_LIBS=-L#{Formula["icu4c"].opt_lib}
     ]
 
     system "./configure", *args

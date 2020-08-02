@@ -3,15 +3,15 @@ class Ipopt < Formula
   homepage "https://projects.coin-or.org/Ipopt/"
   url "https://www.coin-or.org/download/source/Ipopt/Ipopt-3.12.13.tgz"
   sha256 "aac9bb4d8a257fdfacc54ff3f1cbfdf6e2d61fb0cf395749e3b0c0664d3e7e96"
-  revision 2
+  license "EPL-1.0"
+  revision 9
   head "https://github.com/coin-or/Ipopt.git"
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "a35a50b9b0ad50c3e71a741c1ff21bfba5ea4e888886753285d48a0e378c971a" => :catalina
-    sha256 "20bbd4c2c55b7e235786030deb15a22bea1847c8557f69967c241681a3c685e8" => :mojave
-    sha256 "89500fa5621132bccfb09ab3cfc67ce6975700833c778bde1afdd8911c715b1a" => :high_sierra
+    sha256 "d7a39ffbd4228581ca59ffb091b997aebd40a41038c60809baea596ebcd2e871" => :catalina
+    sha256 "1147231684595f18ffe44e3a2852ece5456fc4dbfe7455f6a853dd4ef4e055c0" => :mojave
+    sha256 "4d9b8a8cc3091182b49fd4a38bf55f4ca7e953d326af64e247db419c42f8859c" => :high_sierra
   end
 
   depends_on "pkg-config" => [:build, :test]
@@ -24,7 +24,7 @@ class Ipopt < Formula
 
     # MUMPS does not provide a Makefile.inc customized for macOS.
     patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/ab96a8b/ipopt/mumps-makefile-inc-generic-seq.patch"
+      url "https://raw.githubusercontent.com/Homebrew/formula-patches/ab96a8b8e510a8a022808a9be77174179ac79e85/ipopt/mumps-makefile-inc-generic-seq.patch"
       sha256 "0c570ee41299073ec2232ad089d8ee10a2010e6dfc9edc28f66912dae6999d75"
     end
   end
@@ -37,6 +37,9 @@ class Ipopt < Formula
     resource("mumps").stage do
       cp "Make.inc/Makefile.inc.generic.SEQ", "Makefile.inc"
       inreplace "Makefile.inc", "@rpath/", "#{opt_lib}/"
+
+      # Fix for GCC 10
+      inreplace "Makefile.inc", "OPTF    = -fPIC", "OPTF    = -fPIC -fallow-argument-mismatch"
 
       ENV.deparallelize { system "make", "d" }
 

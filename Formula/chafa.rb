@@ -1,16 +1,15 @@
 class Chafa < Formula
   desc "Versatile and fast Unicode/ASCII/ANSI graphics renderer"
   homepage "https://hpjansson.org/chafa/"
-  url "https://hpjansson.org/chafa/releases/chafa-1.0.1.tar.xz"
-  sha256 "49d491a566a22daf56c51c043259f1373a1b1125d5c1c1fe321f7c25ca178e01"
-  revision 1
+  url "https://hpjansson.org/chafa/releases/chafa-1.4.1.tar.xz"
+  sha256 "46d34034f4c96d120e0639f87a26590427cc29e95fe5489e903a48ec96402ba3"
+  license "GPL-3.0"
 
   bottle do
     cellar :any
-    sha256 "14410a807d87798ad31ebe34f2c4efe96e545b5d50b0c7d2991eda165d24ef8b" => :catalina
-    sha256 "aaa7a1a6515a936e426de959cd5e12912f8ad8a4c496faa4f66e4a91ed8d3e20" => :mojave
-    sha256 "0de874867a7fbb31bec2270bbb66ce09388287350a5ba047642ae0dfbfcd3b2e" => :high_sierra
-    sha256 "b03b539cfcce1e802639c4ba5770ea63eaeff7bb8724b2eede19ba1edeb814c6" => :sierra
+    sha256 "f8285220cba2737c58bea611f3c0b653b3c5e1306b8cef3ff33642ed26260fb8" => :catalina
+    sha256 "a483480366443ac91c52ebab6a06d0995a541098ce163a03c6cef71c0829be1c" => :mojave
+    sha256 "272891299f7962a49755de583274a21a49759e020418586fa0e7cdfe7c8e2202" => :high_sierra
   end
 
   depends_on "pkg-config" => :build

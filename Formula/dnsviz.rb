@@ -3,27 +3,39 @@ class Dnsviz < Formula
 
   desc "Tools for analyzing and visualizing DNS and DNSSEC behavior"
   homepage "https://github.com/dnsviz/dnsviz/"
-  url "https://github.com/dnsviz/dnsviz/releases/download/v0.8.2/dnsviz-0.8.2.tar.gz"
+  url "https://files.pythonhosted.org/packages/25/d2/0ebfe23440a1adfdca403d7773570d3c05a3a8c5bcbaa0c091b5114d0224/dnsviz-0.8.2.tar.gz"
   sha256 "a81ff254c23718cd6f364b03bf6e9c80468fa4663fd5be66043de7b0bece1cab"
-  revision 1
+  license "GPL-2.0"
+  revision 3
 
   bottle do
     cellar :any
-    sha256 "9afe5ee751dcc69d8a75f35a54b72c872851d72ab3a6b1156a4dba16b502c4c5" => :mojave
-    sha256 "91addf642665b5301d585d372ba924d8ba24b41d73ce7a32c049490bc8b98b44" => :high_sierra
-    sha256 "65fedd8f6979802ffcc356688e52abc01b39704cfe76e3c344e8b04e0a0990d5" => :sierra
+    sha256 "06a261b8e0edd4d03bba5d44e2b1fb71ccf401aeae782f07153d3df980e86229" => :catalina
+    sha256 "6622680336cd9f2ad3fc65976cb08788337ac36d6415474ddc1fb11f98896b3b" => :mojave
+    sha256 "a1d37cc96afce1a2ac783c8f8ecbfa19744d487a9c0de7bba54bacd3ebcc7ca1" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
+  depends_on "swig" => :build
   depends_on "bind" => :test
   depends_on "graphviz"
   depends_on "libsodium"
   depends_on "openssl@1.1"
-  depends_on "python@2"
+  depends_on "python@3.8"
 
   resource "dnspython" do
     url "https://files.pythonhosted.org/packages/ec/c5/14bcd63cb6d06092a004793399ec395405edf97c2301dfdc146dfbd5beed/dnspython-1.16.0.zip"
     sha256 "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01"
+  end
+
+  resource "libnacl" do
+    url "https://files.pythonhosted.org/packages/08/9b/16725e8cbb278569db379ea6e4eb24b2e8c574be1ec7617ac2dff8f91b2b/libnacl-1.7.1.tar.gz"
+    sha256 "33f31c4686541aee24876706b46a846f93c60e62d6b4211bc16bd08ba71d8fb8"
+  end
+
+  resource "M2Crypto" do
+    url "https://files.pythonhosted.org/packages/74/18/3beedd4ac48b52d1a4d12f2a8c5cf0ae342ce974859fba838cbbc1580249/M2Crypto-0.35.2.tar.gz"
+    sha256 "4c6ad45ffb88670c590233683074f2440d96aaccb05b831371869fc387cbd127"
   end
 
   resource "pygraphviz" do
@@ -31,24 +43,10 @@ class Dnsviz < Formula
     sha256 "50a829a305dc5a0fd1f9590748b19fece756093b581ac91e00c2c27c651d319d"
   end
 
-  resource "m2crypto" do
-    url "https://files.pythonhosted.org/packages/01/bd/a41491718f9e2bebab015c42b5be7071c6695acfa301e3fc0480bfd6a15b/M2Crypto-0.27.0.tar.gz"
-    sha256 "82317459d653322d6b37f122ce916dc91ddcd9d1b814847497ac796c4549dd68"
-  end
-
-  resource "typing" do
-    url "https://files.pythonhosted.org/packages/bf/9b/2bf84e841575b633d8d91ad923e198a415e3901f228715524689495b4317/typing-3.6.6.tar.gz"
-    sha256 "4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d"
-  end
-
   def install
-    venv = virtualenv_create(libexec)
-    resource("m2crypto").stage do
-      system libexec/"bin/python", "setup.py", "build_ext", "--openssl=#{Formula["openssl@1.1"].opt_prefix}", "install"
-    end
-    venv.pip_install resources.reject { |r| r.name == "m2crypto" }
-    system libexec/"bin/python", "setup.py", "build"
-    system libexec/"bin/python", "setup.py", "install", "--prefix=#{libexec}", "--install-data=#{prefix}", "--install-scripts=#{bin}"
+    ENV["SWIG_FEATURES"]="-I#{Formula["openssl@1.1"].opt_include}"
+
+    virtualenv_install_with_resources
   end
 
   test do

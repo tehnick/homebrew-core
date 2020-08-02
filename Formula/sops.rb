@@ -1,33 +1,29 @@
 class Sops < Formula
   desc "Editor of encrypted files"
   homepage "https://github.com/mozilla/sops"
-  url "https://github.com/mozilla/sops/archive/3.4.0.tar.gz"
-  sha256 "65f680ada424094dcdb80b44e3c11c86235618ef1ab10f5f632fcda954a06363"
+  url "https://github.com/mozilla/sops/archive/v3.6.0.tar.gz"
+  sha256 "fee1c27f14f9f45b5955627e301aafcc38973c9458b25f99ef241bdd0a3b082c"
+  license "MPL-2.0"
   head "https://github.com/mozilla/sops.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "184c2b79a276faa3efb6ec26c8ebb98d1e24b0cdd8bade41136943d787d6ee9c" => :catalina
-    sha256 "ab29594d5eb30f6470adb2c9937b9288f024a233d961dbbb965e03f58355dff6" => :mojave
-    sha256 "3f4baab5e9e5e53bec5f76eb1c7786db53c6e83f6dce1c20aabbd5bb180f486f" => :high_sierra
+    sha256 "d12db4156e6c2eef594c07d15d76f92ee22847334206f9d55be31a6ddbfc7e23" => :catalina
+    sha256 "2a7127a49b5bb27ea9ae2ca7da51d4473d6cc182f933e1aa31732ee98b2bc7e3" => :mojave
+    sha256 "3f93dfcca630ce24ddf54008c220c76642784e29b05dd4ff7396ace3f489dac3" => :high_sierra
   end
 
-  depends_on "go@1.12" => :build
+  depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-    ENV["GOBIN"] = bin
-
-    dir = buildpath/"src/github.com/mozilla/sops"
-    dir.install buildpath.children
-
-    cd dir do
-      system "make", "install"
-      prefix.install_metafiles
-    end
+    system "go", "build", "-o", bin/"sops", "go.mozilla.org/sops/v3/cmd/sops"
+    pkgshare.install "example.yaml"
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/sops --version 2>&1")
+    assert_match version.to_s, shell_output("#{bin}/sops --version")
+
+    assert_match "Recovery failed because no master key was able to decrypt the file.",
+      shell_output("#{bin}/sops #{pkgshare}/example.yaml 2>&1", 128)
   end
 end

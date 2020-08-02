@@ -1,14 +1,16 @@
 class Pdal < Formula
   desc "Point data abstraction library"
   homepage "https://www.pdal.io/"
-  url "https://github.com/PDAL/PDAL/releases/download/2.0.1/PDAL-2.0.1-src.tar.gz"
-  sha256 "7632808f49ff7defa042e810ab8696beb3e59458082126edd14f7be7ae463cbe"
+  url "https://github.com/PDAL/PDAL/releases/download/2.1.0/PDAL-2.1.0-src.tar.gz"
+  sha256 "c300de7935d52cb96e24bdaceea5d189b1840e88636e6deca1f6dad51f909571"
+  license "BSD-3-Clause"
+  revision 2
   head "https://github.com/PDAL/PDAL.git"
 
   bottle do
-    sha256 "b6b38e62c87b28985bba32abbd61c5fcc8d0fa2bd5cd2aabbbbca0debabd3256" => :catalina
-    sha256 "76d2630b0fd6351c6ddd900c9946d48d2162ee10d516aae7f99367e8c2620daf" => :mojave
-    sha256 "00ea9635ce86ebb1783ecf798ebc85e35928594e596408471a8181ef894d86fe" => :high_sierra
+    sha256 "da0f5ab64298b3c1eb5d23589a1bc9eda8ae98c3ebd28458f1422d550fec2e71" => :catalina
+    sha256 "c770fc0555b3a070cea3fabca63e0ab5c2d8ccd011c3a70aab6af87b4b3f607e" => :mojave
+    sha256 "7b9f7e54194ab7f3615a243abde2f3bbb7de666a8babad77a2d42f40a7d44943" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -31,6 +33,7 @@ class Pdal < Formula
                          "-DBUILD_PLUGIN_SQLITE=ON"
 
     system "make", "install"
+    rm_rf "test/unit"
     doc.install "examples", "test"
   end
 

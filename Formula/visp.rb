@@ -1,14 +1,14 @@
 class Visp < Formula
   desc "Visual Servoing Platform library"
   homepage "https://visp.inria.fr/"
-  url "https://gforge.inria.fr/frs/download.php/latestfile/475/visp-3.2.0.tar.gz"
-  sha256 "072237ed5c6fcbc6a87300fa036014ec574fd081724907e41ae2d6fb5a222fbc"
-  revision 5
+  url "https://gforge.inria.fr/frs/download.php/latestfile/475/visp-3.3.0.tar.gz"
+  sha256 "f2ed11f8fee52c89487e6e24ba6a31fa604b326e08fb0f561a22c877ebdb640d"
+  revision 7
 
   bottle do
-    sha256 "8dad266d9554bbf185ff11f87c2ab09d57d99fba6d512f38238e7c2f55ebbe42" => :mojave
-    sha256 "abe3a3879f23184466001c69b261932f15ecd88cf1337c3c310d98e6c7b3fedc" => :high_sierra
-    sha256 "e06a3f6810a11b733278d6e4ede15473a21fb37a89ce665943b578afbd7b4748" => :sierra
+    sha256 "2a55095a34c32590a766b11f47a750671cf1c058cdf8bd6e04b8b28a21bc8af5" => :catalina
+    sha256 "9a699785f7953b29c7d194f1516db2150ba038463c6bd934a1dee9834ef7353d" => :mojave
+    sha256 "75fc159fded2e0613dbaa134efae40e167289493a3b1025ac4efcd19b56ac897" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -22,10 +22,24 @@ class Visp < Formula
   depends_on "pcl"
   depends_on "zbar"
 
+  # Fixes build on OpenCV >= 4.4.0
+  # Extracted from https://github.com/lagadic/visp/pull/795
+  patch :DATA
+
   def install
     ENV.cxx11
 
     sdk = MacOS::CLT.installed? ? "" : MacOS.sdk_path
+
+    # Avoid superenv shim references
+    inreplace "CMakeLists.txt" do |s|
+      s.sub! /CMake build tool:"\s+\${CMAKE_BUILD_TOOL}/,
+             "CMake build tool:            gmake\""
+      s.sub! /C\+\+ Compiler:"\s+\${VISP_COMPILER_STR}/,
+             "C++ Compiler:                clang++\""
+      s.sub! /C Compiler:"\s+\${CMAKE_C_COMPILER}/,
+             "C Compiler:                  clang\""
+    end
 
     system "cmake", ".", "-DBUILD_DEMOS=OFF",
                          "-DBUILD_EXAMPLES=OFF",
@@ -86,3 +100,26 @@ class Visp < Formula
     assert_equal version.to_s, shell_output("./test").chomp
   end
 end
+__END__
+diff --git a/modules/vision/src/key-point/vpKeyPoint.cpp b/modules/vision/src/key-point/vpKeyPoint.cpp
+index dd5cabf..23ed382 100644
+--- a/modules/vision/src/key-point/vpKeyPoint.cpp
++++ b/modules/vision/src/key-point/vpKeyPoint.cpp
+@@ -2269,7 +2269,7 @@ void vpKeyPoint::initDetector(const std::string &detectorName)
+ 
+   if (detectorNameTmp == "SIFT") {
+ #ifdef VISP_HAVE_OPENCV_XFEATURES2D
+-    cv::Ptr<cv::FeatureDetector> siftDetector = cv::xfeatures2d::SIFT::create();
++    cv::Ptr<cv::FeatureDetector> siftDetector = cv::SIFT::create();
+     if (!usePyramid) {
+       m_detectors[detectorNameTmp] = siftDetector;
+     } else {
+@@ -2447,7 +2447,7 @@ void vpKeyPoint::initExtractor(const std::string &extractorName)
+ #else
+   if (extractorName == "SIFT") {
+ #ifdef VISP_HAVE_OPENCV_XFEATURES2D
+-    m_extractors[extractorName] = cv::xfeatures2d::SIFT::create();
++    m_extractors[extractorName] = cv::SIFT::create();
+ #else
+     std::stringstream ss_msg;
+     ss_msg << "Fail to initialize the extractor: SIFT. OpenCV version  " << std::hex << VISP_HAVE_OPENCV_VERSION

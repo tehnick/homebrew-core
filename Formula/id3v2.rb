@@ -3,9 +3,11 @@ class Id3v2 < Formula
   homepage "https://id3v2.sourceforge.io/"
   url "https://downloads.sourceforge.net/project/id3v2/id3v2/0.1.12/id3v2-0.1.12.tar.gz"
   sha256 "8105fad3189dbb0e4cb381862b4fa18744233c3bbe6def6f81ff64f5101722bf"
+  license "LGPL-2.1"
 
   bottle do
     cellar :any
+    sha256 "2476bad339650dc2c12e3dd074b3aba7058e9b3b07c9caf05d6f068ea216d9ef" => :catalina
     sha256 "f0e2da49b513dce2ab73589b2aed98ae2cca184dbe082f92502d87e96ba9731d" => :mojave
     sha256 "ca2c1296318425931c5eec52c70adf98665edeb19d5b681271c3b6353ddf171a" => :high_sierra
     sha256 "3b1d75af49217a58f5ecb6f0e9e34564b299903898c76145218a6496de3a7778" => :sierra

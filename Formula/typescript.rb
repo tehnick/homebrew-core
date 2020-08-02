@@ -3,15 +3,16 @@ require "language/node"
 class Typescript < Formula
   desc "Language for application scale JavaScript development"
   homepage "https://www.typescriptlang.org/"
-  url "https://registry.npmjs.org/typescript/-/typescript-3.6.4.tgz"
-  sha256 "92d2fb8676a6e74a542aba22bbf6600001a02ec6f38f39c0078a9458c91c9d8b"
+  url "https://registry.npmjs.org/typescript/-/typescript-3.9.7.tgz"
+  sha256 "6ddba84372cd3078df4fd1fa2ea3ac11db5d498b384645308494bcd2935416c0"
+  license "Apache-2.0"
   head "https://github.com/Microsoft/TypeScript.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "44378a0e6016c8498472186b4df79282555af9588981f8c4dcde389dec1cc88f" => :catalina
-    sha256 "9a45c32139669ef3e8d886579d9b1fbe1b013a9fea26ccaf9cd6beb3013e3ba6" => :mojave
-    sha256 "4c23a4e52c6ac61ad1050c9271e72c350de0aea962eff22490134d16cf5a58f3" => :high_sierra
+    sha256 "8be118cdb13e1765b31a4c6bd45c70d3228a7d0093718778d7865de35b6b489e" => :catalina
+    sha256 "fea40bd33455e015891ed347e37be5fb46d6240216f7a7d6202864fd4cd7ea97" => :mojave
+    sha256 "828a3273617e11d6e212cefb10716a27603c8fcc8552ff3eb09e2a2521b5399e" => :high_sierra
   end
 
   depends_on "node"

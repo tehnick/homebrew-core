@@ -3,18 +3,18 @@ class Codespell < Formula
 
   desc "Fix common misspellings in source code and text files"
   homepage "https://github.com/codespell-project/codespell"
-  url "https://files.pythonhosted.org/packages/df/6f/764ca059e0eb06b69e1abed2c9a2cabe7dac72b336e2600615b38ea547a3/codespell-1.16.0.tar.gz"
-  sha256 "bf3b7c83327aefd26fe718527baa9bd61016e86db91a8123c0ef9c150fa02de9"
+  url "https://files.pythonhosted.org/packages/7e/37/b15b4133e90bbef5acecfd2f3f3871c1352ee281c042fd64a22a72735fb8/codespell-1.17.1.tar.gz"
+  sha256 "25a2ecd86b9cdc111dc40a30d0ed28c578e13a0ce158d1c383f9d47811bfcd23"
+  license "GPL-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "adb1bc633bab65e7cd2f44a0b658cd83a3c3c2a00ac5d859c4b341be2aaf3018" => :catalina
-    sha256 "577e71571fcefa1ef4edae6d790aa80e978afb21de6f12d232601885b0d30ff9" => :mojave
-    sha256 "330c2359a5e5050d555d9f70c29add7d3e7c9554d89ed43607235a896453b461" => :high_sierra
-    sha256 "b77254f7aee7303a2edabb0a780a78407e7d8c55a44e6a5c75c9dd799beba12d" => :sierra
+    sha256 "fb3fb87c3d707656b5c796fd40a13b6e7d0170f5cc4db6361751074b1f089bcf" => :catalina
+    sha256 "f44c96916092e661dfa53499d3570b98bba5fbcf964751f55c775e0aee68b37c" => :mojave
+    sha256 "752254907866753d1941f39193d67cb2fbaa54f294d6d0f4a1f11cd8a8247aae" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     virtualenv_install_with_resources

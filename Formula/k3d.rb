@@ -1,33 +1,35 @@
 class K3d < Formula
   desc "Little helper to run Rancher Lab's k3s in Docker"
   homepage "https://github.com/rancher/k3d"
-  url "https://github.com/rancher/k3d/archive/v1.3.3.tar.gz"
-  sha256 "23cd26f1a1cf9feef25c2d0a731a0405991b71edc62d4207352c94ae4e34c5b8"
+  url "https://github.com/rancher/k3d/archive/v3.0.0.tar.gz"
+  sha256 "939fae09600ae7edb5e92ecab5c25ac2adec5be432c8a7ee34a14e01a0245b11"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "98fc996c777fe79b6ba0260cc7ef0e12c0961ee1462dbef12eddbeda8bb13fd3" => :catalina
-    sha256 "3ad2b2ea2584c46837dcd958fa0b384bee15f193d85df3025c2b7d476429d6c6" => :mojave
-    sha256 "3cb8ca78ded4bd85a41c4869ff6932a912368479d3c4d8ee73a7d77c26f589c5" => :high_sierra
+    sha256 "1363893ef0fefaa579ea21f1dd546d2d88b44316e2df7746e31a0732aa1beb81" => :catalina
+    sha256 "51e0a32d8d8ddba6386c5243e3a3a22a730020769d30962e2778c586da8088da" => :mojave
+    sha256 "2958a2c668ebe0d064610e680898e895ede437775b2f7fa225a30ee5c9aa3ae5" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GO111MODULE"] = "on"
-    ENV["GOPATH"] = buildpath
-
-    dir = buildpath/"src/github.com/rancher/k3d"
-    dir.install buildpath.children
-
-    cd dir do
-      system "go", "build", "-mod", "vendor", "-ldflags", "-X main.version=#{version}", "-o", bin/"k3d"
-      prefix.install_metafiles
-    end
+    system "go", "build",
+           "-mod", "vendor",
+           "-ldflags", "-s -w -X github.com/rancher/k3d/v3/version.Version=v#{version}"\
+           " -X github.com/rancher/k3d/v3/version.K3sVersion=latest",
+           "-trimpath", "-o", bin/"k3d"
+    prefix.install_metafiles
   end
 
   test do
-    assert_match "k3d version dev", shell_output("#{bin}/k3d -v")
-    assert_match "Checking docker...", shell_output("#{bin}/k3d ct 2>&1", 1)
+    assert_match "k3d version v#{version}\nk3s version latest (default)", shell_output("#{bin}/k3d --version")
+    # Either docker is not present or it is, where the command will fail in the first case.
+    # In any case I wouldn't expect a cluster with name 6d6de430dbd8080d690758a4b5d57c86 to be present
+    # (which is the md5sum of 'homebrew-failing-test')
+    output = shell_output("#{bin}/k3d cluster get 6d6de430dbd8080d690758a4b5d57c86 2>&1", 1).split("\n").pop
+    assert_match output,
+      "\x1B\[31mFATA\x1B\[0m\[0000\]\ No\ nodes\ found\ for\ cluster\ '6d6de430dbd8080d690758a4b5d57c86'\ "
   end
 end

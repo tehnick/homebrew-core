@@ -2,24 +2,22 @@ class SourceToImage < Formula
   desc "Tool for building source and injecting into docker images"
   homepage "https://github.com/openshift/source-to-image"
   url "https://github.com/openshift/source-to-image.git",
-      :tag      => "v1.2.0",
-      :revision => "2a579ecd66dfaf9ee21bbc860fcde8e4d1d12301"
+      tag:      "v1.3.0",
+      revision: "eed2850f2187435ef5d83487e05bf3dc18622ceb"
+  license "Apache-2.0"
+  revision 1
   head "https://github.com/openshift/source-to-image.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7865eec2bd488c5b09844e7c13244e9d19912f75f04f13dbda6b0b393077703b" => :catalina
-    sha256 "102e5173cec0a766173a5cafcf95ab35129c2906bfedad3155ab1fe78933ef2a" => :mojave
-    sha256 "33822b820f7febe068dc2dfd1fafd5502c18e0aadc9b4b2e91b9f095c6febbfe" => :high_sierra
+    sha256 "1082f391a8b448d93865d97431856b29ca5c2d845686f04c5ae4425dc0ead5c5" => :catalina
+    sha256 "db15e9cff473ac13375703f67b00907016001d2888b4a89c6ec065b2dc460d76" => :mojave
+    sha256 "3c107497236774e24628577c13c67372d9814967c9a6f97651d8c05935bd8aa0" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    # Upstream issue from 28 Feb 2018 "Go 1.10 failure due to version comparison bug"
-    # See https://github.com/openshift/source-to-image/issues/851
-    inreplace "hack/common.sh", "go1.4", "go1.0"
-
     system "hack/build-go.sh"
     bin.install "_output/local/bin/darwin/amd64/s2i"
   end

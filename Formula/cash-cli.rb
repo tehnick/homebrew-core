@@ -3,15 +3,15 @@ require "language/node"
 class CashCli < Formula
   desc "Convert currency rates directly from your terminal"
   homepage "https://github.com/xxczaki/cash-cli"
-  url "https://registry.npmjs.org/cash-cli/-/cash-cli-4.0.0.tgz"
-  sha256 "c8b1d437305bc4c492cb9b85bb1b91edb5cc74fa91bd007616746c6258dae6c5"
+  url "https://registry.npmjs.org/cash-cli/-/cash-cli-4.2.1.tgz"
+  sha256 "593e2b02aab0e4369225a2c78a895d511ee491a1708e44d7aba63d9a897b000e"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a89b14a9c425998978afe98652ffd5c9d6f5b2536229fec6f34fa7ccdc59e767" => :catalina
-    sha256 "c78661062dbc6e913d0f69f45af80af1f9967e50fe1eca86a95337ab16fac7ea" => :mojave
-    sha256 "6b8215de6daf01c61e48bd46465be7ad9b400d4ec5ab514f5167bee787d6fa48" => :high_sierra
-    sha256 "5941317cef9b92097c4b45df1e94b7b8d08e708d9813508ab3f42f55068541d3" => :sierra
+    sha256 "f22f6404f47adb8a6c0253362d61fb529da4d6a71045a2902407ed112329310d" => :catalina
+    sha256 "7aa6e66eef5defae364924b00859ad4d884a15563c52488462ab489676f02141" => :mojave
+    sha256 "903fde1135bcc71b70d74b852084897a2708f1d87ad00c200c793600472c42aa" => :high_sierra
   end
 
   depends_on "node"

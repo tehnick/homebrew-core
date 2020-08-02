@@ -1,14 +1,15 @@
 class Krakend < Formula
   desc "Ultra-High performance API Gateway built in Go"
   homepage "https://www.krakend.io/"
-  url "https://github.com/devopsfaith/krakend-ce/archive/1.0.0.tar.gz"
-  sha256 "7626cb961c820e4b3b851a4cbd6d5d976288216891591c1be3a0c21d32477199"
+  url "https://github.com/devopsfaith/krakend-ce/archive/v1.1.1.tar.gz"
+  sha256 "43f02c1ff1dbb8d0627f84d5332ab0974763e529b8fb154f72ca780ac562f858"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2169f9552692bdf17a81705929f8d4fda02a61d409107d7a06820ed96c1b5315" => :catalina
-    sha256 "f2af9a4f455794c0ed9ab63fb85da708b8f76f2aff154c6c6cdb204589ac80a0" => :mojave
-    sha256 "431731a0c27ed6a2dc4b6ef0be3bb73c97153bfd8190d9c62a7cb4a88cf12cc2" => :high_sierra
+    sha256 "3b2c4d19653b8c43580f994349beb23e70d5b2a1c2c187d54d8c1481d072a7ea" => :catalina
+    sha256 "d7dcdd8038f317dba6b12533b5750235f3e12fd2e584de5b4e5a56f29428e092" => :mojave
+    sha256 "db6cc9c73c230995752276f410b742b848d718ab9e6c6b783a6dfc3035f96dc9" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -36,7 +37,8 @@ class Krakend < Formula
         }
       }
     EOS
-    assert_match "Unsupported version", shell_output("#{bin}/krakend check -c krakend_unsupported_version.json 2>&1", 1)
+    assert_match "Unsupported version",
+      shell_output("#{bin}/krakend check -c krakend_unsupported_version.json 2>&1", 1)
 
     (testpath/"krakend_bad_file.json").write <<~EOS
       {
@@ -44,7 +46,8 @@ class Krakend < Formula
         "bad": file
       }
     EOS
-    assert_match "ERROR", shell_output("#{bin}/krakend check -c krakend_bad_file.json 2>&1", 1)
+    assert_match "ERROR",
+      shell_output("#{bin}/krakend check -c krakend_bad_file.json 2>&1", 1)
 
     (testpath/"krakend.json").write <<~EOS
       {
@@ -94,6 +97,7 @@ class Krakend < Formula
         ]
       }
     EOS
-    assert_match "OK", shell_output("#{bin}/krakend check -c krakend.json 2>&1")
+    assert_match "OK",
+      shell_output("#{bin}/krakend check -c krakend.json 2>&1")
   end
 end

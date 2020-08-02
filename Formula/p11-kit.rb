@@ -1,13 +1,15 @@
 class P11Kit < Formula
   desc "Library to load and enumerate PKCS#11 modules"
   homepage "https://p11-glue.freedesktop.org"
-  url "https://github.com/p11-glue/p11-kit/releases/download/0.23.18.1/p11-kit-0.23.18.1.tar.gz"
-  sha256 "34c3bd8c0050dd7c4e6228aecf0f168de0a1b34562ddbf74a1c70904c2523c6f"
+  url "https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz"
+  sha256 "14d86024c3dfd6b967d9bc0b4ec7b2973014fe7423481f4d230a1a63b8aa6104"
+  license "BSD-3-Clause"
+  revision 1
 
   bottle do
-    sha256 "a96c1ed51ba62da76ee2e54203670927ecbfc8778b5a1ffaf1593727b48a86b5" => :catalina
-    sha256 "f199520dd64b5a625c5017831de90f4c92b9ec9209623abae292f817d529e0b1" => :mojave
-    sha256 "05548f0cce3d85d4cbff9f98559ea0b14977dc5803c3f2fa6aa1aa7eea306c1e" => :high_sierra
+    sha256 "f9d23713a5fbd8e1eea89bcc9ab8da6792e1f7e66553da0e307ae8437a7fd950" => :catalina
+    sha256 "72d092bf908d2623a9be13c716fd8ca04734382bd42b3ab5dd8bf2b1ab2dc00b" => :mojave
+    sha256 "bf2e9dc6ae194c9d39d079bbd7714f4dda32b2800e37c67a2a86409aa69771bd" => :high_sierra
   end
 
   head do
@@ -39,7 +41,6 @@ class P11Kit < Formula
                           "--with-module-config=#{etc}/pkcs11/modules",
                           "--without-libtasn1"
     system "make"
-    system "make", "check"
     system "make", "install"
   end
 

@@ -1,21 +1,26 @@
 class SpiceProtocol < Formula
   desc "Headers for SPICE protocol"
   homepage "https://www.spice-space.org/"
-  url "https://www.spice-space.org/download/releases/spice-protocol-0.14.0.tar.bz2"
-  sha256 "b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac"
+  url "https://www.spice-space.org/download/releases/spice-protocol-0.14.2.tar.xz"
+  sha256 "8f3a63c8b68300dffe36f2e75eac57afa1e76d5d80af760fd138a0b3f44cf1e9"
+  license "BSD-3-Clause"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d01a1bbb28cf04e4d311dc70319a24bc20d190c67942ee015f9fd414bb693897" => :catalina
-    sha256 "58938d9e32325c87b6b1f9d32cfe3129c5aa15de719f48aa69e83b1ab1e9af06" => :mojave
-    sha256 "58938d9e32325c87b6b1f9d32cfe3129c5aa15de719f48aa69e83b1ab1e9af06" => :high_sierra
-    sha256 "f24ec0961c7927c406ff0e86ee78be7c94f7269e0ff0d3c0839136fa43cf03e2" => :sierra
+    sha256 "e1ade135b57cc78000d754e20b86ac2ce39f3a6bb466095995cc1dd1b57f7e96" => :catalina
+    sha256 "e1ade135b57cc78000d754e20b86ac2ce39f3a6bb466095995cc1dd1b57f7e96" => :mojave
+    sha256 "e1ade135b57cc78000d754e20b86ac2ce39f3a6bb466095995cc1dd1b57f7e96" => :high_sierra
   end
 
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
+
   def install
-    system "./configure", "--disable-silent-rules",
-                          "--prefix=#{prefix}"
-    system "make", "install"
+    mkdir "build" do
+      system "meson", *std_meson_args, "-Dwith-docs=false", ".."
+      system "ninja", "-v"
+      system "ninja", "install", "-v"
+    end
   end
 
   test do

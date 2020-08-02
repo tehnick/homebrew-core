@@ -1,12 +1,12 @@
 class Artifactory < Formula
   desc "Manages binaries"
   homepage "https://www.jfrog.com/artifactory/"
-  url "https://dl.bintray.com/jfrog/artifactory/jfrog-artifactory-oss-6.10.3.zip"
-  sha256 "809b8227ec854d2dca789135a8d77df1dc6feaabc40875799cafc98c368fae59"
+  url "https://dl.bintray.com/jfrog/artifactory/jfrog-artifactory-oss-6.20.1.zip"
+  sha256 "377b08e030b2cf2dc0fda594e5f20421176a4f0fea0785cc36bb0aade89a624a"
 
   bottle :unneeded
 
-  depends_on :java => "1.8+"
+  depends_on "openjdk"
 
   def install
     # Remove Windows binaries
@@ -21,9 +21,11 @@ class Artifactory < Formula
     libexec.install Dir["*"]
 
     # Launch Script
-    bin.install_symlink libexec/"bin/artifactory.sh"
+    bin.install libexec/"bin/artifactory.sh"
     # Memory Options
-    bin.install_symlink libexec/"bin/artifactory.default"
+    bin.install libexec/"bin/artifactory.default"
+
+    bin.env_script_all_files libexec/"bin", JAVA_HOME: Formula["openjdk"].opt_prefix
   end
 
   def post_install
@@ -36,27 +38,28 @@ class Artifactory < Formula
     libexec.install_symlink data => "data"
   end
 
-  plist_options :manual => "#{HOMEBREW_PREFIX}/opt/artifactory/libexec/bin/artifactory.sh"
+  plist_options manual: "#{HOMEBREW_PREFIX}/opt/artifactory/libexec/bin/artifactory.sh"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>com.jfrog.artifactory</string>
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>Label</key>
+          <string>com.jfrog.artifactory</string>
 
-        <key>WorkingDirectory</key>
-        <string>#{libexec}</string>
+          <key>WorkingDirectory</key>
+          <string>#{libexec}</string>
 
-        <key>Program</key>
-        <string>#{bin}/artifactory.sh</string>
+          <key>Program</key>
+          <string>#{bin}/artifactory.sh</string>
 
-        <key>KeepAlive</key>
-        <true/>
-      </dict>
-    </plist>
-  EOS
+          <key>KeepAlive</key>
+          <true/>
+        </dict>
+      </plist>
+    EOS
   end
 
   test do

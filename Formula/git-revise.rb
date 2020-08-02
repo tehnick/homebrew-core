@@ -3,21 +3,23 @@ class GitRevise < Formula
 
   desc "Rebase alternative for easy & efficient in-memory rebases and fixups"
   homepage "https://github.com/mystor/git-revise"
-  url "https://github.com/mystor/git-revise/archive/0.5.0.tar.gz"
-  sha256 "f2bd6ad51b2acdd6fb6acf51807ce4b951d92cd039fc9e5a7dbb1e182fdf38b4"
+  url "https://github.com/mystor/git-revise/archive/v0.6.0.tar.gz"
+  sha256 "99c3804ddb73f1115bd6be05d10e640a7066e4019c6c223433e55136e66fa4c8"
+  license "MIT"
   head "https://github.com/mystor/git-revise.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4ec22a44768012077828051f16076f7f058ab6140a7b4af8fbae9cd1d5d640be" => :catalina
-    sha256 "46da814698d72cbd9a39feb563c7a3875488d1ed164ac0bdfdd23afdd60f3897" => :mojave
-    sha256 "cdbc5d89bf0adc41adfe18ae14de0d51dfc537dd017ab0ca44fafdda8791ce23" => :high_sierra
+    sha256 "644bd8885dfc27b0cb84294b7195a296b1c1d56af5b870db7af109a93d80e2a0" => :catalina
+    sha256 "a9a61b083fc459b407488d8ef7e2439059702e89eaa19c9a5a8c0e1fb8f1a7c7" => :mojave
+    sha256 "1d15213e6e0220d5e97dd8991b4545d0789a3b907fff1a0996255ea675a1a94b" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     virtualenv_install_with_resources
+    man1.install "git-revise.1"
   end
 
   test do

@@ -1,17 +1,16 @@
 class GstValidate < Formula
+  include Language::Python::Shebang
+
   desc "Tools to validate GstElements from GStreamer"
   homepage "https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-validate/html/"
-
-  stable do
-    url "https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.16.1.tar.xz"
-    sha256 "7f079b9b2a127604b98e297037dc8847ef50f4ce2b508aa2df0cac5b77562899"
-  end
+  url "https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.16.2.tar.xz"
+  sha256 "4861ccb9326200e74d98007e316b387d48dd49f072e0b78cb9d3303fdecfeeca"
+  revision 1
 
   bottle do
-    sha256 "76ac31998b8df5dde6c4be8b84e39622d4350c8871e8ffac6f03ab6ae5572126" => :catalina
-    sha256 "adc145563618a2c2e71bc4fb5673431e9fc96a952487c1cc2aec8c70a1890170" => :mojave
-    sha256 "f548f74c7824cb1bbc9324f8884a6e257d6c5d4da3cb1bed8291eb4809d10b63" => :high_sierra
-    sha256 "bf8c76f74c7c0b447e04efc6d07a068bbf1fc22e34da4b449a3f464336fad706" => :sierra
+    sha256 "44ac302a258e77061adf3b5e87542ef2c2d1e6a4399554198f8e54c16a501491" => :catalina
+    sha256 "602b5e8cfc4749ead0dba6866b12487742488de6cc59555758284c1c8bc9f4b0" => :mojave
+    sha256 "675669b40f30a05ab4c4c32bb92245753890419a8d4f5a649efc9441d200ed28" => :high_sierra
   end
 
   head do
@@ -28,6 +27,7 @@ class GstValidate < Formula
   depends_on "gst-plugins-base"
   depends_on "gstreamer"
   depends_on "json-glib"
+  depends_on "python@3.8"
 
   def install
     args = %W[
@@ -50,6 +50,8 @@ class GstValidate < Formula
       system "make"
       system "make", "install"
     end
+
+    rewrite_shebang detected_python_shebang, bin/"gst-validate-launcher"
   end
 
   test do

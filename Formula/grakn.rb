@@ -1,12 +1,13 @@
 class Grakn < Formula
   desc "The distributed hyper-relational database for knowledge engineering"
   homepage "https://grakn.ai"
-  url "https://github.com/graknlabs/grakn/releases/download/1.5.9/grakn-core-all-mac-1.5.9.zip"
-  sha256 "9934cf19b206e88193173d05d58e5a5460eebc2933a83a99bc807122db93b7dc"
+  url "https://github.com/graknlabs/grakn/releases/download/1.8.0/grakn-core-all-mac-1.8.0.zip"
+  sha256 "5d9e4e7067e53be2868d8a9a56f9e64fe2dee2b46039a303655d32911cbbdf56"
+  license "AGPL-3.0"
 
   bottle :unneeded
 
-  depends_on :java => "1.8"
+  depends_on java: "1.8"
 
   def install
     libexec.install Dir["*"]

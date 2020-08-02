@@ -3,6 +3,7 @@ class Autojump < Formula
   homepage "https://github.com/wting/autojump"
   url "https://github.com/wting/autojump/archive/release-v22.5.3.tar.gz"
   sha256 "00daf3698e17ac3ac788d529877c03ee80c3790472a85d0ed063ac3a354c37b1"
+  license "GPL-3.0"
   head "https://github.com/wting/autojump.git"
 
   bottle do
@@ -13,7 +14,7 @@ class Autojump < Formula
     sha256 "c95107719bd784e0e348be6dbfb3a780240d96f8d76710271c3642335babbd8f" => :sierra
   end
 
-  uses_from_macos "python@2"
+  depends_on :macos # Due to Python 2
 
   def install
     system "./install.py", "-d", prefix, "-z", zsh_completion
@@ -26,14 +27,15 @@ class Autojump < Formula
     bin.write_exec_script libexec/"bin/autojump"
   end
 
-  def caveats; <<~EOS
-    Add the following line to your ~/.bash_profile or ~/.zshrc file (and remember
-    to source the file to update your current session):
-      [ -f #{etc}/profile.d/autojump.sh ] && . #{etc}/profile.d/autojump.sh
+  def caveats
+    <<~EOS
+      Add the following line to your ~/.bash_profile or ~/.zshrc file (and remember
+      to source the file to update your current session):
+        [ -f #{etc}/profile.d/autojump.sh ] && . #{etc}/profile.d/autojump.sh
 
-    If you use the Fish shell then add the following line to your ~/.config/fish/config.fish:
-      [ -f #{HOMEBREW_PREFIX}/share/autojump/autojump.fish ]; and source #{HOMEBREW_PREFIX}/share/autojump/autojump.fish
-  EOS
+      If you use the Fish shell then add the following line to your ~/.config/fish/config.fish:
+        [ -f #{HOMEBREW_PREFIX}/share/autojump/autojump.fish ]; and source #{HOMEBREW_PREFIX}/share/autojump/autojump.fish
+    EOS
   end
 
   test do

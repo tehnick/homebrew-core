@@ -1,21 +1,23 @@
 class GetIplayer < Formula
   desc "Utility for downloading TV and radio programmes from BBC iPlayer"
   homepage "https://github.com/get-iplayer/get_iplayer"
-  url "https://github.com/get-iplayer/get_iplayer/archive/v3.22.tar.gz"
-  sha256 "299de0686f7a4848e2aef22f0647ba35b8114f573334dd3e1a7e331052145593"
-  head "https://github.com/get-iplayer/get_iplayer.git", :branch => "develop"
+  url "https://github.com/get-iplayer/get_iplayer/archive/v3.26.tar.gz"
+  sha256 "2ec105ccb47910d7f3ff7124ecaa839a8778837c12881358e627a132ba027b06"
+  license "GPL-3.0"
+  head "https://github.com/get-iplayer/get_iplayer.git", branch: "develop"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "57c44b5c966174dd88c6e3f88692dbe39f53ac71a356f97ef3b547014709df55" => :mojave
-    sha256 "09d4fd76bd60877e1919495b70080ef96e71e5128c6c9d1d7ddf641c01a99b42" => :high_sierra
-    sha256 "66759745236dcb18d3b829ae22fe8d449389667dd02378e57df1b2842bad6e09" => :sierra
+    sha256 "a3e2df4c8d889ff6230f0ef2bdace24455d15de97a0442b19139f7b8502dbf28" => :catalina
+    sha256 "574a33ef3208092d42fb8640da5ec55dd33b8114207f871329dfdd04813f77e1" => :mojave
+    sha256 "7cb313cecc47bd886b3fa782cc90d790ba75af34567b6bd29af84a218abcec40" => :high_sierra
   end
 
   depends_on "atomicparsley"
   depends_on "ffmpeg"
-  depends_on :macos => :yosemite
+
   uses_from_macos "libxml2"
+  uses_from_macos "perl"
 
   resource "IO::Socket::IP" do
     url "https://cpan.metacpan.org/authors/id/P/PE/PEVANS/IO-Socket-IP-0.39.tar.gz"
@@ -54,12 +56,12 @@ class GetIplayer < Formula
     end
 
     bin.install "get_iplayer", "get_iplayer.cgi"
-    bin.env_script_all_files(libexec/"bin", :PERL5LIB => ENV["PERL5LIB"])
+    bin.env_script_all_files(libexec/"bin", PERL5LIB: ENV["PERL5LIB"])
     man1.install "get_iplayer.1"
   end
 
   test do
-    output = shell_output("\"#{bin}/get_iplayer\" --refresh --refresh-include=\"BBC None\" --quiet dontshowanymatches 2>&1")
+    output = shell_output("\"#{bin}/get_iplayer\" -f --refresh-include=\"BBC None\" -q dontshowanymatches 2>&1")
     assert_match "get_iplayer #{pkg_version}-homebrew", output, "Unexpected version"
     assert_match "INFO: 0 matching programmes", output, "Unexpected output"
     assert_match "INFO: Indexing tv programmes (concurrent)", output,

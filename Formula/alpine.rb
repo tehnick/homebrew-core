@@ -1,19 +1,20 @@
 class Alpine < Formula
   desc "News and email agent"
-  homepage "https://repo.or.cz/alpine.git"
-  url "https://ftp.osuosl.org/pub/blfs/conglomeration/alpine/alpine-2.21.tar.xz"
-  mirror "https://fossies.org/linux/misc/alpine-2.21.tar.xz"
-  sha256 "6030b6881b8168546756ab3a5e43628d8d564539b0476578e287775573a77438"
-  revision 1
+  homepage "http://alpine.x10host.com/alpine/release/"
+  url "http://alpine.x10host.com/alpine/release/src/alpine-2.23.tar.xz"
+  sha256 "793a61215c005b5fcffb48f642f125915276b7ec7827508dd9e83d4c4da91f7b"
+  license "Apache-2.0"
+  head "https://repo.or.cz/alpine.git"
 
   bottle do
-    sha256 "73d6ba0c5623c94d2434fbb7d64e232faff22ad4a2d0352f32bcf6e1c2b33d5b" => :catalina
-    sha256 "63000d10c5caaffa13d36c1c9d798cb421389d796391ee2cab33f586a53f59cc" => :mojave
-    sha256 "cca98c8f35a89f926ca47d88e1b2a1b845233518962a80fa71d6427e9007364d" => :high_sierra
-    sha256 "c60a2e6a4d4de41dfd17a37497fb24eae9b8c07ce7e55fa1726765b6ddac20d6" => :sierra
+    sha256 "3e775bad34dc730ad9c15e3df30e753842ee542695172362cc648ead05e4d151" => :catalina
+    sha256 "5492f86a14779b434ebb069bcef8ae551c93dc8835106d6144699e54191de3bd" => :mojave
+    sha256 "f7b9f13b015de8e08ec73b1e4784abc64e5cf01785ef722ffa3d80441248a640" => :high_sierra
   end
 
   depends_on "openssl@1.1"
+
+  uses_from_macos "ncurses"
 
   def install
     ENV.deparallelize
@@ -23,7 +24,7 @@ class Alpine < Formula
       --with-ssl-dir=#{Formula["openssl@1.1"].opt_prefix}
       --with-ssl-certs-dir=#{etc}/openssl@1.1
       --prefix=#{prefix}
-      --with-passfile=.pine-passfile
+      --with-bundled-tools
     ]
 
     system "./configure", *args
@@ -31,6 +32,6 @@ class Alpine < Formula
   end
 
   test do
-    system "#{bin}/alpine", "-supported"
+    system "#{bin}/alpine", "-conf"
   end
 end

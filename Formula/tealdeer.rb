@@ -1,25 +1,32 @@
 class Tealdeer < Formula
   desc "Very fast implementation of tldr in Rust"
   homepage "https://github.com/dbrgn/tealdeer"
-  url "https://github.com/dbrgn/tealdeer/archive/v1.2.0.tar.gz"
-  sha256 "5cf286059b823501d05da445b9b7a609ec2da91d711d990df76397f79d800c52"
+  url "https://github.com/dbrgn/tealdeer/archive/v1.3.0.tar.gz"
+  sha256 "d384176263c1377b241f4e41f8efd564052e506af00e014240f3874419e187e0"
+  license "Apache-2.0"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "dc8608562bba3aaccdfa5c15003e98bb0b02892e5bdb17436d61051b02b65210" => :catalina
-    sha256 "964fd2fb421a2454648d1be9d2ce8fbab00fedca36a7e964f5da516406638aee" => :mojave
-    sha256 "ff092cd4796f47c7d62bccddc8f64d1afb18e94366568880187b8be0bb142974" => :high_sierra
-    sha256 "e6a03bd85487c6d11f7558e30bd736fe96527803798c21beecf3ee4069c0f855" => :sierra
+    sha256 "9db1cd67e060652967a899a4266758bf0b460b1426bea40a822f217c4edf4d80" => :catalina
+    sha256 "379f9775e19bf959868350869913b83458b3f14b4aacdd4e5432c2a4cdcf8e9d" => :mojave
+    sha256 "fd5d4b07815554a32fc161accc1145d1a7ef761bd20f2f94bdb94eca57563e32" => :high_sierra
   end
 
   depends_on "rust" => :build
 
-  conflicts_with "tldr", :because => "both install `tldr` binaries"
+  on_linux do
+    depends_on "pkg-config" => :build
+    depends_on "openssl@1.1"
+  end
+
+  conflicts_with "tldr", because: "both install `tldr` binaries"
 
   def install
-    system "cargo", "install", "--root", prefix,
-                               "--path", "."
-    bash_completion.install "bash_tealdeer"
+    system "cargo", "install", *std_cargo_args
+    bash_completion.install "bash_tealdeer" => "tldr"
+    zsh_completion.install "zsh_tealdeer" => "_tldr"
+    fish_completion.install "fish_tealdeer" => "tldr.fish"
   end
 
   test do

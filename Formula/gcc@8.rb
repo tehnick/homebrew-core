@@ -1,14 +1,15 @@
 class GccAT8 < Formula
   desc "GNU compiler collection"
   homepage "https://gcc.gnu.org/"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz"
-  sha256 "64baadfe6cc0f4947a84cb12d7f0dfaf45bb58b7e92461639596c21e02d97d2c"
+  url "https://ftp.gnu.org/gnu/gcc/gcc-8.4.0/gcc-8.4.0.tar.xz"
+  mirror "https://ftpmirror.gnu.org/gcc/gcc-8.4.0/gcc-8.4.0.tar.xz"
+  sha256 "e30a6e52d10e1f27ed55104ad233c30bd1e99cfb5ff98ab022dc941edd1b2dd4"
+  revision 1
 
   bottle do
-    sha256 "b1e150c72b4c3b7f3493371d71cdb668f691bfee2e998e5b0bf570eed28254d6" => :mojave
-    sha256 "9fe980d09d28fa000058afc02efc5b3e1b2d27a636608d337c6d777f8a3e5f24" => :high_sierra
-    sha256 "a62506316b82ad0298e13d94921086117536ddf1d72de571a9fcd8d0fa1823ef" => :sierra
+    sha256 "55525171b1a90425dab69799f3730492cd3f04b2755242340472925794104962" => :catalina
+    sha256 "3321d929ae429e3ccf8b4c4e265e20e6302d361d5c444f4b7a5217771b8d0b01" => :mojave
+    sha256 "80b73e0a1679e7ca9e098de1e82e19e312d159098b3355607b76a3673b80c2ee" => :high_sierra
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
@@ -25,16 +26,6 @@ class GccAT8 < Formula
 
   # GCC bootstraps itself, so it is OK to have an incompatible C++ stdlib
   cxxstdlib_check :skip
-
-  # Patch for Xcode bug, taken from https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89864#c43
-  # This should be removed in the next release of GCC if fixed by Apple; this is an xcode bug,
-  # but this patch is a work around committed to GCC trunk
-  if MacOS::Xcode.version >= "10.2"
-    patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/master/gcc/8.3.0-xcode-bug-_Atomic-fix.patch"
-      sha256 "33ee92bf678586357ee8ab9d2faddf807e671ad37b97afdd102d5d153d03ca84"
-    end
-  end
 
   def install
     # GCC will suffer build errors if forced to use a particular linker.
@@ -76,21 +67,21 @@ class GccAT8 < Formula
     # Xcode 10 dropped 32-bit support
     args << "--disable-multilib" if DevelopmentTools.clang_build_version >= 1000
 
+    # System headers may not be in /usr/include
+    sdk = MacOS.sdk_path_if_needed
+    if sdk
+      args << "--with-native-system-header-dir=/usr/include"
+      args << "--with-sysroot=#{sdk}"
+    end
+
+    # Avoid reference to sed shim
+    args << "SED=/usr/bin/sed"
+
     # Ensure correct install names when linking against libgcc_s;
     # see discussion in https://github.com/Homebrew/legacy-homebrew/pull/34303
     inreplace "libgcc/config/t-slibgcc-darwin", "@shlib_slibdir@", "#{HOMEBREW_PREFIX}/lib/gcc/#{version_suffix}"
 
     mkdir "build" do
-      if !MacOS::CLT.installed?
-        # For Xcode-only systems, we need to tell the sysroot path
-        args << "--with-native-system-header-dir=/usr/include"
-        args << "--with-sysroot=#{MacOS.sdk_path}"
-      elsif MacOS.version >= :mojave
-        # System headers are no longer located in /usr/include
-        args << "--with-native-system-header-dir=/usr/include"
-        args << "--with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
-      end
-
       system "../configure", *args
 
       # Use -headerpad_max_install_names in the build,

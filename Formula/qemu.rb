@@ -1,15 +1,15 @@
 class Qemu < Formula
-  desc "x86 and PowerPC Emulator"
+  desc "Emulator for x86 and PowerPC"
   homepage "https://www.qemu.org/"
-  url "https://download.qemu.org/qemu-4.1.0.tar.xz"
-  sha256 "656e60218689bdeec69903087fd7582d5d3e72238d02f4481d8dc6d79fd909c6"
+  url "https://download.qemu.org/qemu-5.0.0.tar.xz"
+  sha256 "2f13a92a0fa5c8b69ff0796b59b86b080bbb92ebad5d301a7724dd06b5e78cb6"
+  revision 2
   head "https://git.qemu.org/git/qemu.git"
 
   bottle do
-    sha256 "b8e20707ff317f4182fbd180f033f4a9f163e40fec54a442d9b227e2f39846db" => :catalina
-    sha256 "3b35079b1729b9b1bd58087794ccd9d40848b69d22a601c12b451791709298d6" => :mojave
-    sha256 "0ef458cc2c387f8bbb2bdbd0e4d6e2a21574eb735c1621ad8e0cd3e094288298" => :high_sierra
-    sha256 "68d05c70584e722c8109682ddc041a6271e0c36d102c7d3f55553ba3b4f39480" => :sierra
+    sha256 "d502a1077e1adf1653a5f6a704a902885bf1db2b2dc8f8f26610d48ca6b1ba16" => :catalina
+    sha256 "880d9ad2657c4db9f12871591028604a106fce0138093ec9d1cbb96038e73da6" => :mojave
+    sha256 "7660efa3ec8a21441ac781229728aa364d3c63160fabd0c147a31c2b9667e448" => :high_sierra
   end
 
   depends_on "libtool" => :build
@@ -22,7 +22,9 @@ class Qemu < Formula
   depends_on "libusb"
   depends_on "lzo"
   depends_on "ncurses"
+  depends_on "nettle"
   depends_on "pixman"
+  depends_on "snappy"
   depends_on "vde"
 
   # 820KB floppy disk image file of FreeDOS 1.2, used to test QEMU
@@ -61,7 +63,38 @@ class Qemu < Formula
 
   test do
     expected = build.stable? ? version.to_s : "QEMU Project"
+    assert_match expected, shell_output("#{bin}/qemu-system-aarch64 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-alpha --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-arm --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-cris --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-hppa --version")
     assert_match expected, shell_output("#{bin}/qemu-system-i386 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-lm32 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-m68k --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-microblaze --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-microblazeel --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-mips --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-mips64 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-mips64el --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-mipsel --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-moxie --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-nios2 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-or1k --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-ppc --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-ppc64 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-riscv32 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-riscv64 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-rx --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-s390x --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-sh4 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-sh4eb --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-sparc --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-sparc64 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-tricore --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-unicore32 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-x86_64 --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-xtensa --version")
+    assert_match expected, shell_output("#{bin}/qemu-system-xtensaeb --version")
     resource("test-image").stage testpath
     assert_match "file format: raw", shell_output("#{bin}/qemu-img info FLOPPY.img")
   end

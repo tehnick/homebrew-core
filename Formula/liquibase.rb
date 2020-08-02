@@ -1,8 +1,9 @@
 class Liquibase < Formula
   desc "Library for database change tracking"
   homepage "https://www.liquibase.org/"
-  url "https://github.com/liquibase/liquibase/releases/download/liquibase-parent-3.8.0/liquibase-3.8.0-bin.tar.gz"
-  sha256 "d6d940dd924b0acdb2a57203578182e42d72ffdb375526c6f6b70354acc40f76"
+  url "https://github.com/liquibase/liquibase/releases/download/v3.10.1/liquibase-3.10.1.tar.gz"
+  sha256 "e54dc5d639fa404ebcc72de647c2009748fa0685566a46abaed9c2a9b88e40e0"
+  license "Apache-2.0"
 
   bottle :unneeded
 
@@ -15,10 +16,11 @@ class Liquibase < Formula
     (libexec/"lib").install_symlink Dir["#{libexec}/sdk/lib-sdk/slf4j*"]
   end
 
-  def caveats; <<~EOS
-    You should set the environment variable LIQUIBASE_HOME to
-      #{opt_libexec}
-  EOS
+  def caveats
+    <<~EOS
+      You should set the environment variable LIQUIBASE_HOME to
+        #{opt_libexec}
+    EOS
   end
 
   test do

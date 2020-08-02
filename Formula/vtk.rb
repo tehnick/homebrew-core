@@ -1,15 +1,30 @@
 class Vtk < Formula
   desc "Toolkit for 3D computer graphics, image processing, and visualization"
   homepage "https://www.vtk.org/"
-  url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
-  sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
-  revision 3
+  revision 10
   head "https://github.com/Kitware/VTK.git"
 
+  stable do
+    url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
+    sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
+
+    # Fix compile issues on Mojave and later
+    patch do
+      url "https://gitlab.kitware.com/vtk/vtk/commit/ca3b5a50d945b6e65f0e764b3138cad17bd7eb8d.diff"
+      sha256 "b9f7a3ebf3c29f3cad4327eb15844ac0ee849755b148b60fef006314de8e822e"
+    end
+
+    # Python 3.8 compatibility
+    patch do
+      url "https://gitlab.kitware.com/vtk/vtk/commit/257b9d7b18d5f3db3fe099dc18f230e23f7dfbab.diff"
+      sha256 "572c06a4ba279a133bfdcf0190fec2eff5f330fa85ad6a2a0b0f6dfdea01ca69"
+    end
+  end
+
   bottle do
-    sha256 "b82c5276ce784af50cb6cddc8355b69239a51ea724849375207fff1518990be1" => :mojave
-    sha256 "1e2f7885e7502b654db20733c675d432549aba8d454567ec38fcb7a5975b9f24" => :high_sierra
-    sha256 "416159f7f88c72a0aec2eb5fb8d68feb99053cd025fc5c3b1f8b41e81cb8df1c" => :sierra
+    sha256 "37a13865cbf0c68db548b85f9577242b95a14c148db1c81548d82aac578fbf25" => :catalina
+    sha256 "4dee6ecbb7543786a57b9624df0b7bbe3bfe9686746a33d24c9233bfd7463d72" => :mojave
+    sha256 "d238bb0dbe69516d187cd31295d86c070ade51f4efae7c9bc41bdbe6f2e4d99b" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -21,12 +36,11 @@ class Vtk < Formula
   depends_on "libtiff"
   depends_on "netcdf"
   depends_on "pyqt"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "qt"
 
   def install
     pyver = Language::Python.major_minor_version "python3"
-    py_prefix = Formula["python3"].opt_frameworks/"Python.framework/Versions/#{pyver}"
     args = std_cmake_args + %W[
       -DBUILD_SHARED_LIBS=ON
       -DBUILD_TESTING=OFF
@@ -47,9 +61,7 @@ class Vtk < Formula
       -DVTK_USE_SYSTEM_ZLIB=ON
       -DVTK_WRAP_PYTHON=ON
       -DVTK_PYTHON_VERSION=3
-      -DPYTHON_EXECUTABLE=#{Formula["python"].opt_bin}/python3
-      -DPYTHON_INCLUDE_DIR=#{py_prefix}/include/python#{pyver}m
-      -DPYTHON_LIBRARY=#{py_prefix}/lib/libpython#{pyver}.dylib
+      -DPYTHON_EXECUTABLE=#{Formula["python@3.8"].opt_bin}/python3
       -DVTK_INSTALL_PYTHON_MODULE_DIR=#{lib}/python#{pyver}/site-packages
       -DVTK_QT_VERSION:STRING=5
       -DVTK_Group_Qt=ON

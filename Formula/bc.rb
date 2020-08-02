@@ -4,6 +4,7 @@ class Bc < Formula
   url "https://ftp.gnu.org/gnu/bc/bc-1.07.1.tar.gz"
   mirror "https://ftpmirror.gnu.org/bc/bc-1.07.1.tar.gz"
   sha256 "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a"
+  license "GPL-3.0"
 
   bottle do
     cellar :any_skip_relocation
@@ -16,6 +17,10 @@ class Bc < Formula
   end
 
   keg_only :provided_by_macos
+
+  uses_from_macos "bison" => :build
+  uses_from_macos "ed" => :build
+  uses_from_macos "flex"
 
   def install
     # prevent user BC_ENV_ARGS from interfering with or influencing the

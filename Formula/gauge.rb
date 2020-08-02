@@ -1,33 +1,41 @@
 class Gauge < Formula
   desc "Test automation tool that supports executable documentation"
-  homepage "https://getgauge.io"
-  url "https://github.com/getgauge/gauge/archive/v1.0.6.tar.gz"
-  sha256 "89b47749ef134e57295849e89a10fadf577e05aeb690e9db013c39e9c59b1f5d"
+  homepage "https://gauge.org"
+  url "https://github.com/getgauge/gauge/archive/v1.1.1.tar.gz"
+  sha256 "b136727d0ed114ab18d9d380e1ff70ad70e60b56bbacf854be2aeddc9b20044a"
+  license "Apache-2.0"
   head "https://github.com/getgauge/gauge.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "55748117bc55056a48b5c7b25071fd7b1a620361939f7016e2511d9b8eab2537" => :catalina
-    sha256 "45b496b39ee682a95ca49b36a94e8041e03fca3644e80223c36539f495fee384" => :mojave
-    sha256 "60af1c02f5a733bcb8614fe8bc2c7031675cde58aed3f6b0eb0a5a18602c8320" => :high_sierra
-    sha256 "591e0cbb2faa78e291cc2dc026fe68532c6c63f4329fada91bdedc3695f92d00" => :sierra
+    rebuild 1
+    sha256 "31440544842f79e972bf2df49fc4f87f4ee843f67fab0c007687ec6eac38f2cb" => :catalina
+    sha256 "590ec7a1a946660cbcab4a202666ac49c1d8cb43f791193a54760a8378c14189" => :mojave
+    sha256 "503c38cb1eeeedfbd24250e202107d64fc6712e40095b55880cb5893d04911fb" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-    ENV["GOROOT"] = Formula["go"].opt_libexec
-    dir = buildpath/"src/github.com/getgauge/gauge"
-    dir.install buildpath.children
-    ln_s buildpath/"src", dir
-    cd dir do
-      system "go", "run", "build/make.go"
-      system "go", "run", "build/make.go", "--install", "--prefix", prefix
-    end
+    system "go", "run", "build/make.go"
+    system "go", "run", "build/make.go", "--install", "--prefix", prefix
   end
 
   test do
-    assert_match version.to_s[0, 5], shell_output("#{bin}/gauge -v")
+    (testpath/"manifest.json").write <<~EOS
+      {
+        "Plugins": [
+          "html-report"
+        ]
+      }
+    EOS
+
+    system("#{bin}/gauge", "install")
+    assert_predicate testpath/".gauge/plugins", :exist?
+
+    system("#{bin}/gauge", "config", "check_updates", "false")
+    assert_match "false", shell_output("#{bin}/gauge config check_updates")
+
+    assert_match version.to_s, shell_output("#{bin}/gauge -v 2>&1")
   end
 end

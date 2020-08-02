@@ -13,6 +13,8 @@
   "corelocationcli": "homebrew/cask",
   "dwarf-fortress": "homebrew/cask",
   "geany": "homebrew/cask",
+  "gearboy": "homebrew/cask",
+  "gearsystem": "homebrew/cask",
   "gimp": "homebrew/cask",
   "grads": "homebrew/cask",
   "gtkwave": "homebrew/cask",
@@ -21,11 +23,11 @@
   "jsl": "homebrew/cask",
   "keybase": "homebrew/cask",
   "meld": "homebrew/cask",
-  "mpv": "homebrew/cask",
   "osxfuse": "homebrew/cask",
   "phantomjs": "homebrew/cask",
   "quassel": "homebrew/cask",
   "schismtracker": "homebrew/cask/schism-tracker",
   "transmission-remote-gtk": "homebrew/cask/transmission-remote-gui",
-  "tuntap": "homebrew/cask"
+  "tuntap": "homebrew/cask",
+  "wesnoth": "homebrew/cask/the-battle-for-wesnoth"
 }

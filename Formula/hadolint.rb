@@ -1,30 +1,33 @@
-require "language/haskell"
-
 class Hadolint < Formula
-  include Language::Haskell::Cabal
-
   desc "Smarter Dockerfile linter to validate best practices"
   homepage "https://github.com/hadolint/hadolint"
-  url "https://github.com/hadolint/hadolint/archive/v1.17.2.tar.gz"
-  sha256 "9ab93b772b9d763ced02717bcf12ad4b060d535f6cdd59cb7b6a23aba61e453b"
+  url "https://github.com/hadolint/hadolint/archive/v1.18.0.tar.gz"
+  sha256 "0ebe67e543226721c3802dd56db0355575accf50f10c09fe188bbb604aa8c193"
+  license "GPL-3.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a14cc819871236cf5c238493e497cc101267224b3ce8d27578622c2bcc926f51" => :mojave
-    sha256 "bf080fe17e353dfabe80a060e3379d47fe935994a7a81c3872b0247b5158ee4a" => :high_sierra
-    sha256 "5494638c1b68a80e0832eede84bf70afe2ae14c30c80c202e90ca8de9c847009" => :sierra
+    rebuild 1
+    sha256 "ae5b6cfc174f50b883fd7907774d5d43250a18a2774b3f80d806122ed8da9c5a" => :catalina
+    sha256 "ce882dfa51e5ca6025362a499ff280af2c676fad485ca5157ad4c9ceca8934e0" => :mojave
+    sha256 "9c8ea84c521ab94e4f78d73b67593738760cb437e6e050e0e6f81be62c944440" => :high_sierra
   end
 
-  depends_on "cabal-install" => :build
-  depends_on "ghc" => :build
+  depends_on "haskell-stack" => :build
+
+  uses_from_macos "xz"
+
+  on_linux do
+    depends_on "gmp"
+  end
 
   def install
-    cabal_sandbox do
-      cabal_install "hpack"
-      system "./.cabal-sandbox/bin/hpack"
-    end
+    # Let `stack` handle its own parallelization
+    jobs = ENV.make_jobs
+    ENV.deparallelize
 
-    install_cabal_package
+    system "stack", "-j#{jobs}", "build"
+    system "stack", "-j#{jobs}", "--local-bin-path=#{bin}", "install"
   end
 
   test do

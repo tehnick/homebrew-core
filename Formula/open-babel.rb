@@ -1,26 +1,31 @@
 class OpenBabel < Formula
   desc "Chemical toolbox"
   homepage "https://openbabel.org"
-  url "https://github.com/openbabel/openbabel/archive/openbabel-2-4-1.tar.gz"
-  version "2.4.1"
-  sha256 "594c7f8a83f3502381469d643f7b185882da1dd4bc2280c16502ef980af2a776"
-  revision 1
+  url "https://github.com/openbabel/openbabel/archive/openbabel-3-1-1.tar.gz"
+  version "3.1.1"
+  sha256 "c97023ac6300d26176c97d4ef39957f06e68848d64f1a04b0b284ccff2744f02"
+  license "GPL-2.0"
   head "https://github.com/openbabel/openbabel.git"
 
   bottle do
-    sha256 "4ab9e67beff60ffa0f90c8f35b3fc729ecbf44387deca6d42a57feb6b399d6ca" => :catalina
-    sha256 "61c3b83067ef6ecff739ad64af1f7dee20c66459838f2584b5ace1077261cbef" => :mojave
-    sha256 "0383df12c965d3e2b0087812186992b32ed6d02fc7bcfef397b071db2b96e568" => :high_sierra
-    sha256 "fac962fa1127ac9476e5dd1c44ba593c6184bb49444eac28804e45609243e8f9" => :sierra
+    sha256 "997886c087d6c342ea47649bb6de0e50fa807a2116aaad2119490b8921b85edf" => :catalina
+    sha256 "d8bf12ee10f070e6ca4396fa37d02da80f5449f5c3927a0050ffbb028331a01a" => :mojave
+    sha256 "035d300440fbfaaf20939137db63e8f78246983a16db563dcd1b66f4980685f4" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
+  depends_on "rapidjson" => :build
+  depends_on "swig" => :build
+  depends_on "cairo"
   depends_on "eigen"
+  depends_on "python@3.8"
 
   def install
-    args = std_cmake_args + %w[
-      -DCAIRO_LIBRARY:FILEPATH=
+    args = std_cmake_args + %W[
+      -DRUN_SWIG=ON
+      -DPYTHON_BINDINGS=ON
+      -DPYTHON_EXECUTABLE=#{Formula["python@3.8"].opt_bin}/python3
     ]
 
     mkdir "build" do

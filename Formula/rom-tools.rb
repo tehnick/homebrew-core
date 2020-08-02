@@ -1,25 +1,25 @@
 class RomTools < Formula
   desc "Tools for Multiple Arcade Machine Emulator"
   homepage "https://mamedev.org/"
-  url "https://github.com/mamedev/mame/archive/mame0214.tar.gz"
-  version "0.214"
-  sha256 "8ae24e3b1de33df33957c5f642bd98828842305bcb31da130b759ba7e88b36d2"
+  url "https://github.com/mamedev/mame/archive/mame0222.tar.gz"
+  version "0.222"
+  sha256 "3380b86d1bc5bc09f5bb4099f3833b6fba924a8bd189aac4dab149afba799ce7"
+  license "GPL-2.0"
   head "https://github.com/mamedev/mame.git"
 
   bottle do
     cellar :any
-    sha256 "c2119c4add026c7154759dcd79d6057ffeb599843a1a11832a8aa4136d41a172" => :catalina
-    sha256 "a715c098f78e564c50777c3ea83b464565c99d46c89e0d03adf18cae46dfa9c5" => :mojave
-    sha256 "4468edf1f627a01f45182883420fae3e2de480851f74aedb6637ecef566fcc6c" => :high_sierra
+    sha256 "e0c8c80f0844a58de81334a8ce0d65bb92134d9941a21a07137c99dfcc348236" => :catalina
+    sha256 "180c4629cee72f5ff6ecd6dbf03c96d161129e74b348f0ccb99300a786f17226" => :mojave
+    sha256 "0965eb18c1272ae4ebbbe7113c184d18243f899b22b9b986ea9091c7eec99b44" => :high_sierra
   end
 
-  depends_on "asio" => :build
   depends_on "pkg-config" => :build
   depends_on "flac"
   # Need C++ compiler and standard library support C++14.
   # Build failure on Sierra, see:
   # https://github.com/Homebrew/homebrew-core/pull/39388
-  depends_on :macos => :high_sierra
+  depends_on macos: :high_sierra
   depends_on "sdl2"
   depends_on "utf8proc"
 
@@ -29,12 +29,12 @@ class RomTools < Formula
                    "USE_LIBSDL=1",
                    "USE_SYSTEM_LIB_EXPAT=1",
                    "USE_SYSTEM_LIB_ZLIB=1",
-                   "USE_SYSTEM_LIB_ASIO=1",
+                   "USE_SYSTEM_LIB_ASIO=0",
                    "USE_SYSTEM_LIB_FLAC=1",
                    "USE_SYSTEM_LIB_UTF8PROC=1"
     bin.install %w[
       aueffectutil castool chdman floptool imgtool jedutil ldresample ldverify
-      nltool nlwav pngcmp regrep romcmp src2html srcclean testkeys unidasm
+      nltool nlwav pngcmp regrep romcmp srcclean testkeys unidasm
     ]
     bin.install "split" => "rom-split"
     man1.install Dir["docs/man/*.1"]
@@ -56,7 +56,6 @@ class RomTools < Formula
     assert_match "summary", shell_output("#{bin}/regrep 2>&1", 1)
     system "#{bin}/romcmp"
     system "#{bin}/rom-split"
-    assert_match "template", shell_output("#{bin}/src2html 2>&1", 1)
     system "#{bin}/srcclean"
     assert_match "architecture", shell_output("#{bin}/unidasm", 1)
   end

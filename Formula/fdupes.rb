@@ -1,26 +1,26 @@
 class Fdupes < Formula
   desc "Identify or delete duplicate files"
   homepage "https://github.com/adrianlopezroche/fdupes"
-  url "https://github.com/adrianlopezroche/fdupes/archive/v1.6.1.tar.gz"
-  sha256 "9d6b6fdb0b8419815b4df3bdfd0aebc135b8276c90bbbe78ebe6af0b88ba49ea"
+  url "https://github.com/adrianlopezroche/fdupes/releases/download/v2.1.1/fdupes-2.1.1.tar.gz"
+  sha256 "5ab60e6c0b10438f3e323c6d14f34d2f3eec33cc4cd95159f220a1722613b1b2"
+  license "MIT"
   version_scheme 1
 
   bottle do
-    cellar :any_skip_relocation
-    rebuild 1
-    sha256 "461c8de0f269c38289159a5b41935a788955bff38fdc7c104108c9e3dfac22ea" => :catalina
-    sha256 "69dcc3c64c3debb7f3b927e16fc6e7e2250c4c35db280a8fd97315fcc48628a4" => :mojave
-    sha256 "2ca42f56f5b4e48a4a51cf9687108eb2ebbbf43ce610596d4420be1a68f1ec1b" => :high_sierra
-    sha256 "4838e3104ea06e61d7acce5f482ff80bae1d634f29a1edd44e388b9f8c63f19b" => :sierra
-    sha256 "b0b7afcd64459cfc3c2bb95ac92e1aa7f6531fbf05603e472c97c5d4e72c94b7" => :el_capitan
-    sha256 "ce706b289e019a30c4d07a307ae2c5c10ef1b886e4ee8e5e62f7275a9213a370" => :yosemite
+    cellar :any
+    sha256 "13686b900c1c95aaa6904e4f007ef79185a46626722228ddcd273e8bd265c2f5" => :catalina
+    sha256 "95ddd9ad27d0805991a64e7454b3a9abbd332aea0f893e1337dc3d2b14a06324" => :mojave
+    sha256 "ad80afb06ccbdc78c055560549341b10d19fd7e1ccf6f832630bba1aef78cd6b" => :high_sierra
   end
 
+  depends_on "pcre2"
+
+  uses_from_macos "ncurses"
+
   def install
-    inreplace "Makefile", "gcc", "#{ENV.cc} #{ENV.cflags}"
-    system "make", "fdupes"
-    bin.install "fdupes"
-    man1.install "fdupes.1"
+    system "./configure", "--prefix=#{prefix}"
+    system "make"
+    system "make", "install"
   end
 
   test do

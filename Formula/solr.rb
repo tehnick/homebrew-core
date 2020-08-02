@@ -1,33 +1,35 @@
 class Solr < Formula
   desc "Enterprise search platform from the Apache Lucene project"
   homepage "https://lucene.apache.org/solr/"
-  url "https://www.apache.org/dyn/closer.cgi?path=lucene/solr/8.2.0/solr-8.2.0.tgz"
-  sha256 "bfa4b39b236e5d714f4233138b8b5cb7e1996ddc0aad60052ce83c4b7bf33449"
+  url "https://www.apache.org/dyn/closer.lua?path=lucene/solr/8.6.0/solr-8.6.0.tgz"
+  mirror "https://archive.apache.org/dist/lucene/solr/8.6.0/solr-8.6.0.tgz"
+  sha256 "4519ccdb531619df770f1065db6adcedc052c7aa94b42806d541966550956aa5"
+  license "Apache-2.0"
 
   bottle :unneeded
 
-  depends_on :java
-
-  skip_clean "example/logs"
+  depends_on "openjdk"
 
   def install
-    bin.install %w[bin/solr bin/post bin/oom_solr.sh]
     pkgshare.install "bin/solr.in.sh"
-    prefix.install %w[example server]
-    libexec.install Dir["*"]
-
-    # Fix the classpath for the post tool
-    inreplace "#{bin}/post", '"$SOLR_TIP/dist"', "#{libexec}/dist"
-
-    # Fix the paths in the sample solrconfig.xml files
-    Dir.glob(["#{prefix}/example/**/solrconfig.xml",
-              "#{prefix}/**/data_driven_schema_configs/**/solrconfig.xml",
-              "#{prefix}/**/sample_techproducts_configs/**/solrconfig.xml"]) do |f|
-      inreplace f, ":../../../..}/", "}/libexec/"
-    end
+    (var/"lib/solr").install "server/solr/README.txt", "server/solr/solr.xml", "server/solr/zoo.cfg"
+    prefix.install %w[contrib dist server]
+    libexec.install "bin"
+    bin.install [libexec/"bin/solr", libexec/"bin/post", libexec/"bin/oom_solr.sh"]
+    bin.env_script_all_files libexec,
+      JAVA_HOME:     Formula["openjdk"].opt_prefix,
+      SOLR_HOME:     var/"lib/solr",
+      SOLR_LOGS_DIR: var/"log/solr",
+      SOLR_PID_DIR:  var/"run/solr"
+    (libexec/"bin").rmtree
   end
 
-  plist_options :manual => "solr start"
+  def post_install
+    (var/"run/solr").mkpath
+    (var/"log/solr").mkpath
+  end
+
+  plist_options manual: "solr start"
 
   def plist
     <<~EOS
@@ -42,6 +44,8 @@ class Solr < Formula
             <string>#{opt_bin}/solr</string>
             <string>start</string>
             <string>-f</string>
+            <string>-s</string>
+            <string>/usr/local/var/lib/solr</string>
           </array>
           <key>ServiceDescription</key>
           <string>#{name}</string>
@@ -55,6 +59,19 @@ class Solr < Formula
   end
 
   test do
-    system bin/"solr"
+    port = free_port
+
+    # Info detects no Solr node => exit code 3
+    shell_output(bin/"solr -i", 3)
+    # Start a Solr node => exit code 0
+    shell_output(bin/"solr start -p #{port} -Djava.io.tmpdir=/tmp")
+    # Info detects a Solr node => exit code 0
+    shell_output(bin/"solr -i")
+    # Impossible to start a second Solr node on the same port => exit code 1
+    shell_output(bin/"solr start -p #{port}", 1)
+    # Stop a Solr node => exit code 0
+    shell_output(bin/"solr stop -p #{port}")
+    # No Solr node left to stop => exit code 1
+    shell_output(bin/"solr stop -p #{port}", 1)
   end
 end

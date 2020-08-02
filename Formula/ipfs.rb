@@ -2,15 +2,17 @@ class Ipfs < Formula
   desc "Peer-to-peer hypermedia protocol"
   homepage "https://ipfs.io/"
   url "https://github.com/ipfs/go-ipfs.git",
-      :tag      => "v0.4.22",
-      :revision => "4e981576b71665f2a9ba71fbf479204802a03a37"
+      tag:      "v0.6.0",
+      revision: "d6e036a888ba95c15ce243a45c0cacb4a5bb8ee4"
+  # license ["Apache-2.0", "MIT"] - pending https://github.com/Homebrew/brew/pull/7953
+  license "Apache-2.0"
   head "https://github.com/ipfs/go-ipfs.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "b855c4ffc4c1261fb1a33960498f87ec4d17a6f48262a60fb6983311e8e3e87c" => :mojave
-    sha256 "0e20eda5b040aa8ce134d95284e16cd8913438046321a867908372dfa8941350" => :high_sierra
-    sha256 "16a0b8ca56ea1b6e90f2d489c298075c34bffabed60b14cb2d7c31d0e492a1b3" => :sierra
+    sha256 "e5c9d5a386a83e4e6a9893be6729625902c7eea07ec109fce83b6864a0512bbf" => :catalina
+    sha256 "cbe22d6554e50f65e202e8b65d3bd41b1a18793cc6d33316397c062dd3ddcd79" => :mojave
+    sha256 "7efd7e625d8eeb59c6d8ac3c4a582b77024c7f64f46809996404bb7fd9f2be5a" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -20,27 +22,30 @@ class Ipfs < Formula
     (buildpath/"src/github.com/ipfs/go-ipfs").install buildpath.children
     cd("src/github.com/ipfs/go-ipfs") { system "make", "install" }
     bin.install "bin/ipfs"
+
+    cd("src/github.com/ipfs/go-ipfs") { bash_completion.install "misc/completion/ipfs-completion.bash" }
   end
 
-  plist_options :manual => "ipfs daemon"
+  plist_options manual: "ipfs daemon"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-      <key>Label</key>
-      <string>#{plist_name}</string>
-      <key>ProgramArguments</key>
-      <array>
-        <string>#{opt_bin}/ipfs</string>
-        <string>daemon</string>
-      </array>
-      <key>RunAtLoad</key>
-      <true/>
-    </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+        <key>Label</key>
+        <string>#{plist_name}</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>#{opt_bin}/ipfs</string>
+          <string>daemon</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+      </dict>
+      </plist>
+    EOS
   end
 
   test do

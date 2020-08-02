@@ -1,31 +1,23 @@
 class Pyqt < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
-  url "https://dl.bintray.com/homebrew/mirror/pyqt-5.10.1.tar.gz"
-  mirror "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.10.1/PyQt5_gpl-5.10.1.tar.gz"
-  sha256 "9932e971e825ece4ea08f84ad95017837fa8f3f29c6b0496985fa1093661e9ef"
-  revision 2
+  url "https://files.pythonhosted.org/packages/8c/90/82c62bbbadcca98e8c6fa84f1a638de1ed1c89e85368241e9cc43fcbc320/PyQt5-5.15.0.tar.gz"
+  sha256 "c6f75488ffd5365a65893bc64ea82a6957db126fbfe33654bcd43ae1c30c52f9"
+  license "GPL-3.0"
 
   bottle do
     cellar :any
-    sha256 "2e2535d179edae8c6097337432c8f7f4b3ef674fde3bb44cf1ef2545f28b296d" => :mojave
-    sha256 "814c28f94e026eb94186b787a45cf1e82f59f1d9ba15c70c0950f5c70cf894d1" => :high_sierra
-    sha256 "e225e01bcf22a4246548148b102c7cef0aaa9ffd9e8ac7f6419b7b964baf25db" => :sierra
+    sha256 "a17f79ba93b629d68857864a9b35130b4cd56c650f4c80226fb9c983d40ef199" => :catalina
+    sha256 "6bc5f85f905eb25f9bfc9e23da8af4d23ba77745ace301fe4d3e8b93ad9a27b7" => :mojave
+    sha256 "6a823bc3eedf914192f63d8d21d4fc66ee32399100cb9b79b044dfd60fa401bb" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "qt"
   depends_on "sip"
 
-  # Patch from openSUSE for compatibility with Qt 5.11.0
-  # https://build.opensuse.org/package/show/home:cgiboudeaux:branches:KDE:Qt5/python-qt5
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/4f563668/pyqt/qt-5.11.diff"
-    sha256 "34bba97f87615ea072312bfc03c4d3fb0a1cf7a4cd9d6907857c1dca6cc89200"
-  end
-
   def install
-    version = Language::Python.major_minor_version "python3"
+    version = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
     args = ["--confirm-license",
             "--bindir=#{bin}",
             "--destdir=#{lib}/python#{version}/site-packages",
@@ -36,20 +28,21 @@ class Pyqt < Formula
             "--qmake=#{Formula["qt"].bin}/qmake",
             # Force deployment target to avoid libc++ issues
             "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
+            "--designer-plugindir=#{pkgshare}/plugins",
             "--qml-plugindir=#{pkgshare}/plugins",
+            "--pyuic5-interpreter=#{Formula["python@3.8"].opt_bin}/python3",
             "--verbose"]
 
-    system "python3", "configure.py", *args
+    system Formula["python@3.8"].opt_bin/"python3", "configure.py", *args
     system "make"
-    system "make", "install"
-    system "make", "clean"
+    ENV.deparallelize { system "make", "install" }
   end
 
   test do
     system "#{bin}/pyuic5", "--version"
     system "#{bin}/pylupdate5", "-version"
 
-    system "python3", "-c", "import PyQt5"
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import PyQt5"
     %w[
       Gui
       Location
@@ -57,9 +50,8 @@ class Pyqt < Formula
       Network
       Quick
       Svg
-      WebEngineWidgets
       Widgets
       Xml
-    ].each { |mod| system "python3", "-c", "import PyQt5.Qt#{mod}" }
+    ].each { |mod| system Formula["python@3.8"].opt_bin/"python3", "-c", "import PyQt5.Qt#{mod}" }
   end
 end

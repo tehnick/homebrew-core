@@ -2,14 +2,15 @@ class ErlangAT21 < Formula
   desc "Programming language for highly scalable real-time systems"
   homepage "https://www.erlang.org/"
   # Download tarball from GitHub; it is served faster than the official tarball.
-  url "https://github.com/erlang/otp/archive/OTP-21.3.8.8.tar.gz"
-  sha256 "d7db443bc27a782e15270c5e43fe57426d835764459fed7c1373879e56f9c3da"
+  url "https://github.com/erlang/otp/archive/OTP-21.3.8.17.tar.gz"
+  sha256 "ee2ab2be55adaeea3ffbe97141cd5f1729bc4d0aaf24f70d3aa8e4cbc40e4910"
+  license "Apache-2.0"
 
   bottle do
     cellar :any
-    sha256 "883bcf55c79997ab161f2aa7ff03b6d9ea9a3bb61f743dc3b5b93a2aab7f8ad7" => :catalina
-    sha256 "fdd478b2ce036fdc0c727abdeb17af287dc814608f1f335cf0a6b209079fe907" => :mojave
-    sha256 "9fe041fff48bdab01276ed5009848d003d8aad5730453ea8be219c14405d3d26" => :high_sierra
+    sha256 "80da11f173ac7d9b658613ad9931e33ee042905e8e2decac288c1767324bbe5a" => :catalina
+    sha256 "daf05823fc6b27636118a957e08799a3ff4de0ac33a033ecd9b895047f300312" => :mojave
+    sha256 "94a90bf5c009855d8ef5b5f0251cf63d327602b58ab2e0251533e710eb6ef4d7" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -19,6 +20,8 @@ class ErlangAT21 < Formula
   depends_on "libtool" => :build
   depends_on "openssl@1.1"
   depends_on "wxmac" # for GUI apps like observer
+
+  uses_from_macos "m4" => :build
 
   resource "man" do
     url "https://www.erlang.org/download/otp_doc_man_21.3.tar.gz"
@@ -30,6 +33,12 @@ class ErlangAT21 < Formula
     url "https://www.erlang.org/download/otp_doc_html_21.3.tar.gz"
     mirror "https://fossies.org/linux/misc/otp_doc_html_21.3.tar.gz"
     sha256 "258b1e0ed1d07abbf08938f62c845450e90a32ec542e94455e5d5b7c333da362"
+  end
+
+  # Fix build on Xcode 11.4
+  patch do
+    url "https://github.com/erlang/otp/commit/3edba0dad391431cbadad44a8bd15c75254fc239.patch?full_index=1"
+    sha256 "0c82d9f3bdb668ba78025988c9447bebe91a2f6bb00daa7f0ae7bd1916cd9bfd"
   end
 
   def install
@@ -71,15 +80,41 @@ class ErlangAT21 < Formula
     doc.install resource("html")
   end
 
-  def caveats; <<~EOS
-    Man pages can be found in:
-      #{opt_lib}/erlang/man
+  def caveats
+    <<~EOS
+      Man pages can be found in:
+        #{opt_lib}/erlang/man
 
-    Access them with `erl -man`, or add this directory to MANPATH.
-  EOS
+      Access them with `erl -man`, or add this directory to MANPATH.
+    EOS
   end
 
   test do
     system "#{bin}/erl", "-noshell", "-eval", "crypto:start().", "-s", "init", "stop"
+    (testpath/"factorial").write <<~EOS
+      #!#{bin}/escript
+      %% -*- erlang -*-
+      %%! -smp enable -sname factorial -mnesia debug verbose
+      main([String]) ->
+          try
+              N = list_to_integer(String),
+              F = fac(N),
+              io:format("factorial ~w = ~w\n", [N,F])
+          catch
+              _:_ ->
+                  usage()
+          end;
+      main(_) ->
+          usage().
+      
+      usage() ->
+          io:format("usage: factorial integer\n").
+      
+      fac(0) -> 1;
+      fac(N) -> N * fac(N-1).
+    EOS
+    chmod 0755, "factorial"
+    assert_match "usage: factorial integer", shell_output("./factorial")
+    assert_match "factorial 42 = 1405006117752879898543142606244511569936384000000000", shell_output("./factorial 42")
   end
 end

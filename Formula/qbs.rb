@@ -1,15 +1,15 @@
 class Qbs < Formula
   desc "Build tool for developing projects across multiple platforms"
   homepage "https://wiki.qt.io/Qbs"
-  url "https://download.qt.io/official_releases/qbs/1.14.0/qbs-src-1.14.0.tar.gz"
-  sha256 "c90f3469e91b0c7970f2dc7eeadcbccf966fbf5f462b8f73206a2a5345413f6a"
+  url "https://download.qt.io/official_releases/qbs/1.16.0/qbs-src-1.16.0.tar.gz"
+  sha256 "a77be21ec08904b86afdbe798dd3597d070ee8f9ca9cc9ed3f21b87d6fa12b25"
   head "https://code.qt.io/qbs/qbs.git"
 
   bottle do
     cellar :any
-    sha256 "87e39dfa34e141ddf010dd08236034a35f49f1c449e86ad452523602be226324" => :catalina
-    sha256 "271df9a65ec466a6308ff464e82961ae0347044412a7633c2144840db6edc72f" => :mojave
-    sha256 "582a5f518c877c4b172f1024741c08af27cebaa1afd5c5816802a51d1df849ce" => :high_sierra
+    sha256 "dd1b46fde86c54b18a9212766359f4e09ddde64fc977f7d8661dcc66cf8b99eb" => :catalina
+    sha256 "276c975b5a1aec7b43521e2af0006f60f5f7119ee1cc55fda7f431fc364d4dea" => :mojave
+    sha256 "bce183feddefac9637f6cb38c291617057ec85a15441c7d8a1e07a20f47c0c6b" => :high_sierra
   end
 
   depends_on "qt"

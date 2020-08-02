@@ -1,14 +1,16 @@
 class FfmpegAT28 < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-2.8.15.tar.bz2"
-  sha256 "35647f6c1f6d4a1719bc20b76bf4c26e4ccd665f46b5676c0e91c5a04622ee21"
-  revision 7
+  url "https://ffmpeg.org/releases/ffmpeg-2.8.17.tar.xz"
+  sha256 "d0734fec613fe12bee0b5a84f917779b854c1ede7882793f618490e6bbf0c148"
+  # None of these parts are used by default, you have to explicitly pass `--enable-gpl`
+  # to configure to activate them. In this case, FFmpeg's license changes to GPL v2+.
+  license "GPL-2.0"
 
   bottle do
-    sha256 "4db09503a3c68e0f29ed088a76e57874c0fa0950f9482fc7b782cddb09f6143d" => :catalina
-    sha256 "662e87d7964a065ba2577ae8fb10a26a0ad54a7d1583c26c798522b6cb37b105" => :mojave
-    sha256 "f489e1d41d4a58d0f671641b44276614b2944321f62c9e5e9576501a93aeb9b3" => :high_sierra
+    sha256 "f0d50cafeb730343feabdbe5226875104e1d11d31bb33d3e03ad5d05dcd8be2c" => :catalina
+    sha256 "65555478eb8b748324a2a37a079693d449bc15022c88a8ee4360c5de558d0a8c" => :mojave
+    sha256 "5323c85c6cab5c3e549ea62b42dabea2e54e39d00e7a0d497f0d181862742f02" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -42,10 +44,6 @@ class FfmpegAT28 < Formula
       inreplace %w[libavdevice/v4l2.c libavutil/time.c], "HAVE_CLOCK_GETTIME",
                                                          "UNDEFINED_GIBBERISH"
     end
-
-    # Work around Xcode 11 clang bug
-    # https://bitbucket.org/multicoreware/x265/issues/514/wrong-code-generated-on-macos-1015
-    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
 
     args = %W[
       --prefix=#{prefix}
@@ -85,19 +83,17 @@ class FfmpegAT28 < Formula
     # prevents GCC from building VDA support. GCC has no problems on
     # 10.9 and earlier.
     # See: https://github.com/Homebrew/homebrew/issues/33741
-    if MacOS.version < :yosemite || ENV.compiler == :clang
-      args << "--enable-vda"
+    args << if ENV.compiler == :clang
+      "--enable-vda"
     else
-      args << "--disable-vda"
+      "--disable-vda"
     end
 
     system "./configure", *args
 
     inreplace "config.mak" do |s|
       shflags = s.get_make_var "SHFLAGS"
-      if shflags.gsub!(" -Wl,-read_only_relocs,suppress", "")
-        s.change_make_var! "SHFLAGS", shflags
-      end
+      s.change_make_var! "SHFLAGS", shflags if shflags.gsub!(" -Wl,-read_only_relocs,suppress", "")
     end
 
     system "make", "install"
@@ -109,8 +105,8 @@ class FfmpegAT28 < Formula
 
   test do
     # Create an example mp4 file
-    system "#{bin}/ffmpeg", "-y", "-filter_complex",
-        "testsrc=rate=1:duration=1", "#{testpath}/video.mp4"
-    assert_predicate testpath/"video.mp4", :exist?
+    mp4out = testpath/"video.mp4"
+    system bin/"ffmpeg", "-y", "-filter_complex", "testsrc=rate=1:duration=1", mp4out
+    assert_predicate mp4out, :exist?
   end
 end

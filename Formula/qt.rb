@@ -3,33 +3,36 @@
 class Qt < Formula
   desc "Cross-platform application and UI framework"
   homepage "https://www.qt.io/"
-  url "https://download.qt.io/official_releases/qt/5.13/5.13.1/single/qt-everywhere-src-5.13.1.tar.xz"
-  mirror "https://qt.mirror.constant.com/archive/qt/5.13/5.13.1/single/qt-everywhere-src-5.13.1.tar.xz"
-  mirror "https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-5.13.1.tar.xz"
-  sha256 "adf00266dc38352a166a9739f1a24a1e36f1be9c04bf72e16e142a256436974e"
+  url "https://download.qt.io/official_releases/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz"
+  mirror "https://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz"
+  mirror "https://mirrors.ocf.berkeley.edu/qt/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz"
+  sha256 "22b63d7a7a45183865cc4141124f12b673e7a17b1fe2b91e433f6547c5d548c3"
 
-  head "https://code.qt.io/qt/qt5.git", :branch => "dev", :shallow => false
+  head "https://code.qt.io/qt/qt5.git", branch: "dev", shallow: false
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "3d0edac62d9e12bc7886bbe5d656abb719816ea0312235215ff29d7bd510bba5" => :catalina
-    sha256 "8879bd6173c6bb83731ff3fa6114a1a5655d22d43cc10a6576c53f4940a1d3b9" => :mojave
-    sha256 "04fe46304a54f80ffb9b83f5a2e01bbfe86d016275e4ec989b2eb142b81366d8" => :high_sierra
+    sha256 "c1094fb3e2c5efa2580f4ad36f240a83b08a5118aa8f12a526f08fca27e6d6c7" => :catalina
+    sha256 "86674d9e61e1f75a20029974a01804a9fa0e6ea2fdc8fe10cb964ab8aea2a4e4" => :mojave
+    sha256 "c579327b288cfe0f23d6bd41e6e3b672538b6f19fbc0379322ce5c0ba422e794" => :high_sierra
   end
 
   keg_only "Qt 5 has CMake issues when linked"
 
   depends_on "pkg-config" => :build
-  depends_on :xcode => :build
-  depends_on :macos => :sierra
+  depends_on xcode: :build
+  depends_on macos: :sierra
 
-  # Fix QtWebEngine's chromium for Xcode 11 and macOS 10.15 SDK
-  # Upstream patch, remove in next version
-  # https://bugreports.qt.io/browse/QTBUG-78997
+  uses_from_macos "bison"
+  uses_from_macos "flex"
+  uses_from_macos "sqlite"
+
+  # Fix build on Linux when the build system has AVX2
+  # Patch submitted at https://codereview.qt-project.org/c/qt/qt3d/+/303993
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/9cc60b1e/qt/QTBUG-78997.diff"
-    sha256 "9834112eaca6b903709308ee690e0315472ae82d7d4488e3a38d307fe58b2ae7"
+    url "https://codereview.qt-project.org/gitweb?p=qt/qt3d.git;a=patch;h=b456a7d47a36dc3429a5e7bac7665b12d257efea"
+    sha256 "e47071f5feb6f24958b3670d83071502fe87243456b29fdc731c6eba677d9a59"
+    directory "qt3d"
   end
 
   def install
@@ -52,6 +55,11 @@ class Qt < Formula
     ]
 
     system "./configure", *args
+
+    # Remove reference to shims directory
+    inreplace "qtbase/mkspecs/qmodule.pri",
+              /^PKG_CONFIG_EXECUTABLE = .*$/,
+              "PKG_CONFIG_EXECUTABLE = #{Formula["pkg-config"].opt_bin/"pkg-config"}"
     system "make"
     ENV.deparallelize
     system "make", "install"
@@ -74,10 +82,11 @@ class Qt < Formula
     Pathname.glob("#{bin}/*.app") { |app| mv app, libexec }
   end
 
-  def caveats; <<~EOS
-    We agreed to the Qt open source license for you.
-    If this is unacceptable you should uninstall.
-  EOS
+  def caveats
+    <<~EOS
+      We agreed to the Qt open source license for you.
+      If this is unacceptable you should uninstall.
+    EOS
   end
 
   test do

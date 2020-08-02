@@ -1,18 +1,19 @@
 class Qxmpp < Formula
   desc "Cross-platform C++ XMPP client and server library"
   homepage "https://github.com/qxmpp-project/qxmpp/"
-  url "https://github.com/qxmpp-project/qxmpp/archive/v1.0.0.tar.gz"
-  sha256 "bf62ac8d0b5741b3cb07ea92780b279d5c34d000dc7401d6c20a9b77865a5c1e"
+  url "https://github.com/qxmpp-project/qxmpp/archive/v1.3.1.tar.gz"
+  sha256 "812e718a2dd762ec501a9012a1281b9b6c6d46ec38adbc6eec242309144e1c55"
+  license "LGPL-2.1"
 
   bottle do
     cellar :any
-    sha256 "269124872ad871b962223e342eb1170b0af84abf8e2e1dbc4cd5005cd51206fa" => :catalina
-    sha256 "9c81c56a30502d584f18c3d6082ce5671845b69d7222678e3766696f69672062" => :mojave
-    sha256 "3ac04dfac535d1fc68f7f536662bacf178fd8038dc11298df32ac68ee140eb46" => :high_sierra
-    sha256 "6f78d2a082e84a482d64ce8cab4d811fa69f4e6fbf0bc2b5124c8751beb4c797" => :sierra
+    sha256 "ae5ada2da192e552193487318f63c28bc5a1ce71705ac97ff2f2cdaebf1ace20" => :catalina
+    sha256 "ace2c4096387d98f5a27d28d73b0ed2453a61a5a9b4bd7ff1c55b105f0373b38" => :mojave
+    sha256 "a8342df624addc888a2d409e01a087e7974ff78b2091df7f6dc94949bb55abee" => :high_sierra
   end
 
   depends_on "cmake" => :build
+  depends_on xcode: :build
   depends_on "qt"
 
   def install

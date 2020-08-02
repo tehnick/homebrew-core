@@ -1,25 +1,27 @@
 class Mupdf < Formula
   desc "Lightweight PDF and XPS viewer"
   homepage "https://mupdf.com/"
-  url "https://mupdf.com/downloads/archive/mupdf-1.15.0-source.tar.xz"
-  sha256 "565036cf7f140139c3033f0934b72e1885ac7e881994b7919e15d7bee3f8ac4e"
-  revision 1
+  url "https://mupdf.com/downloads/archive/mupdf-1.17.0-source.tar.xz"
+  sha256 "c935fb2593d9a28d9b56b59dad6e3b0716a6790f8a257a68fa7dcb4430bc6086"
+  license "AGPL-3.0"
   head "https://git.ghostscript.com/mupdf.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "fb6b298d8e7d01948271e6c91f00a82c2c26217ea528ecfebcfc7e16c19a598a" => :mojave
-    sha256 "0058023a86332af7cc136f8d0763e832bd4fda72f6d22220ec2847407b2a21ca" => :high_sierra
-    sha256 "eea95ab5ecb7a3c406c3c27c477a0440d8ed65f0db7ece2538905a6f42e7bcbc" => :sierra
+    sha256 "473cb909d61450baa808fab50f18342811665f4e9e31f26a21e03f6bc5e70363" => :catalina
+    sha256 "abe79a517f7debadd94a67d3c7130c017ec8b985f381f0af7c9d08c75df13501" => :mojave
+    sha256 "e12021a10707afc92cea6d8a7633ee2a8d0f89359bb2f166c6e53d89e411f0f3" => :high_sierra
   end
 
-  depends_on "openssl@1.1"
   depends_on :x11
 
   conflicts_with "mupdf-tools",
-    :because => "mupdf and mupdf-tools install the same binaries."
+    because: "mupdf and mupdf-tools install the same binaries"
 
   def install
+    # Work around Xcode 11 clang bug
+    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
+
     system "make", "install",
            "build=release",
            "verbose=yes",

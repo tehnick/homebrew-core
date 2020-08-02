@@ -1,14 +1,15 @@
 class ApacheGeode < Formula
   desc "In-memory Data Grid for fast transactional data processing"
   homepage "https://geode.apache.org/"
-  url "https://www.apache.org/dyn/closer.cgi?path=geode/1.10.0/apache-geode-1.10.0.tgz"
-  mirror "https://archive.apache.org/dist/geode/1.10.0/apache-geode-1.10.0.tgz"
-  mirror "https://www.apache.org/dist/geode/1.10.0/apache-geode-1.10.0.tgz"
-  sha256 "d13a7e91d11ce14cc7ad3c024b25e541343653b8ad2a88d461a59fec97d59655"
+  url "https://www.apache.org/dyn/closer.lua?path=geode/1.12.0/apache-geode-1.12.0.tgz"
+  mirror "https://archive.apache.org/dist/geode/1.12.0/apache-geode-1.12.0.tgz"
+  mirror "https://www.apache.org/dist/geode/1.12.0/apache-geode-1.12.0.tgz"
+  sha256 "063b473dac914aca53c09326487cc96c63ef84eecc8b053c8cc3d5110e82f179"
+  license "Apache-2.0"
 
   bottle :unneeded
 
-  depends_on :java => "1.8+"
+  depends_on java: "1.8"
 
   def install
     rm_f "bin/gfsh.bat"

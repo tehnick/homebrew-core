@@ -1,22 +1,23 @@
 class Libwebsockets < Formula
   desc "C websockets server library"
   homepage "https://libwebsockets.org"
-  url "https://github.com/warmcat/libwebsockets/archive/v3.2.0.tar.gz"
-  sha256 "5e731c536a20d9c03ae611631db073f05cd77bf0906a8c30d2a13638d4c8c667"
-  revision 1
+  url "https://github.com/warmcat/libwebsockets/archive/v4.0.20.tar.gz"
+  sha256 "a26d243f2642a9b810e7d91f1e66b149d1da978decdca58ce1c9218c454f397e"
+  license "MIT"
   head "https://github.com/warmcat/libwebsockets.git"
 
   bottle do
-    sha256 "695623da170149af1510d880554b7f72af10bf07fd2ae1fcabec28a5d4ec6d1c" => :catalina
-    sha256 "3196125ae013d45631b5f28fc60df1545357f98b94b3c45742e177554bec3b9f" => :mojave
-    sha256 "6195a152caa89229651dd1a0834283754ebad277d06755e8b851a0d0471cde61" => :high_sierra
-    sha256 "ff664e498d2cc5d17663d5990d4100c05de251fbb65e5a22ae1209241cb8d3f6" => :sierra
+    sha256 "671e40b52a25c5aabd5e3bfa9d1bacef8882870abf80ed531968b7bdc52ba7b6" => :catalina
+    sha256 "ef189da41dcbed3bb8f358e0576c3a19bd559b54905271c07aeeddb5d7380410" => :mojave
+    sha256 "bee063b0139fd076bfcaf68986713ad7593a1633582a1bec8348dd1e48142bb2" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "libevent"
   depends_on "libuv"
   depends_on "openssl@1.1"
+
+  uses_from_macos "zlib"
 
   def install
     system "cmake", ".", *std_cmake_args,
@@ -46,7 +47,8 @@ class Libwebsockets < Formula
         return 0;
       }
     EOS
-    system ENV.cc, "test.c", "-I#{Formula["openssl@1.1"].opt_prefix}/include", "-L#{lib}", "-lwebsockets", "-o", "test"
+    system ENV.cc, "test.c", "-I#{Formula["openssl@1.1"].opt_prefix}/include",
+                   "-L#{lib}", "-lwebsockets", "-o", "test"
     system "./test"
   end
 end

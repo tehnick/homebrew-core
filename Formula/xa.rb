@@ -1,15 +1,15 @@
 class Xa < Formula
   desc "6502 cross assembler"
   homepage "https://www.floodgap.com/retrotech/xa/"
-  url "https://www.floodgap.com/retrotech/xa/dists/xa-2.3.9.tar.gz"
-  sha256 "8d3097d3b75adf4305d7d5c8e8f2568a7176cb348bcc50006cfc58378540c555"
+  url "https://www.floodgap.com/retrotech/xa/dists/xa-2.3.11.tar.gz"
+  sha256 "32f2164c99e305218e992970856dd8e2309b5cb6ac4758d7b2afe3bfebc9012d"
+  license "GPL-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0d0d90da2fd47164ebd040576077653818cde1596e6772b2a8dde81a139c974f" => :catalina
-    sha256 "c158ac34c430221611c8fec3144c7b489ed65e99e459325a528e14a2cd727489" => :mojave
-    sha256 "b9b214c757c86617774275ea57f8191e7ca46b21ce3f879387cce5e388eb285f" => :high_sierra
-    sha256 "9a16e276c370a5afb7ae4379e10318660d15375a0baa86550c6f16e662559ee1" => :sierra
+    sha256 "82ac5a005305bb5fd7ff181e2f9aae95ad5f865574ed4cb8f936948cce406a72" => :catalina
+    sha256 "6dfd866eea2c29d98aabbe4b9a0821ad9b808b0d2b7754b3400f5bb4f4cb4184" => :mojave
+    sha256 "40334865dd2af12409a5c52ed9a8d3a5bd6b781da28375509e2481bd885c87e4" => :high_sierra
   end
 
   def install

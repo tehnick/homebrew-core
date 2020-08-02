@@ -3,9 +3,11 @@ class Kyua < Formula
   homepage "https://github.com/jmmv/kyua"
   url "https://github.com/jmmv/kyua/releases/download/kyua-0.13/kyua-0.13.tar.gz"
   sha256 "db6e5d341d5cf7e49e50aa361243e19087a00ba33742b0855d2685c0b8e721d6"
+  license "BSD-3-Clause"
   revision 1
 
   bottle do
+    sha256 "181ef5174cbb2f2ab2dd0e011d597a1124bd0e359de33967d89730cd5d708529" => :catalina
     sha256 "a210c64c138b1656093b103ae27d9354972d7c2ec1e7220b0d94a9bc6806522c" => :mojave
     sha256 "ecf3850322d6a575b63519a21f6bfe7eb652c67564f7292f017306d468cbf49d" => :high_sierra
     sha256 "b533f71a13a6b8bdbbc4778515f5701774175879d6171804f43c1da8e12b4217" => :sierra

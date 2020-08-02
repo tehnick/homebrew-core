@@ -3,17 +3,17 @@ class Supervisor < Formula
 
   desc "Process Control System"
   homepage "http://supervisord.org/"
-  url "https://github.com/Supervisor/supervisor/archive/4.1.0.tar.gz"
-  sha256 "e4e87a309d34c1356b77d1dfd300191b2a7c314e050d7b3853e5b91ef166c2f2"
+  url "https://github.com/Supervisor/supervisor/archive/4.2.0.tar.gz"
+  sha256 "05031f36ad15cad47fb56f01d8e075f952ae39ba8ce492ea790ebb310e3f0368"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e4036a376329fdfe172d0884353e8726063b9535ff79a76f46e04369e680b5ba" => :catalina
-    sha256 "3e51e9866e4793367df67e0e566cb33a8f018a899cfbb36654f1d8baa9be4bd4" => :mojave
-    sha256 "41fd027c40c5e5da953fc007999db6248046f45ea68e9b1c5a4525834e98f130" => :high_sierra
+    sha256 "2e3d14abf6e8b63001bfe0b128da3853db20bec5e99073eeac7b5e6b63b8bd1e" => :catalina
+    sha256 "2d860cc6e534901d1c9c9d330955aa5b7e3c5e4bb9d460180eca222742545957" => :mojave
+    sha256 "cf5c9fe0c5d1af7d39000624b00b96d5b945da9a79b3273bc245237f477ac105" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     inreplace buildpath/"supervisor/skel/sample.conf" do |s|
@@ -34,7 +34,7 @@ class Supervisor < Formula
     (var/"log").mkpath
   end
 
-  plist_options :manual => "supervisord -c #{HOMEBREW_PREFIX}/etc/supervisord.ini"
+  plist_options manual: "supervisord -c #{HOMEBREW_PREFIX}/etc/supervisord.ini"
 
   def plist
     <<~EOS

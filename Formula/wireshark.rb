@@ -1,16 +1,15 @@
 class Wireshark < Formula
   desc "Graphical network analyzer and capture tool"
   homepage "https://www.wireshark.org"
-  url "https://www.wireshark.org/download/src/all-versions/wireshark-3.0.5.tar.xz"
-  mirror "https://1.eu.dl.wireshark.org/src/all-versions/wireshark-3.0.5.tar.xz"
-  sha256 "c551fce475c49cea317ccbf9d22404bc827dde9cee0ccdf6648bfed3ecd9f820"
-  head "https://code.wireshark.org/review/wireshark", :using => :git
+  url "https://www.wireshark.org/download/src/all-versions/wireshark-3.2.5.tar.xz"
+  mirror "https://1.eu.dl.wireshark.org/src/all-versions/wireshark-3.2.5.tar.xz"
+  sha256 "bd89052a5766cce08b1090df49628567e48cdd24bbaa47667c851bac6aaac940"
+  head "https://code.wireshark.org/review/wireshark", using: :git
 
   bottle do
-    sha256 "0dc5cb8d614d3bcc388b51b05a6b85bdef8195e5dd39477239a79a82736670d9" => :catalina
-    sha256 "7c538b398788ec39b394f3973073323f76434653880bfedb48e5f3767026853d" => :mojave
-    sha256 "44f9bc010e0d11fea64ab47ef40128a08b4b186ffd77a60048f0b3d4de4ac171" => :high_sierra
-    sha256 "e7723a63da53ec4441807123f167e63dd8df02e79cca2a5d3340c34d8758368b" => :sierra
+    sha256 "27ac1313478b321ece59273e73ff0ef3dbfc8f3bb5e804f84d1647e9c3493f02" => :catalina
+    sha256 "6f7222fa6ba170a6f51cdde7b4167aa25fff8bd5f507b0741844f30225e0c959" => :mojave
+    sha256 "2201d32c491a0b8e0d1116e58120695826fb4b1782129ec62bcb8d67b222c6f5" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -23,6 +22,9 @@ class Wireshark < Formula
   depends_on "libssh"
   depends_on "lua@5.1"
   depends_on "nghttp2"
+
+  uses_from_macos "bison" => :build
+  uses_from_macos "flex" => :build
 
   def install
     args = std_cmake_args + %W[
@@ -41,7 +43,6 @@ class Wireshark < Formula
       -DENABLE_SMI=ON
       -DBUILD_sshdump=ON
       -DBUILD_ciscodump=ON
-
       -DENABLE_NGHTTP2=ON
       -DBUILD_wireshark=OFF
       -DENABLE_APPLICATION_BUNDLE=OFF
@@ -63,16 +64,17 @@ class Wireshark < Formula
     (include/"wireshark/wsutil").install Dir["wsutil/*.h"]
   end
 
-  def caveats; <<~EOS
-    This formula only installs the command-line utilities by default.
+  def caveats
+    <<~EOS
+      This formula only installs the command-line utilities by default.
 
-    Install Wireshark.app with Homebrew Cask:
-      brew cask install wireshark
+      Install Wireshark.app with Homebrew Cask:
+        brew cask install wireshark
 
-    If your list of available capture interfaces is empty
-    (default macOS behavior), install ChmodBPF:
-      brew cask install wireshark-chmodbpf
-  EOS
+      If your list of available capture interfaces is empty
+      (default macOS behavior), install ChmodBPF:
+        brew cask install wireshark-chmodbpf
+    EOS
   end
 
   test do

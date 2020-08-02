@@ -1,58 +1,52 @@
 class Stubby < Formula
   desc "DNS privacy enabled stub resolver service based on getdns"
   homepage "https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Daemon+-+Stubby"
-  url "https://github.com/getdnsapi/stubby/archive/v0.2.6.tar.gz"
-  sha256 "634b0b9fb8f36416e210fa65800a6c1672bcf9f4f276a042ccf89567ad8ef781"
-  head "https://github.com/getdnsapi/stubby.git", :branch => "develop"
+  url "https://github.com/getdnsapi/stubby/archive/v0.3.0.tar.gz"
+  sha256 "b37a0e0ec2b7cfcdcb596066a6fd6109e91a2766b17a42c47d3703d9be41d000"
+  license "BSD-3-Clause"
+  head "https://github.com/getdnsapi/stubby.git", branch: "develop"
 
   bottle do
-    sha256 "2def06f55cd7c225180d7c07686ff6047047b4696db24240fbf8c37a88cca8e2" => :catalina
-    sha256 "aa05e8445978d4d7391addd20666f7ab141e9587e4585d7873052acb68aed123" => :mojave
-    sha256 "e336da47ce50d92a0c3f445db4200dad8f99ba406ef454abfffb4085601e9e71" => :high_sierra
-    sha256 "685cec7e37bf310b77da3680fa81d1bfc920928289c4905eb5c6899e40f6f801" => :sierra
+    rebuild 1
+    sha256 "aaa2e665539768e5095b04cdbbf61b8b865334770e4608f144096f010631d47c" => :catalina
+    sha256 "be2d27bc1ceb52f5728c34b179ba4b57593ded2e66c87c4ab26fa6e89ac26ece" => :mojave
+    sha256 "437687f0eebd8218424dbefd61988a5ebb9c2a4487c779c36a329deaf2c2ad92" => :high_sierra
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
+  depends_on "cmake" => :build
   depends_on "libtool" => :build
   depends_on "getdns"
   depends_on "libyaml"
 
   def install
-    system "autoreconf", "-fiv"
-    system "./configure", "--disable-dependency-tracking",
-                          "--disable-silent-rules",
-                          "--prefix=#{prefix}",
-                          "--sysconfdir=#{etc}"
+    system "cmake", "-DCMAKE_INSTALL_RUNSTATEDIR=#{HOMEBREW_PREFIX}/var/run/", \
+                    "-DCMAKE_INSTALL_SYSCONFDIR=#{HOMEBREW_PREFIX}/etc", ".", *std_cmake_args
     system "make", "install"
   end
 
-  plist_options :startup => true, :manual => "sudo stubby -C #{HOMEBREW_PREFIX}/etc/stubby/stubby.yml"
+  plist_options startup: true, manual: "sudo stubby -C #{HOMEBREW_PREFIX}/etc/stubby/stubby.yml"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>KeepAlive</key>
-        <true/>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/stubby</string>
-          <string>-C</string>
-          <string>#{etc}/stubby/stubby.yml</string>
-        </array>
-        <key>StandardErrorPath</key>
-        <string>#{var}/log/stubby/stubby.log</string>
-        <key>StandardOutPath</key>
-        <string>#{var}/log/stubby/stubby.log</string>
-      </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>KeepAlive</key>
+          <true/>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_bin}/stubby</string>
+            <string>-C</string>
+            <string>#{etc}/stubby/stubby.yml</string>
+          </array>
+        </dict>
+      </plist>
+    EOS
   end
 
   test do
@@ -73,16 +67,13 @@ class Stubby < Formula
     EOS
     output = shell_output("#{bin}/stubby -i -C stubby_test.yml")
     assert_match "bindata for 145.100.185.15", output
-    pid = fork do
+
+    fork do
       exec "#{bin}/stubby", "-C", testpath/"stubby_test.yml"
     end
-    begin
-      sleep 2
-      output = shell_output("dig @127.0.0.1 -p 5553 getdnsapi.net")
-      assert_match "status: NOERROR", output
-    ensure
-      Process.kill 9, pid
-      Process.wait pid
-    end
+    sleep 2
+
+    output = shell_output("dig @127.0.0.1 -p 5553 getdnsapi.net")
+    assert_match "status: NOERROR", output
   end
 end

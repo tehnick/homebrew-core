@@ -1,30 +1,29 @@
 class Pygobject3 < Formula
   desc "GNOME Python bindings (based on GObject Introspection)"
   homepage "https://wiki.gnome.org/Projects/PyGObject"
-  url "https://download.gnome.org/sources/pygobject/3.34/pygobject-3.34.0.tar.xz"
-  sha256 "87e2c9aa785f352ef111dcc5f63df9b85cf6e05e52ff04f803ffbebdacf5271a"
+  url "https://download.gnome.org/sources/pygobject/3.36/pygobject-3.36.1.tar.xz"
+  sha256 "d1bf42802d1cec113b5adaa0e7bf7f3745b44521dc2163588d276d5cd61d718f"
+  license "LGPL-2.1"
 
   bottle do
     cellar :any
-    sha256 "5ab85d008b95eea80afc8f7991e044ffa85104fe1d3dbf0ef6adf52caa8d7b37" => :catalina
-    sha256 "10abeaee530ca25b234c317adf3d46524beb878ede16d7100322c1c1aded878d" => :mojave
-    sha256 "be14c63aab1bdc4bb3abd6078c5dce50c5fea09f5bf71b2425bee33bee038242" => :high_sierra
-    sha256 "1a7b76f2f40d02ca4c5ddfc8ded2f8f2362f900493e243b2b08ec856b0d42c48" => :sierra
+    sha256 "174079a381809080c02d5720bc2538929bf571d28710f7ab3cb646bfcd2a5bbf" => :catalina
+    sha256 "c2b276445ce99b5094cd6b68b03fb6dc47a8c2eefbc743b40eacc373b822345c" => :mojave
+    sha256 "f462700d1cd736cc800d410ef3e4d2509527ca98cb7dc437ac80adb9bc04b6d6" => :high_sierra
   end
 
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkg-config" => :build
   depends_on "gobject-introspection"
-  depends_on "py2cairo"
   depends_on "py3cairo"
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     mkdir "buildpy3" do
-      system "meson", "--prefix=#{prefix}",
+      system "meson", *std_meson_args,
                       "-Dpycairo=true",
-                      "-Dpython=python3",
+                      "-Dpython=#{Formula["python@3.8"].opt_bin}/python3",
                       ".."
       system "ninja", "-v"
       system "ninja", "install", "-v"
@@ -40,8 +39,8 @@ class Pygobject3 < Formula
       assert(31 == GLib.Date.get_days_in_month(GLib.DateMonth.JANUARY, 2000))
     EOS
 
-    pyversion = Language::Python.major_minor_version "python3"
+    pyversion = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
     ENV.prepend_path "PYTHONPATH", lib/"python#{pyversion}/site-packages"
-    system "python3", "test.py"
+    system Formula["python@3.8"].opt_bin/"python3", "test.py"
   end
 end

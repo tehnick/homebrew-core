@@ -1,16 +1,15 @@
 class Rrdtool < Formula
   desc "Round Robin Database"
   homepage "https://oss.oetiker.ch/rrdtool/index.en.html"
-  url "https://github.com/oetiker/rrdtool-1.x/releases/download/v1.7.0/rrdtool-1.7.0.tar.gz"
-  sha256 "f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b"
-  revision 2
+  url "https://github.com/oetiker/rrdtool-1.x/releases/download/v1.7.2/rrdtool-1.7.2.tar.gz"
+  sha256 "a199faeb7eff7cafc46fac253e682d833d08932f3db93a550a4a5af180ca58db"
+  license "GPL-2.0"
+  revision 1
 
   bottle do
-    cellar :any
-    sha256 "fdf30d365db065b6b6a7b7d48d86122dde11d1f0ef4a8fc0d5447b4b78e3511b" => :catalina
-    sha256 "7b3548ea861690d6507de212fe55808c9120424b6b9c73a5fc9ac960b252685a" => :mojave
-    sha256 "a93a0f09da257b0e9fd429727ad1d7afbfe8ca8b19aaa299f77f6719954b8432" => :high_sierra
-    sha256 "42323cefde415bf4d129f4a619f1a40acc517f6cfa52a584aadf286c6cf72f9d" => :sierra
+    sha256 "ce57cda576f452e7790e091d645887231d4aa5b691e2c33b4ea93b3dd92d7757" => :catalina
+    sha256 "fae6691230b527c93670d1d00b266e43497744fc09df06c9977265e578b529fc" => :mojave
+    sha256 "858013744cfc3d31a47b7e3629198922d1994f20d0d44c11f6c921ce6f2b9942" => :high_sierra
   end
 
   head do
@@ -23,9 +22,6 @@ class Rrdtool < Formula
   depends_on "pkg-config" => :build
   depends_on "glib"
   depends_on "pango"
-
-  # Ha-ha, but sleeping is annoying when running configure a lot
-  patch :DATA
 
   def install
     # fatal error: 'ruby/config.h' file not found
@@ -40,14 +36,12 @@ class Rrdtool < Formula
       --disable-ruby-site-install
     ]
 
+    inreplace "configure", /^sleep 1$/, "#sleep 1"
+
     system "./bootstrap" if build.head?
     system "./configure", *args
 
-    # Needed to build proper Ruby bundle
-    ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
-
     system "make", "CC=#{ENV.cc}", "CXX=#{ENV.cxx}", "install"
-    prefix.install "bindings/ruby/test.rb"
   end
 
   test do
@@ -57,28 +51,3 @@ class Rrdtool < Formula
     system "#{bin}/rrdtool", "dump", "temperature.rrd"
   end
 end
-
-__END__
-diff --git a/configure b/configure
-index 266754d..d21ab33 100755
---- a/configure
-+++ b/configure
-@@ -23868,18 +23868,6 @@ $as_echo_n "checking in... " >&6; }
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: and out again" >&5
- $as_echo "and out again" >&6; }
-
--echo $ECHO_N "ordering CD from http://tobi.oetiker.ch/wish $ECHO_C" 1>&6
--sleep 1
--echo $ECHO_N ".$ECHO_C" 1>&6
--sleep 1
--echo $ECHO_N ".$ECHO_C" 1>&6
--sleep 1
--echo $ECHO_N ".$ECHO_C" 1>&6
--sleep 1
--echo $ECHO_N ".$ECHO_C" 1>&6
--sleep 1
--{ $as_echo "$as_me:${as_lineno-$LINENO}: result:  just kidding ;-)" >&5
--$as_echo " just kidding ;-)" >&6; }
- echo
- echo "----------------------------------------------------------------"
- echo "Config is DONE!"

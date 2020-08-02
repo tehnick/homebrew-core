@@ -1,27 +1,30 @@
 class Ghq < Formula
   desc "Remote repository management made easy"
-  homepage "https://github.com/motemen/ghq"
-  url "https://github.com/motemen/ghq.git",
-      :tag      => "v0.12.6",
-      :revision => "f75cda17931f3d24829f425344dff18f91d78bf6"
+  homepage "https://github.com/x-motemen/ghq"
+  url "https://github.com/x-motemen/ghq.git",
+      tag:      "v1.1.5",
+      revision: "f5ac3e5655ced9bf3aee2690a2aaa43431cc567f"
+  license "MIT"
+  head "https://github.com/x-motemen/ghq.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "feb197303052612409d47fdfcaa1ed48e617a2a6c561d24a9590994ba8f956f5" => :mojave
-    sha256 "5b301b1b73f6e915107fad6dbe50de2f298cfdc0e847f926bd64205935c3922d" => :high_sierra
-    sha256 "4d36b962ed79ab2736ecd7bd8b7480ac00a13258df8ad2f0c37226abcb660b4d" => :sierra
+    sha256 "247f4e7b0964b0a27321b24ae06349d9eac65280345dda17680fa8049c29ac75" => :catalina
+    sha256 "a863be3a3b307c82821d0dbed2d4d1faa05aaea9c6dd150d7b3f2a878e4bd79c" => :mojave
+    sha256 "060f3bc0d7b55e04274383faa21b45e8d8457ca61e25fd3416b2fe0d3177036b" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    system "make", "build"
+    system "make", "build", "VERBOSE=1"
     bin.install "ghq"
-    zsh_completion.install "zsh/_ghq"
+    bash_completion.install "misc/bash/_ghq" => "ghq"
+    zsh_completion.install "misc/zsh/_ghq"
     prefix.install_metafiles
   end
 
   test do
-    assert_match "#{testpath}/.ghq", shell_output("#{bin}/ghq root")
+    assert_match "#{testpath}/ghq", shell_output("#{bin}/ghq root")
   end
 end

@@ -3,15 +3,15 @@ require "language/node"
 class Ungit < Formula
   desc "The easiest way to use git. On any platform. Anywhere"
   homepage "https://github.com/FredrikNoren/ungit"
-  url "https://registry.npmjs.org/ungit/-/ungit-1.4.47.tgz"
-  sha256 "be09b1210dbd221e2df1545ba6f3f90607609dcd4f816acd10128f7b97142f24"
+  url "https://registry.npmjs.org/ungit/-/ungit-1.5.9.tgz"
+  sha256 "788102743a3766554d2a820d3aaf5cb7d88759199942e61e8ff7db6cb15e8dad"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "32cc8801611cb74068f8545f12adf5d9ff660f136ba9c189ce7eb0377ca8f03f" => :catalina
-    sha256 "e233e8cb64931db8e7e2619c17caa5ea9312b13c527bf6c615266a56b88114a1" => :mojave
-    sha256 "29a874ac4d0ece018d37992264a3b0e58d8782ebcbb1d9593f07341d1a77e52d" => :high_sierra
-    sha256 "55a92e5decc65e32fe6db750d4152680a65e013fd47ce727e1ef034650c479d5" => :sierra
+    sha256 "7dd44ea62872b6b74da4a37c831226621642dae6c6df9fe22023541807efe4ba" => :catalina
+    sha256 "de93814870e37281df7262938f7a7342d4af8fa587eec8e32dd154089d0bc418" => :mojave
+    sha256 "71672f7b2e885d612d4590dafb8cc11b84a47e77e0d89de85879974b77c4a649" => :high_sierra
   end
 
   depends_on "node"
@@ -22,15 +22,13 @@ class Ungit < Formula
   end
 
   test do
-    require "nokogiri"
+    port = free_port
 
-    pid = fork do
-      exec bin/"ungit", "--no-launchBrowser", "--autoShutdownTimeout", "5000" # give it an idle timeout to make it exit
+    fork do
+      exec bin/"ungit", "--no-launchBrowser", "--port=#{port}"
     end
-    sleep 5
-    assert_match "ungit", Nokogiri::HTML(shell_output("curl -s 127.0.0.1:8448/")).at_css("title").text
-  ensure
-    Process.kill("TERM", pid)
-    Process.wait(pid)
+    sleep 8
+
+    assert_includes shell_output("curl -s 127.0.0.1:#{port}/"), "<title>ungit</title>"
   end
 end

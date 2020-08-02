@@ -1,17 +1,21 @@
 class Vnu < Formula
   desc "Nu Markup Checker: command-line and server HTML validator"
   homepage "https://validator.github.io/validator/"
-  url "https://github.com/validator/validator/releases/download/18.11.5/vnu.jar_18.11.5.zip"
-  sha256 "b9785a3ab51671509c8d418cc84298b1389ca2d82107aa0537544090a7c51862"
+  url "https://github.com/validator/validator/releases/download/20.3.16/vnu.jar_20.3.16.zip"
+  sha256 "1d5b3f0ded0a1e6f9d26a0be5c051a9590a11c8aab2e12d208120a3063e7bdcd"
+  license "MIT"
   version_scheme 1
 
   bottle :unneeded
 
-  depends_on :java => "1.8+"
+  depends_on "openjdk"
 
   def install
     libexec.install "vnu.jar"
-    bin.write_jar_script libexec/"vnu.jar", "vnu"
+    (bin/"vnu").write <<~EOS
+      #!/bin/bash
+      exec "#{Formula["openjdk"].opt_bin}/java" -jar "#{libexec}/vnu.jar" "$@"
+    EOS
   end
 
   test do

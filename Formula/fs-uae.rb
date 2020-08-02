@@ -1,14 +1,15 @@
 class FsUae < Formula
   desc "Amiga emulator"
   homepage "https://fs-uae.net/"
-  url "https://fs-uae.net/stable/3.0.0/fs-uae-3.0.0.tar.gz"
-  sha256 "221568b8f78bac352f84297f0cabe984d3da4f808e39cc3191541c02b389c964"
+  url "https://fs-uae.net/stable/3.0.5/fs-uae-3.0.5.tar.gz"
+  sha256 "f26ec42e03cf1a7b53b6ce0d9845aa45bbf472089b5ec046b3eb784ec6859fe3"
+  license "GPL-2.0"
 
   bottle do
     cellar :any
-    sha256 "a520a09e6a703765acaf3829b901b86d6f6503ef2887f1c5495ba6f309443a23" => :mojave
-    sha256 "ece2223f92dbe078b29dda91e691551d6788f8ea22fa7cc46919b125c4d62fb1" => :high_sierra
-    sha256 "f4b193b58774d21e007cd83a564ee8d2efab0f99bb213d91424c56f472ae35ee" => :sierra
+    sha256 "124950f0053e117fa271e182e705b2c9bee21f2572e371c1ff18f106ad777c5a" => :catalina
+    sha256 "446a54d257e764ec9df2b825b7dfe9dbb266e5ad586f439d75223c986ce21aa8" => :mojave
+    sha256 "b540e43634bfbbe75fe6f143a9bec8aeae85e29028f44e3d54bb979c4630cc51" => :high_sierra
   end
 
   head do
@@ -25,7 +26,6 @@ class FsUae < Formula
   depends_on "glib"
   depends_on "libmpeg2"
   depends_on "libpng"
-  depends_on "openal-soft" if MacOS.version == :mavericks
   depends_on "sdl2"
 
   def install

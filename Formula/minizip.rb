@@ -17,8 +17,10 @@ class Minizip < Formula
   depends_on "automake" => :build
   depends_on "libtool" => :build
 
+  uses_from_macos "zlib"
+
   conflicts_with "minizip2",
-    :because => "both install a `libminizip.a` library"
+    because: "both install a `libminizip.a` library"
 
   def install
     system "./configure", "--prefix=#{prefix}"

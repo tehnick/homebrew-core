@@ -4,19 +4,19 @@ class Sshuttle < Formula
   desc "Proxy server that works as a poor man's VPN"
   homepage "https://github.com/sshuttle/sshuttle"
   url "https://github.com/sshuttle/sshuttle.git",
-      :tag      => "v0.78.5",
-      :revision => "752a95310198886515577463a4a7e36d7f218018"
+      tag:      "v1.0.3",
+      revision: "c5dcc918db666dfd1b30afc72cc198abfb3b3aa9"
+  license "LGPL-2.0"
   head "https://github.com/sshuttle/sshuttle.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "107aecff3f7504b0eab9d370aca884bc13f24df4ff6b55a2b8e4d8664ba985a2" => :catalina
-    sha256 "dff7259d647fd392e53de03660ece7be96452882938f387c199938f8054f4c2b" => :mojave
-    sha256 "28f3d7fc8858779cb6020908302fb185810d574e8023e935b8410d0660973d49" => :high_sierra
-    sha256 "04e8f60acb5131f58a0fbe66d7c8d847c4d423db3edb2671ff1319fc499a2c5f" => :sierra
+    sha256 "f44682243fd2b0ffd1f463f8eca6a93a0575b8b52e27d14c2bbb0d5cdee72f32" => :catalina
+    sha256 "4a16f0170fc41f77af6a8994dc587cc5510de7be1b7fab4ad5968fb6d402587f" => :mojave
+    sha256 "d466f1fb7d5dd3ae8f2ceec36a5d2348c124c25847db7d7156db59554c81ea44" => :high_sierra
   end
 
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
     # Building the docs requires installing

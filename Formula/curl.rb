@@ -1,15 +1,15 @@
 class Curl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server"
   homepage "https://curl.haxx.se/"
-  url "https://curl.haxx.se/download/curl-7.66.0.tar.bz2"
-  sha256 "6618234e0235c420a21f4cb4c2dd0badde76e6139668739085a70c4e2fe7a141"
+  url "https://curl.haxx.se/download/curl-7.71.1.tar.bz2"
+  sha256 "9d52a4d80554f9b0d460ea2be5d7be99897a1a9f681ffafe739169afd6b4f224"
+  license "curl"
 
   bottle do
     cellar :any
-    sha256 "0e6be8e3fafd61557a817ea454d8f9d8ece5326d543685b418911209b8eaf2e4" => :catalina
-    sha256 "40b832d7e108407eb3fb1b378163f08ca5b58492bde0e7c01c6c109a0f5419bd" => :mojave
-    sha256 "9b9613753b5ba8e11a1aacde92cc679f97e5b2e67c28fbb14951f29128ed0f6c" => :high_sierra
-    sha256 "a4eadb93e26d5a74b3395ca69a835df7798edadd23762822672dc8da36fb685d" => :sierra
+    sha256 "36dc71f1899b803ab093e727c920b40f91b197402d9c73124c86d02feb0023c5" => :catalina
+    sha256 "99d574c0dec0a50f21ce736d77759038353f2301c7d7a64d5855d311aac4b506" => :mojave
+    sha256 "083d119978d82e86d68567b5fc48faf3d80bf66bf3f6e1c21400a2462d3c460c" => :high_sierra
   end
 
   head do
@@ -23,7 +23,12 @@ class Curl < Formula
   keg_only :provided_by_macos
 
   depends_on "pkg-config" => :build
-  uses_from_macos "openssl"
+
+  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "openssl@1.1"
+  end
 
   def install
     system "./buildconf" if build.head?

@@ -3,6 +3,7 @@ class Htop < Formula
   homepage "https://hisham.hm/htop/"
   url "https://hisham.hm/htop/releases/2.2.0/htop-2.2.0.tar.gz"
   sha256 "d9d6826f10ce3887950d709b53ee1d8c1849a70fa38e91d5896ad8cbc6ba3c57"
+  license "GPL-2.0"
   revision 1
 
   bottle do
@@ -30,11 +31,12 @@ class Htop < Formula
     system "make", "install"
   end
 
-  def caveats; <<~EOS
-    htop requires root privileges to correctly display all running processes,
-    so you will need to run `sudo htop`.
-    You should be certain that you trust any software you grant root privileges.
-  EOS
+  def caveats
+    <<~EOS
+      htop requires root privileges to correctly display all running processes,
+      so you will need to run `sudo htop`.
+      You should be certain that you trust any software you grant root privileges.
+    EOS
   end
 
   test do

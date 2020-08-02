@@ -1,25 +1,24 @@
 class GitTown < Formula
   desc "High-level command-line interface for Git"
   homepage "https://www.git-town.com/"
-  url "https://github.com/Originate/git-town/archive/v7.2.1.tar.gz"
-  sha256 "67e061d34e6102755a4cd3f7b438487f7f5165be1836b8c26f46d5e2e8e3a121"
+  url "https://github.com/git-town/git-town/archive/v7.4.0.tar.gz"
+  sha256 "f9ff00839fde70bc9b5024bae9a51d8b00e0bb309c3542ed65be50bb8a13e6a5"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9d756be0c03322770b3ef08f71a356dcf3b7f9effa3f366d8818547a32d6629e" => :catalina
-    sha256 "acdbaa473264c569f1d2f2cfe6c6486ff02f6af601e800e0cb0a350ef0c32154" => :mojave
-    sha256 "b3be72d926d402afe2ae9b079bd702095729372b7a142d1ade13367a8415cf43" => :high_sierra
-    sha256 "423e9c2afbde04439ce9689942b739806b5ae97941d92d9ae4d2f9c7f4295047" => :sierra
+    sha256 "e6d6fbabc41bbef0488161ac1ab71d486dd0439eb8ee3072b1a812cc0d573bee" => :catalina
+    sha256 "2d39b261dfa7208c257416d61115c22bf242b16e7d696eb810252c192981a052" => :mojave
+    sha256 "40debf4a33e518102e579e8e8dbdefa2676c4bf057cbcb994bb86f05df17dd16" => :high_sierra
   end
 
   depends_on "go" => :build
-  depends_on :macos => :el_capitan
+  depends_on macos: :el_capitan
 
   def install
-    ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/Originate").mkpath
-    ln_sf buildpath, buildpath/"src/github.com/Originate/git-town"
-    system "go", "build", "-o", bin/"git-town"
+    system "go", "build", *std_go_args, "-ldflags",
+           "-X github.com/git-town/git-town/src/cmd.version=v7.4.0 "\
+           "-X github.com/git-town/git-town/src/cmd.buildDate=2020/07/05"
   end
 
   test do

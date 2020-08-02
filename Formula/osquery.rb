@@ -3,19 +3,22 @@ class Osquery < Formula
   homepage "https://osquery.io"
   url "https://github.com/facebook/osquery/archive/3.3.2.tar.gz"
   sha256 "74280181f45046209053a3e15114d93adc80929a91570cc4497931cfb87679e4"
-  revision 7
+  # license ["Apache-2.0", "GPL-2.0-only"] - pending https://github.com/Homebrew/brew/pull/7953
+  license "Apache-2.0"
+  revision 16
 
   bottle do
     cellar :any
-    sha256 "16662c8d802d1b14b8fe51b4bd42707cf556e6567a86f2bb2886204ce68b5ab9" => :catalina
-    sha256 "1480020e674965e23dd59cd6dee6ad2209d55b839c958ff236c525a8a57a7ba2" => :mojave
-    sha256 "32a3852dbd1f226a30d2c6003b1c1397ef49c4339eb17bda466bf1f982fc4ee3" => :high_sierra
-    sha256 "75f51a577ccfa48c10b8af7d5f7cd766fc133784b74cd26eb46529fa64553d62" => :sierra
+    sha256 "ea852c037cabbc09798dcdba8ce675e49d56f3a576b3b1fbf541bd9ca40ba1d1" => :catalina
+    sha256 "ec9daadf541bd30127bef694fc8e1ad1689de9338936ddbf28a0a138d25890b0" => :mojave
+    sha256 "9c70ccbcc111293ceddc2421035cf6b0748709d96979c3db01a5d8dee1053db4" => :high_sierra
   end
+
+  disable!
 
   depends_on "bison" => :build
   depends_on "cmake" => :build
-  depends_on "python" => :build
+  depends_on "python@3.8" => :build
   depends_on "augeas"
   depends_on "boost"
   depends_on "gflags"
@@ -25,7 +28,7 @@ class Osquery < Formula
   depends_on "librdkafka"
   depends_on "lldpd"
   # osquery only supports macOS 10.12 and above. Do not remove this.
-  depends_on :macos => :sierra
+  depends_on macos: :sierra
   depends_on "openssl@1.1"
   depends_on "rapidjson"
   depends_on "rocksdb"
@@ -36,16 +39,14 @@ class Osquery < Formula
   depends_on "yara"
   depends_on "zstd"
 
-  fails_with :gcc => "6"
-
   resource "MarkupSafe" do
-    url "https://files.pythonhosted.org/packages/c0/41/bae1254e0396c0cc8cf1751cb7d9afc90a602353695af5952530482c963f/MarkupSafe-0.23.tar.gz"
-    sha256 "a4ec1aff59b95a14b45eb2e23761a0179e98319da5a7eb76b56ea8cdc7b871c3"
+    url "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/MarkupSafe-1.1.1.tar.gz"
+    sha256 "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"
   end
 
   resource "Jinja2" do
-    url "https://files.pythonhosted.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/Jinja2-2.8.1.tar.gz"
-    sha256 "35341f3a97b46327b3ef1eb624aadea87a535b8f50863036e085e7c426ac5891"
+    url "https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c/Jinja2-2.11.2.tar.gz"
+    sha256 "89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0"
   end
 
   resource "third-party" do
@@ -67,7 +68,10 @@ class Osquery < Formula
 
   # Patch for compatibility with OpenSSL 1.1
   # submitted upstream: https://github.com/osquery/osquery/issues/5755
-  patch :DATA
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/osquery/openssl-1.1.diff"
+    sha256 "18ace03c11e06b0728060382284a8da115bd6e14247db20ac0188246e5ff8af4"
+  end
 
   def install
     ENV.cxx11
@@ -104,16 +108,17 @@ class Osquery < Formula
     # Set the version
     ENV["OSQUERY_BUILD_VERSION"] = version
 
-    xy = Language::Python.major_minor_version "python3"
+    xy = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
     ENV.prepend_create_path "PYTHONPATH", buildpath/"third-party/python/lib/python#{xy}/site-packages"
 
     res = resources.map(&:name).to_set - %w[aws-sdk-cpp third-party]
     res.each do |r|
       resource(r).stage do
-        system "python3", "setup.py", "install",
-                          "--prefix=#{buildpath}/third-party/python/",
-                          "--single-version-externally-managed",
-                          "--record=installed.txt"
+        system Formula["python@3.8"].opt_bin/"python3",
+               "setup.py", "install",
+               "--prefix=#{buildpath}/third-party/python/",
+               "--single-version-externally-managed",
+               "--record=installed.txt"
       end
     end
 
@@ -139,73 +144,9 @@ class Osquery < Formula
     (include/"osquery/core").install Dir["osquery/core/*.h"]
   end
 
-  plist_options :startup => true, :manual => "osqueryd"
+  plist_options startup: true, manual: "osqueryd"
 
   test do
     assert_match "platform_info", shell_output("#{bin}/osqueryi -L")
   end
 end
-__END__
-diff -pur osquery-3.3.2/osquery/tables/system/darwin/certificates.mm osquery-3.3.2-fixed/osquery/tables/system/darwin/certificates.mm
---- osquery-3.3.2/osquery/tables/system/darwin/certificates.mm	2018-10-29 22:24:29.000000000 +0100
-+++ osquery-3.3.2-fixed/osquery/tables/system/darwin/certificates.mm	2019-09-07 16:25:24.000000000 +0200
-@@ -20,6 +20,7 @@ namespace tables {
-
- void genCertificate(X509* cert, const std::string& path, QueryData& results) {
-   Row r;
-+  const ASN1_OCTET_STRING *s;
-
-   // Generate the common name and subject.
-   // They are very similar OpenSSL API accessors so save some logic and
-@@ -42,13 +43,11 @@ void genCertificate(X509* cert, const st
-   // so it should be called before others.
-   r["ca"] = (CertificateIsCA(cert)) ? INTEGER(1) : INTEGER(0);
-   r["self_signed"] = (CertificateIsSelfSigned(cert)) ? INTEGER(1) : INTEGER(0);
--  r["key_usage"] = genKeyUsage(cert->ex_kusage);
--  r["authority_key_id"] =
--      (cert->akid && cert->akid->keyid)
--          ? genKIDProperty(cert->akid->keyid->data, cert->akid->keyid->length)
--          : "";
--  r["subject_key_id"] =
--      (cert->skid) ? genKIDProperty(cert->skid->data, cert->skid->length) : "";
-+  r["key_usage"] = genKeyUsage(X509_get_key_usage(cert));
-+  s = X509_get0_authority_key_id(cert);
-+  r["authority_key_id"] = s ? genKIDProperty(s->data, s->length) : "";
-+  s = X509_get0_subject_key_id(cert);
-+  r["subject_key_id"] = s ? genKIDProperty(s->data, s->length) : "";
-
-   r["serial"] = genSerialForCertificate(cert);
-
-diff -pur osquery-3.3.2/osquery/tables/system/darwin/keychain_utils.cpp osquery-3.3.2-fixed/osquery/tables/system/darwin/keychain_utils.cpp
---- osquery-3.3.2/osquery/tables/system/darwin/keychain_utils.cpp	2018-10-29 22:24:29.000000000 +0100
-+++ osquery-3.3.2-fixed/osquery/tables/system/darwin/keychain_utils.cpp	2019-09-07 17:03:59.000000000 +0200
-@@ -84,7 +84,10 @@ void genAlgorithmProperties(X509* cert,
-                             std::string& sig,
-                             std::string& size) {
-   int nid = 0;
--  nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
-+  ASN1_OBJECT *ppkalg;
-+  X509_PUBKEY *pubkey = X509_get_X509_PUBKEY(cert);
-+  X509_PUBKEY_get0_param(&ppkalg, NULL, NULL, NULL, pubkey);
-+  nid = OBJ_obj2nid(ppkalg);
-   if (nid != NID_undef) {
-     key = std::string(OBJ_nid2ln(nid));
-
-@@ -101,7 +104,7 @@ void genAlgorithmProperties(X509* cert,
-       // The EVP_size for EC keys returns the maximum buffer for storing the
-       // key data, it does not indicate the size/strength of the curve.
-       if (nid == NID_X9_62_id_ecPublicKey) {
--        const EC_KEY* ec_pkey = pkey->pkey.ec;
-+        const EC_KEY* ec_pkey = EVP_PKEY_get0_EC_KEY(pkey);
-         const EC_GROUP* ec_pkey_group = nullptr;
-         ec_pkey_group = EC_KEY_get0_group(ec_pkey);
-         int curve_nid = 0;
-@@ -114,7 +117,7 @@ void genAlgorithmProperties(X509* cert,
-     EVP_PKEY_free(pkey);
-   }
-
--  nid = OBJ_obj2nid(cert->cert_info->signature->algorithm);
-+  nid = OBJ_obj2nid(X509_get0_tbs_sigalg(cert)->algorithm);
-   if (nid != NID_undef) {
-     sig = std::string(OBJ_nid2ln(nid));
-   }

@@ -3,19 +3,20 @@ class Cmdshelf < Formula
   homepage "https://github.com/toshi0383/cmdshelf"
   url "https://github.com/toshi0383/cmdshelf/archive/2.0.2.tar.gz"
   sha256 "dea2ea567cfa67196664629ceda5bc775040b472c25e96944c19c74892d69539"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "65e3a0b17ed9e636069e00d9a824b4f7325120da6f31d861d5cec993e14994fd" => :catalina
-    sha256 "c301f1669b28ecae813f8af356d24756bec61dc2f00a8afcaffea68f82e6c702" => :mojave
-    sha256 "ca4befbca1874c7b17d53268ed650db694c4d7ec09497febd46024e3cc4719ad" => :high_sierra
+    rebuild 2
+    sha256 "e4093bda9528ae027e122f321e2f1a44d3b4fc8b569e2bf0eba526399cccdacd" => :catalina
+    sha256 "4c83af8661b368f727a389f12d434be45655d10aef9ae1acb8b2be830aae0558" => :mojave
+    sha256 "c0cdc78df3f3896e4e8ba2112ec6e5189682da06419637ebfa9d660ff4fb902f" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
     man.install Dir["docs/man/*"]
     bash_completion.install "cmdshelf-completion.bash"
   end

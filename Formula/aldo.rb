@@ -3,6 +3,7 @@ class Aldo < Formula
   homepage "https://www.nongnu.org/aldo/"
   url "https://savannah.nongnu.org/download/aldo/aldo-0.7.7.tar.bz2"
   sha256 "f1b8849d09267fff3c1f5122097d90fec261291f51b1e075f37fad8f1b7d9f92"
+  license "GPL-3.0"
 
   bottle do
     cellar :any
@@ -20,7 +21,10 @@ class Aldo < Formula
 
   # Reported upstream:
   # https://savannah.nongnu.org/bugs/index.php?42127
-  patch :DATA
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/aldo/0.7.7.patch"
+    sha256 "3b6c6cc067fc690b5af4042a2326cee2b74071966e9e2cd71fab061fde6c4a5d"
+  end
 
   def install
     system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}"
@@ -31,31 +35,3 @@ class Aldo < Formula
     assert_match "Aldo #{version} Main Menu", pipe_output("#{bin}/aldo", "6")
   end
 end
-
-__END__
-diff --git a/src/menu.cc b/src/menu.cc
-index 483b826..092d604 100644
---- a/src/menu.cc
-+++ b/src/menu.cc
-@@ -112,20 +112,17 @@ void Menu::add_item(id_type id, std::string c, Function2 f)
- 
- void Menu::add_item_at(unsigned int pos, id_type id, std::string c, Function1 f)
- {
--    IT it(&m_its[pos]);
--    m_its.insert(it, Item(id,c,f) );
-+    m_its.insert(m_its.begin()+pos, Item(id,c,f) );
- }
- 
- void Menu::add_item_at(unsigned int pos, id_type id, std::string c, Function2 f)
- {
--    IT it(&m_its[pos]);
--    m_its.insert(it, Item(id,c,f) );
-+    m_its.insert(m_its.begin()+pos, Item(id,c,f) );
- }
- 
- void Menu::delete_item_at(unsigned int pos)
- {
--    IT it(&m_its[pos]);
--    m_its.erase(it);
-+    m_its.erase(m_its.begin()+pos);
- }

@@ -1,20 +1,21 @@
 class Hexyl < Formula
   desc "Command-line hex viewer"
   homepage "https://github.com/sharkdp/hexyl"
-  url "https://github.com/sharkdp/hexyl/archive/v0.6.0.tar.gz"
-  sha256 "5031b20c13b3ccb27abbf119b54609cef16c4152aca2823ee5c53cd5f434b97e"
+  url "https://github.com/sharkdp/hexyl/archive/v0.8.0.tar.gz"
+  sha256 "b2e69b4ca694afd580c7ce22ab83a207174d2bbc9dabbad020fee4a98a1205be"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e7fe7b6f9430c7c6ffe0645ba7c5c921791723538272e102f82d3c69f62c4c01" => :catalina
-    sha256 "b35036056ad68140fae0a7e0bed52112bee652edea69039527d4f2b0444680cb" => :mojave
-    sha256 "e425d90bb0892027917cd36b34b78c08faa5fb4d82ade2eecf1df53181d76ed9" => :high_sierra
+    sha256 "2443b91247ef98143863f23724ab1ffe3b192aa65471d2198ab02ffa72936ce9" => :catalina
+    sha256 "465474b8dd2b6344efda4d611341a0d40c46965fabce4e3446bb3bc0a45c2392" => :mojave
+    sha256 "8805fb02b8cc13ffe9ca11663140f502dfbcbe5a4cbdf1262bd88758bc88167f" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

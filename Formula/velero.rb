@@ -1,36 +1,36 @@
 class Velero < Formula
   desc "Disaster recovery for Kubernetes resources and persistent volumes"
-  homepage "https://github.com/heptio/velero"
-  url "https://github.com/heptio/velero/archive/v1.1.0.tar.gz"
-  sha256 "9313f059c9c973052fba4b307e652b1067b8542302277af1f610415e79cb32c0"
+  homepage "https://github.com/vmware-tanzu/velero"
+  url "https://github.com/vmware-tanzu/velero/archive/v1.4.2.tar.gz"
+  sha256 "83677c307d207156aca1e1f9010b10de7bfde24751bab76a86d55b10abd6deaa"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e4684ab704c35f8ee7f9843f2f106f693f87d7671864f9a20859c392b844adc7" => :catalina
-    sha256 "713560c7ada1422f49cf04e4146e3afa483e5f00b50a67fcc4c7180e7018c394" => :mojave
-    sha256 "74e077b085c10713f22c09fdc592ef6dce9e13a6a87a3d83b02ca9f66f1557c1" => :high_sierra
-    sha256 "36bce9094dac8e3dd1ed7d108dea0237f90f101ff158ae7279a53907258e5ed0" => :sierra
+    sha256 "43f34e8aa73e955b28de5f571b34515354da24439d4109102844e99e6e03257e" => :catalina
+    sha256 "9f475940b9dd4efc10b9a729aea4b7e9fc48115e3cea08ddb7c50eb3587e8298" => :mojave
+    sha256 "a77a77035798f2f3155a073850b5eac02e3de413c7273b3e97cb9f1d6d92e8a8" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
     ENV["GOPATH"] = buildpath
-    dir = buildpath/"src/github.com/heptio/velero"
+    dir = buildpath/"src/github.com/vmware-tanzu/velero"
     dir.install buildpath.children - [buildpath/".brew_home"]
 
     cd dir do
       system "go", "build", "-o", bin/"velero", "-installsuffix", "static",
                    "-ldflags",
-                   "-X github.com/heptio/velero/pkg/buildinfo.Version=v#{version}",
+                   "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v#{version}",
                    "./cmd/velero"
 
       # Install bash completion
-      output = Utils.popen_read("#{bin}/velero completion bash")
+      output = Utils.safe_popen_read("#{bin}/velero", "completion", "bash")
       (bash_completion/"velero").write output
 
       # Install zsh completion
-      output = Utils.popen_read("#{bin}/velero completion zsh")
+      output = Utils.safe_popen_read("#{bin}/velero", "completion", "zsh")
       (zsh_completion/"_velero").write output
 
       prefix.install_metafiles

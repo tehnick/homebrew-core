@@ -1,22 +1,22 @@
 class Osm2pgsql < Formula
   desc "OpenStreetMap data to PostgreSQL converter"
   homepage "https://wiki.openstreetmap.org/wiki/Osm2pgsql"
-  url "https://github.com/openstreetmap/osm2pgsql/archive/0.96.0.tar.gz"
-  sha256 "b6020e77d88772989279a69ae4678e9782989b630613754e483b5192cd39c723"
-  revision 1
+  url "https://github.com/openstreetmap/osm2pgsql/archive/1.2.2.tar.gz"
+  sha256 "fc386fc996f24e67cbfb4963de438b2a80c82c9a46f6ca17ade69c7d562d8680"
+  license "GPL-2.0"
   head "https://github.com/openstreetmap/osm2pgsql.git"
 
   bottle do
-    sha256 "e4f782810a9998759252feab613524c3c6cc2dc614b3511ef15f6f2ed4972f98" => :catalina
-    sha256 "0ebba50375c8d63d13db3e8d1dc2b326d5099758f272c6fd5216be6497bba2ae" => :mojave
-    sha256 "2ad65d522d094b6b9b742bca379d66f9999658050efbb19f1ad79fafbb1f823d" => :high_sierra
-    sha256 "59fa881b0b8e0f1f0c542881814f21896d676bdcf6ab71c823f1676b0432be87" => :sierra
+    sha256 "4780322e6a538730d945e40f3be991101a33e7326d4e0c847f0bd86237ae78b1" => :catalina
+    sha256 "d2a2fb8456cc3f62e16ea412c27beef6681036ea64a33a0eb3b6a70e0b4069b9" => :mojave
+    sha256 "4154c1bd9f91b7f72df47570a36208b5ae3b233c7b200dce4d4ce5a99d05a3a0" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "geos"
   depends_on "lua"
+  depends_on "luajit"
   depends_on "postgresql"
   depends_on "proj"
 
@@ -33,7 +33,7 @@ class Osm2pgsql < Formula
     ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
     mkdir "build" do
-      system "cmake", "..", *std_cmake_args
+      system "cmake", "-DWITH_LUAJIT=ON", "..", *std_cmake_args
       system "make", "install"
     end
   end

@@ -1,27 +1,28 @@
 class Meson < Formula
   desc "Fast and user friendly build system"
   homepage "https://mesonbuild.com/"
-  url "https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz"
-  sha256 "d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32"
+  url "https://github.com/mesonbuild/meson/releases/download/0.55.0/meson-0.55.0.tar.gz"
+  sha256 "0a1ae2bfe2ae14ac47593537f93290fb79e9b775c55b4c53c282bc3ca3745b35"
+  license "Apache-2.0"
   head "https://github.com/mesonbuild/meson.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8df30b9960a09372a5695bb8a6c2275ecd42337d668e6334c846652cc0803e20" => :catalina
-    sha256 "8df30b9960a09372a5695bb8a6c2275ecd42337d668e6334c846652cc0803e20" => :mojave
-    sha256 "8df30b9960a09372a5695bb8a6c2275ecd42337d668e6334c846652cc0803e20" => :high_sierra
+    sha256 "a2f25cb6f38a6e9d8dad19da2420d8efb1641e9ef2e2e5fa8f473e8707ba8bde" => :catalina
+    sha256 "a2f25cb6f38a6e9d8dad19da2420d8efb1641e9ef2e2e5fa8f473e8707ba8bde" => :mojave
+    sha256 "a2f25cb6f38a6e9d8dad19da2420d8efb1641e9ef2e2e5fa8f473e8707ba8bde" => :high_sierra
   end
 
   depends_on "ninja"
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
-    version = Language::Python.major_minor_version("python3")
+    version = Language::Python.major_minor_version Formula["python@3.8"].bin/"python3"
     ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
 
-    system "python3", *Language::Python.setup_install_args(prefix)
+    system Formula["python@3.8"].bin/"python3", *Language::Python.setup_install_args(prefix)
 
-    bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"])
+    bin.env_script_all_files(libexec/"bin", PYTHONPATH: ENV["PYTHONPATH"])
   end
 
   test do

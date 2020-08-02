@@ -1,21 +1,22 @@
 class Gdal < Formula
   desc "Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://download.osgeo.org/gdal/2.4.2/gdal-2.4.2.tar.xz"
-  sha256 "dcc132e469c5eb76fa4aaff238d32e45a5d947dc5b6c801a123b70045b618e0c"
-  revision 2
+  url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
+  sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
+  license "MIT"
 
   bottle do
-    sha256 "a4a409e4e4008b8888b736017aaf8b304fc5eead7ec06b648d9d99ba1e04c7a5" => :catalina
-    sha256 "c7ad8cc7d44e6604063e85f3b6d68a2537b65805e2956ec5d690ee5d179cbb4f" => :mojave
-    sha256 "2a08d12b8b544f584cf38ba937e1a1f7cae65f2c346cbf661bf3cfdd67f95fbd" => :high_sierra
-    sha256 "b49c8f495cfcd520f7daf32b922bc91c66637d638216aaf83694f2bcb154d08d" => :sierra
+    sha256 "b781dd4174e448f161d1e3f38fa898fea35ea16cb9fa6212cbcd0cffd6951e81" => :catalina
+    sha256 "5a517fafd975da2c073cbca3946b481683f88e832432efdc6c3951c8aac325d3" => :mojave
+    sha256 "d3e3b959e7c6f80ff748a345ba26c1876568de7f0edffe69ae6ed40959ddeee9" => :high_sierra
   end
 
   head do
     url "https://github.com/OSGeo/gdal.git"
     depends_on "doxygen" => :build
   end
+
+  depends_on "pkg-config" => :build
 
   depends_on "cfitsio"
   depends_on "epsilon"
@@ -39,7 +40,7 @@ class Gdal < Formula
   depends_on "pcre"
   depends_on "poppler"
   depends_on "proj"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "sqlite" # To ensure compatibility with SpatiaLite
   depends_on "unixodbc" # macOS version is not complete enough
   depends_on "webp"
@@ -47,7 +48,11 @@ class Gdal < Formula
   depends_on "xz" # get liblzma compression algorithm library from XZutils
   depends_on "zstd"
 
-  conflicts_with "cpl", :because => "both install cpl_error.h"
+  on_linux do
+    depends_on "bash-completion"
+  end
+
+  conflicts_with "cpl", because: "both install cpl_error.h"
 
   def install
     args = [
@@ -77,7 +82,7 @@ class Gdal < Formula
       "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libtiff=#{Formula["libtiff"].opt_prefix}",
-      "--with-pg=#{Formula["libpq"].opt_prefix}/bin/pg_config",
+      "--with-pg=yes",
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-spatialite=#{Formula["libspatialite"].opt_prefix}",
       "--with-sqlite3=#{Formula["sqlite"].opt_prefix}",
@@ -142,7 +147,7 @@ class Gdal < Formula
 
     # Build Python bindings
     cd "swig/python" do
-      system "python3", *Language::Python.setup_install_args(prefix)
+      system Formula["python@3.8"].opt_bin/"python3", *Language::Python.setup_install_args(prefix)
     end
     bin.install Dir["swig/python/scripts/*.py"]
 
@@ -157,6 +162,7 @@ class Gdal < Formula
     # basic tests to see if third-party dylibs are loading OK
     system "#{bin}/gdalinfo", "--formats"
     system "#{bin}/ogrinfo", "--formats"
-    system "python3", "-c", "import gdal"
+
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import gdal"
   end
 end

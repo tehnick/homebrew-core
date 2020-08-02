@@ -1,26 +1,22 @@
 class Cli53 < Formula
   desc "Command-line tool for Amazon Route 53"
   homepage "https://github.com/barnybug/cli53"
-  url "https://github.com/barnybug/cli53/archive/0.8.15.tar.gz"
-  sha256 "6b9fcce93071782f9cdfe1a05f098aa08e83f317a0685c2a7f09bafb7d74d24f"
+  url "https://github.com/barnybug/cli53/archive/0.8.17.tar.gz"
+  sha256 "32b8e6ffe3234f87497328285c377b9280d1b302658e9acb45eb0dedbda0b14d"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2c2a5dd44af517c69efc330c702059b7796d2fd0b4d2fa648eda6dfaa14485c8" => :catalina
-    sha256 "8b2b742de7a1c984e9f89feaf08fdc51c0e33de1b85756309d3d01eee6f1cd92" => :mojave
-    sha256 "c4bb7bc057db2d1eb5d1d1db7b9bc12ed84d35fa66af7876cdf1b6ab70196a24" => :high_sierra
-    sha256 "8ff45dc92eb907700f61b4c7142cf50be6c1f7018c2e62a08d4c522c5ecfe047" => :sierra
+    sha256 "65f9f13eb5c2f53afcb697f9699f8dd6b9df5f400908a2d3423879f8ca895942" => :catalina
+    sha256 "73ec9efeaf423dd32530bd4a547b11522b54dd5666942735268bb7690479ff09" => :mojave
+    sha256 "190e2e02b890cf099ca52d1468b224d16c82840a3a534db83a2aed5553b07bfc" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-    mkdir_p buildpath/"src/github.com/barnybug"
-    ln_s buildpath, buildpath/"src/github.com/barnybug/cli53"
-
-    system "make", "build"
-    bin.install "cli53"
+    system "go", "build", "-ldflags", "-s -w", "-trimpath", "-o", bin/"cli53", "./cmd/cli53"
+    prefix.install_metafiles
   end
 
   test do

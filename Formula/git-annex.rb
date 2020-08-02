@@ -5,15 +5,15 @@ class GitAnnex < Formula
 
   desc "Manage files with git without checking in file contents"
   homepage "https://git-annex.branchable.com/"
-  url "https://hackage.haskell.org/package/git-annex-7.20191017/git-annex-7.20191017.tar.gz"
-  sha256 "e0ba2828001b56f3c10ebd20fe78ea00f1d4acf99e995c84b6326d643166acf9"
+  url "https://hackage.haskell.org/package/git-annex-8.20200720.1/git-annex-8.20200720.1.tar.gz"
+  sha256 "d6252697151ab01cc8f7a492dc5eb4b4e773c0d48771df360c82a7cca7a39c3c"
   head "git://git-annex.branchable.com/"
 
   bottle do
     cellar :any
-    sha256 "ceb9b4f44c78b0414f0ac2975e950b8e9c54dda056491d1b71a26a87090d1ccd" => :catalina
-    sha256 "4889623d675f3ba5d7849c016d46b6361123c276efdae0c41e7d28bdb0a3268b" => :mojave
-    sha256 "42d3462f385d0fa600a585810b104586a411b2e6d4e49ed8b757957de50cd712" => :high_sierra
+    sha256 "0dc6cab32110246d38e26753141ac0772557cf303cf7a92f52edf1b4b2c9f625" => :catalina
+    sha256 "15cc50337736d3a405ca28665dc89e850e29d622a7233d0071249fa5fbe66eba" => :mojave
+    sha256 "215ae839c10f9fa39a236d0f7cd3bd9630b6c719a2d9e593bdd03b692c6bbc6e" => :high_sierra
   end
 
   depends_on "cabal-install" => :build
@@ -22,42 +22,38 @@ class GitAnnex < Formula
   depends_on "gsasl"
   depends_on "libmagic"
   depends_on "quvi"
-  depends_on "xdot"
 
   def install
-    # Reported 28 Feb 2018 to aws upstream https://github.com/aristidb/aws/issues/244
-    # This is already resolved in aws 0.20 but we can't move to 0.20 until
-    # esqueleto 2.6.0 ships. See https://github.com/bitemyapp/esqueleto/issues/88
-    # The network 2.7.0.1 issue has been fixed upstream but needs a new release.
     install_cabal_package "--constraint", "http-conduit>=2.3",
                           "--constraint", "network>=2.6.3.0",
-                          :using => ["alex", "happy", "c2hs"],
-                          :flags => ["s3", "webapp"]
+                          using: ["alex", "happy", "c2hs"],
+                          flags: ["s3", "webapp"]
     bin.install_symlink "git-annex" => "git-annex-shell"
   end
 
-  plist_options :manual => "git annex assistant --autostart"
+  plist_options manual: "git annex assistant --autostart"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>KeepAlive</key>
-        <false/>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/git-annex</string>
-          <string>assistant</string>
-          <string>--autostart</string>
-        </array>
-      </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>KeepAlive</key>
+          <false/>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_bin}/git-annex</string>
+            <string>assistant</string>
+            <string>--autostart</string>
+          </array>
+        </dict>
+      </plist>
+    EOS
   end
 
   test do

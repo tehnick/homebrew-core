@@ -1,25 +1,24 @@
 class Zookeeper < Formula
   desc "Centralized server for distributed coordination of services"
   homepage "https://zookeeper.apache.org/"
-  url "https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz"
-  sha256 "b14f7a0fece8bd34c7fffa46039e563ac5367607c612517aa7bd37306afbd1cd"
+  url "https://www.apache.org/dyn/closer.lua?path=zookeeper/zookeeper-3.5.8/apache-zookeeper-3.5.8.tar.gz"
+  mirror "https://archive.apache.org/dist/zookeeper/zookeeper-3.5.8/apache-zookeeper-3.5.8.tar.gz"
+  sha256 "bafc0abe7da696a2020ba11b8ce7d06f6e28e9bf1e5504de09be25b8b589777d"
+  license "Apache-2.0"
+  head "https://gitbox.apache.org/repos/asf/zookeeper.git"
 
   bottle do
     cellar :any
-    sha256 "854225ed94e18cdf9a08b992a658e851d4c4d77d826e8ae243488e65b38af84c" => :catalina
-    sha256 "e4cc87d3dc3d2e406fbc262b0b98bea4b8ab2464ca17c24b98abc92a055a4454" => :mojave
-    sha256 "6eceba9bba26dce645d2357f4fdca321b13bafb540c501f9b36f335695b450b1" => :high_sierra
+    sha256 "e22e36c7f02c5c57703d90d8a594896d0335311fc016130db2716822c750373f" => :catalina
+    sha256 "8a108199968e633827d46cc43bebef94bce9fd0f81cf05b1d61c2ad6b41a8fc4" => :mojave
+    sha256 "272323746835859d1f1181e79893fc16b0f48ee8ea401b6412fa5266f6439f6d" => :high_sierra
   end
 
-  head do
-    url "https://svn.apache.org/repos/asf/zookeeper/trunk"
-
-    depends_on "ant" => :build
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "cppunit" => :build
-    depends_on "libtool" => :build
-  end
+  depends_on "ant" => :build
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
 
   def shim_script(target)
     <<~EOS
@@ -48,12 +47,10 @@ class Zookeeper < Formula
   end
 
   def install
-    if build.head?
-      system "ant", "compile_jute"
-      system "autoreconf", "-fvi", "src/c"
-    end
+    system "ant", "compile_jute"
 
     cd "zookeeper-client/zookeeper-client-c" do
+      system "autoreconf", "-fiv"
       system "./configure", "--disable-dependency-tracking",
                             "--prefix=#{prefix}",
                             "--without-cppunit"
@@ -62,14 +59,9 @@ class Zookeeper < Formula
 
     rm_f Dir["bin/*.cmd"]
 
-    if build.head?
-      system "ant"
-      libexec.install "bin", "src/contrib", "src/java/lib"
-      libexec.install Dir["build/*.jar"]
-    else
-      libexec.install "bin", "zookeeper-contrib", "lib"
-      libexec.install Dir["*.jar"]
-    end
+    system "ant"
+    libexec.install "bin", "build/lib", "zookeeper-contrib"
+    libexec.install Dir["build/*.jar"]
 
     bin.mkpath
     (etc/"zookeeper").mkpath
@@ -96,37 +88,38 @@ class Zookeeper < Formula
     (etc/"zookeeper").install ["conf/zoo.cfg", "conf/zoo_sample.cfg"]
   end
 
-  plist_options :manual => "zkServer start"
+  plist_options manual: "zkServer start"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>EnvironmentVariables</key>
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
         <dict>
-           <key>SERVER_JVMFLAGS</key>
-           <string>-Dapple.awt.UIElement=true</string>
+          <key>EnvironmentVariables</key>
+          <dict>
+             <key>SERVER_JVMFLAGS</key>
+             <string>-Dapple.awt.UIElement=true</string>
+          </dict>
+          <key>KeepAlive</key>
+          <dict>
+            <key>SuccessfulExit</key>
+            <false/>
+          </dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_bin}/zkServer</string>
+            <string>start-foreground</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>WorkingDirectory</key>
+          <string>#{var}</string>
         </dict>
-        <key>KeepAlive</key>
-        <dict>
-          <key>SuccessfulExit</key>
-          <false/>
-        </dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/zkServer</string>
-          <string>start-foreground</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{var}</string>
-      </dict>
-    </plist>
-  EOS
+      </plist>
+    EOS
   end
 
   test do

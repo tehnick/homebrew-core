@@ -3,13 +3,14 @@ class Dynare < Formula
   homepage "https://www.dynare.org/"
   url "https://www.dynare.org/release/source/dynare-4.5.7.tar.xz"
   sha256 "9224ec5279d79d55d91a01ed90022e484f66ce93d56ca6d52933163f538715d4"
-  revision 6
+  license "GPL-3.0"
+  revision 13
 
   bottle do
     cellar :any
-    sha256 "5e6191e5e862f1729e47a53a0261d40430d91089cdb8626afbc5b5d7a18651d9" => :mojave
-    sha256 "4780fb158ec635c5b1761d16949e4ebd435a32b2bd6de087d65da9747b3617fe" => :high_sierra
-    sha256 "cf0c471675a8684df712ba9278bae7ab982ecc0f20ac6e3962ecadfe56021211" => :sierra
+    sha256 "405340f12c76b7d99b39663e88f0c379b304f6e8548cb8c7d985f96857653769" => :catalina
+    sha256 "b08d5deb853d4aade3ddc1c65c32ed67a07bd85234f2fe07b16e1c6460767abb" => :mojave
+    sha256 "bd22eddfc2a888987210f5d4736457a1e3b3a7b410f90f4116775a4d8a9d7136" => :high_sierra
   end
 
   head do
@@ -48,7 +49,7 @@ class Dynare < Formula
       system "make", "lib", "OPTS=-fPIC -fdefault-integer-8",
              "FORTRAN=gfortran", "LOADER=gfortran",
              "SLICOTLIB=../libslicot64_pic.a"
-      (buildpath/"slicot").install "libslicot_pic.a", "libslicot64_pic.a"
+      (buildpath/"slicot/lib").install "libslicot_pic.a", "libslicot64_pic.a"
     end
 
     system "autoreconf", "-fvi" if build.head?
@@ -57,14 +58,20 @@ class Dynare < Formula
                           "--disable-silent-rules",
                           "--prefix=#{prefix}",
                           "--disable-matlab",
-                          "--with-slicot=#{buildpath}/slicot"
-    system "make", "install"
+                          "--with-slicot=#{buildpath}/slicot",
+                          "--with-boost=#{Formula["boost"].prefix}",
+                          "--disable-doc"
+    # Octave hardcodes its paths which causes problems on GCC minor version bumps
+    gcc = Formula["gcc"]
+    flibs = "-L#{gcc.lib/"gcc"/gcc.version_suffix} -lgfortran -lquadmath -lm"
+    system "make", "install", "FLIBS=#{flibs}"
   end
 
-  def caveats; <<~EOS
-    To get started with Dynare, open Octave and type
-      addpath #{opt_lib}/dynare/matlab
-  EOS
+  def caveats
+    <<~EOS
+      To get started with Dynare, open Octave and type
+        addpath #{opt_lib}/dynare/matlab
+    EOS
   end
 
   test do

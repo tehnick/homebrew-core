@@ -1,15 +1,15 @@
 class Itk < Formula
   desc "Insight Toolkit is a toolkit for performing registration and segmentation"
-  homepage "https://www.itk.org/"
-  url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.2.tar.gz"
-  sha256 "d8760b279de20497c432e7cdf97ed349277da1ae435be1f6f0f00fbe8d4938c1"
-  revision 1
-  head "https://itk.org/ITK.git"
+  homepage "https://itk.org"
+  url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.1.0/InsightToolkit-5.1.0.tar.gz"
+  sha256 "121020a1611508cec8123eb5226215598cec07be627d843a2e6b6da891e61d13"
+  license "Apache-2.0"
+  head "https://github.com/InsightSoftwareConsortium/ITK.git"
 
   bottle do
-    sha256 "043c8bb2431ca4ecb4f8e392afe98c2f6fce5688e80525356ad412fb0aa7af6e" => :mojave
-    sha256 "c0f6268306bd86bf562d0cb28566483967e11bdfc18ca098394c0837de331fb7" => :high_sierra
-    sha256 "24390090a8109b2c50ecf1c51ce3cc168c1b4722f281aa8976642a6ba9d3b367" => :sierra
+    sha256 "a164746cce8e23e169a967bae3c8b455f63674ee3e74f677d7e1214253db3975" => :catalina
+    sha256 "e633ca1823a1f35e0d2e025a4f2ce7e1cad26342d934e9a41a29396e0808f374" => :mojave
+    sha256 "d7e3580065e5c49d5af1a403bbb7a3a0532471494c87e15f50ca295c74a30123" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -20,13 +20,6 @@ class Itk < Formula
   depends_on "libpng"
   depends_on "libtiff"
   depends_on "vtk"
-
-  # Patch needed to install MINC's cmake files into #{lib}/cmake not #{lib}
-  # PR Submitted to ITK upstream: https://github.com/InsightSoftwareConsortium/ITK/pull/754
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/master/itk/4.13.2-MINC-cmake-files-location.patch"
-    sha256 "7ec6a55e83109332d636298e7339793ec338969211533467ff0fbfb7c1c27883"
-  end
 
   def install
     args = std_cmake_args + %W[
@@ -55,6 +48,19 @@ class Itk < Formula
       -DITK_USE_GPU=ON
     ]
 
+    # Avoid references to the Homebrew shims directory
+    inreplace "Modules/Core/Common/src/CMakeLists.txt" do |s|
+      s.gsub!(/MAKE_MAP_ENTRY\(\s*\\"CMAKE_C_COMPILER\\",
+              \s*\\"\${CMAKE_C_COMPILER}\\".*\);/x,
+              "MAKE_MAP_ENTRY(\\\"CMAKE_C_COMPILER\\\", " \
+              "\\\"#{ENV.cc}\\\", \\\"The C compiler.\\\");")
+
+      s.gsub!(/MAKE_MAP_ENTRY\(\s*\\"CMAKE_CXX_COMPILER\\",
+              \s*\\"\${CMAKE_CXX_COMPILER}\\".*\);/x,
+              "MAKE_MAP_ENTRY(\\\"CMAKE_CXX_COMPILER\\\", " \
+              "\\\"#{ENV.cxx}\\\", \\\"The CXX compiler.\\\");")
+    end
+
     mkdir "build" do
       system "cmake", "..", *args
       system "make"
@@ -76,9 +82,9 @@ class Itk < Formula
 
     v = version.to_s.split(".")[0..1].join(".")
     # Build step
-    system ENV.cxx, "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
+    system ENV.cxx, "-std=c++11", "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
     # Linking step
-    system ENV.cxx, "test.cxx.o", "-o", "test",
+    system ENV.cxx, "-std=c++11", "test.cxx.o", "-o", "test",
                     "#{lib}/libITKCommon-#{v}.1.dylib",
                     "#{lib}/libITKVNLInstantiation-#{v}.1.dylib",
                     "#{lib}/libitkvnl_algo-#{v}.1.dylib",

@@ -1,8 +1,9 @@
 class Asdf < Formula
   desc "Extendable version manager with support for Ruby, Node.js, Erlang & more"
-  homepage "https://github.com/asdf-vm"
-  url "https://github.com/asdf-vm/asdf/archive/v0.7.4.tar.gz"
-  sha256 "25c3c26e667eaf96686db340279acfa1b40a924ed2ecabc4db66a04b12211f7e"
+  homepage "https://asdf-vm.com/"
+  url "https://github.com/asdf-vm/asdf/archive/v0.7.8.tar.gz"
+  sha256 "6225d822a189ab02f88e2afa9f46c52cb876885ea21b56827e564f73c99369d3"
+  license "MIT"
   head "https://github.com/asdf-vm/asdf.git"
 
   bottle :unneeded
@@ -17,11 +18,12 @@ class Asdf < Formula
   depends_on "unixodbc"
 
   conflicts_with "homeshick",
-    :because => "asdf and homeshick both install files in lib/commands"
+    because: "asdf and homeshick both install files in lib/commands"
 
   def install
     bash_completion.install "completions/asdf.bash"
     fish_completion.install "completions/asdf.fish"
+    zsh_completion.install "completions/_asdf"
     libexec.install "bin/private"
     prefix.install Dir["*"]
   end

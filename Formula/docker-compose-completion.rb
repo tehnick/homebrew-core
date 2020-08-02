@@ -1,14 +1,16 @@
 class DockerComposeCompletion < Formula
   desc "Docker-compose completion script"
   homepage "https://docs.docker.com/compose/completion/"
-  url "https://github.com/docker/compose/archive/1.24.1.tar.gz"
-  sha256 "63a0e0d3819ff77aebd3d5ea30f77b36475ed522c4dabed2eb10636e35aa9370"
+  url "https://github.com/docker/compose/archive/1.26.2.tar.gz"
+  sha256 "a4999bcb838ca9e88ff992fedd7a32ab71f97ae081696f8bf26fa1da54aaffe6"
+  license "Apache-2.0"
+  revision 1
   head "https://github.com/docker/compose.git"
 
   bottle :unneeded
 
   conflicts_with "docker-compose",
-    :because => "docker-compose already includes completion scripts"
+    because: "docker-compose already includes completion scripts"
 
   def install
     bash_completion.install "contrib/completion/bash/docker-compose"

@@ -16,6 +16,8 @@ class Unzip < Formula
 
   keg_only :provided_by_macos
 
+  uses_from_macos "bzip2"
+
   # Upstream is unmaintained so we use the Debian patchset:
   # https://packages.debian.org/buster/unzip
   patch do

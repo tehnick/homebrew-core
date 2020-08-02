@@ -1,84 +1,71 @@
 class KnotResolver < Formula
   desc "Minimalistic, caching, DNSSEC-validating DNS resolver"
   homepage "https://www.knot-resolver.cz"
-  url "https://secure.nic.cz/files/knot-resolver/knot-resolver-3.2.1.tar.xz"
-  sha256 "d1396888ec3a63f19dccdf2b7dbcb0d16a5d8642766824b47f4c21be90ce362b"
-  revision 1
+  url "https://secure.nic.cz/files/knot-resolver/knot-resolver-5.1.2.tar.xz"
+  sha256 "caa4f941caf39080184554fb1310f383eba4b30d9c4c2215670d6b0a2de8f836"
   head "https://gitlab.labs.nic.cz/knot/knot-resolver.git"
 
   bottle do
-    sha256 "d10e18db53db4a96db665cb04a04d84d9050e8f2cd4989420bab6dbb13a1f6be" => :mojave
-    sha256 "c6d685f41c1ce47998c825c89c228013e4303fd14271c3a204a13b6ac9008bdc" => :high_sierra
-    sha256 "527254894d8ffb9c97a9e00dfbe19a6509c009d901e4e3be2410ee80636e0991" => :sierra
+    sha256 "341d13941123e359dc5f1cb6147e6058296691c95ea2cfe4a2a436d1125ae9e1" => :catalina
+    sha256 "7a861d87a84b2e8572bb9b76fbd3768b516821dc046c1a34f1d27caa4b511748" => :mojave
+    sha256 "5050ebacd49658cde25168edc4e40575dfb1934b554eac5b1e28c29dfc520cea" => :high_sierra
   end
 
-  depends_on "cmocka" => :build
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
   depends_on "pkg-config" => :build
   depends_on "gnutls"
   depends_on "knot"
   depends_on "libuv"
   depends_on "lmdb"
   depends_on "luajit"
-  depends_on "nettle"
 
   def install
-    # Since we don't run `make install` or `make etc-install`, we need to
-    # install root.hints manually before running `make check`.
-    cp "etc/root.hints", buildpath
-    (etc/"kresd").install "root.hints"
-
-    %w[all lib-install daemon-install client-install modules-install
-       check].each do |target|
-      system "make", target, "PREFIX=#{prefix}", "ETCDIR=#{etc}/kresd"
+    mkdir "build" do
+      system "meson", *std_meson_args, "--default-library=static", ".."
+      system "ninja"
+      system "ninja", "install"
     end
-
-    cp "etc/config.personal", "config"
-    inreplace "config", /^\s*user\(/, "-- user("
-    (etc/"kresd").install "config"
-
-    (etc/"kresd").install "etc/root.hints"
-    (etc/"kresd").install "etc/icann-ca.pem"
-
-    (buildpath/"root.keys").write(root_keys)
-    (var/"kresd").install "root.keys"
   end
 
   # DNSSEC root anchor published by IANA (https://www.iana.org/dnssec/files)
-  def root_keys; <<~EOS
-    . IN DS 20326 8 2 e06d44b80b8f1d39a95c0b0d7c65d08458e880409bbc683457104237c7f8ec8d
-  EOS
+  def root_keys
+    <<~EOS
+      . IN DS 20326 8 2 e06d44b80b8f1d39a95c0b0d7c65d08458e880409bbc683457104237c7f8ec8d
+    EOS
   end
 
-  plist_options :startup => true
+  plist_options startup: true
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-      <key>Label</key>
-      <string>#{plist_name}</string>
-      <key>WorkingDirectory</key>
-      <string>#{var}/kresd</string>
-      <key>RunAtLoad</key>
-      <true/>
-      <key>ProgramArguments</key>
-      <array>
-        <string>#{sbin}/kresd</string>
-        <string>-c</string>
-        <string>#{etc}/kresd/config</string>
-        <string>-f</string>
-        <string>1</string>
-      </array>
-      <key>StandardInPath</key>
-      <string>/dev/null</string>
-      <key>StandardOutPath</key>
-      <string>/dev/null</string>
-      <key>StandardErrorPath</key>
-      <string>#{var}/log/kresd.log</string>
-    </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+        <key>Label</key>
+        <string>#{plist_name}</string>
+        <key>WorkingDirectory</key>
+        <string>#{var}/kresd</string>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>ProgramArguments</key>
+        <array>
+          <string>#{sbin}/kresd</string>
+          <string>-c</string>
+          <string>#{etc}/kresd/config</string>
+          <string>-f</string>
+          <string>1</string>
+        </array>
+        <key>StandardInPath</key>
+        <string>/dev/null</string>
+        <key>StandardOutPath</key>
+        <string>/dev/null</string>
+        <key>StandardErrorPath</key>
+        <string>#{var}/log/kresd.log</string>
+      </dict>
+      </plist>
+    EOS
   end
 
   test do

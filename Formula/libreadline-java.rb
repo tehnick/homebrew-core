@@ -13,7 +13,7 @@ class LibreadlineJava < Formula
     sha256 "784fc9cb94f45ccaf91af932f35d6ac3570326914c4a4da866c9e34e173238a2" => :sierra
   end
 
-  depends_on :java => "1.8"
+  depends_on java: "1.8"
   depends_on "readline"
 
   # Fix "non-void function should return a value"-Error
@@ -63,7 +63,8 @@ class LibreadlineJava < Formula
       s.change_make_var! "CC", "cc"
       s.gsub! "LIB_EXT := so", "LIB_EXT := jnilib"
       s.gsub! "$(CC) -shared $(OBJECTS) $(LIBPATH) $($(TG)_LIBS) -o $@",
-        "$(CC) -install_name #{HOMEBREW_PREFIX}/lib/$(LIB_PRE)$(TG).$(LIB_EXT) -dynamiclib $(OBJECTS) $(LIBPATH) $($(TG)_LIBS) -o $@"
+              "$(CC) -install_name #{HOMEBREW_PREFIX}/lib/$(LIB_PRE)$(TG).$(LIB_EXT) " \
+              "-dynamiclib $(OBJECTS) $(LIBPATH) $($(TG)_LIBS) -o $@"
     end
 
     pkgshare.mkpath
@@ -75,15 +76,19 @@ class LibreadlineJava < Formula
     doc.install "api"
   end
 
-  def caveats; <<~EOS
-    You may need to set JAVA_HOME:
-      export JAVA_HOME="$(/usr/libexec/java_home)"
-  EOS
+  def caveats
+    <<~EOS
+      You may need to set JAVA_HOME:
+        export JAVA_HOME="$(/usr/libexec/java_home)"
+    EOS
   end
 
   # Testing libreadline-java (can we execute and exit libreadline without exceptions?)
   test do
-    assert /Exception/ !~ pipe_output("java -Djava.library.path=#{lib} -cp #{pkgshare}/libreadline-java.jar test.ReadlineTest", "exit")
+    assert /Exception/ !~ pipe_output(
+      "java -Djava.library.path=#{lib} -cp #{pkgshare}/libreadline-java.jar test.ReadlineTest",
+      "exit",
+    )
   end
 end
 

@@ -1,47 +1,47 @@
 class Ledger < Formula
   desc "Command-line, double-entry accounting tool"
   homepage "https://ledger-cli.org/"
-  url "https://github.com/ledger/ledger/archive/v3.1.3.tar.gz"
-  sha256 "b248c91d65c7a101b9d6226025f2b4bf3dabe94c0c49ab6d51ce84a22a39622b"
-  revision 2
+  url "https://github.com/ledger/ledger/archive/v3.2.1.tar.gz"
+  sha256 "92bf09bc385b171987f456fe3ee9fa998ed5e40b97b3acdd562b663aa364384a"
+  license "BSD-3-Clause"
+  revision 1
   head "https://github.com/ledger/ledger.git"
 
   bottle do
-    sha256 "3832ab013b9af3f1c3a0f036cd672480dfc83e64c5647ff1b2bb18cd42eafadf" => :catalina
-    sha256 "db83f16edf50f9ef8924146954c67939aa0dfd28eb4d3ea7117be2da969a2d34" => :mojave
-    sha256 "6be4a8ef637a89862f326455b20c1244dc68c0ea955ad06d9e315ab5ec80fdcd" => :high_sierra
-    sha256 "ff0f9bb212a91440415225bc505bcbf305fc254e021994864955312c8c5e37d0" => :sierra
+    sha256 "9389b112e1243aeeba892aa4159fade1d4cddaf6f9e9cd134f7ae4e5c48949b6" => :catalina
+    sha256 "c6296f9a1093aea18b386efc82ed8c3a5c870560c1c32b189639644dd396f5ea" => :mojave
+    sha256 "130e42b66db744081ad7e25e3f71dc70c2923e25e0476ef0e306514081ed1aca" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "boost"
-  depends_on "boost-python"
   depends_on "gmp"
   depends_on "mpfr"
-  depends_on "python@2"
+  depends_on "python@3.8"
+
+  uses_from_macos "groff"
 
   def install
     ENV.cxx11
+    ENV.prepend_path "PATH", Formula["python@3.8"].opt_libexec/"bin"
 
     args = %W[
       --jobs=#{ENV.make_jobs}
       --output=build
       --prefix=#{prefix}
       --boost=#{Formula["boost"].opt_prefix}
-      --python
       --
       -DBUILD_DOCS=1
       -DBUILD_WEB_DOCS=1
-      -DUSE_PYTHON27_COMPONENT=1
       -DBoost_NO_BOOST_CMAKE=ON
-    ]
+      -DPython_FIND_VERSION_MAJOR=3
+    ] + std_cmake_args
     system "./acprep", "opt", "make", *args
     system "./acprep", "opt", "make", "doc", *args
     system "./acprep", "opt", "make", "install", *args
 
     (pkgshare/"examples").install Dir["test/input/*.dat"]
     pkgshare.install "contrib"
-    pkgshare.install "python/demo.py"
     elisp.install Dir["lisp/*.el", "lisp/*.elc"]
     bash_completion.install pkgshare/"contrib/ledger-completion.bash"
   end
@@ -55,7 +55,5 @@ class Ledger < Formula
       "balance", "--collapse", "equity"
     assert_equal "          $-2,500.00  Equity", balance.read.chomp
     assert_equal 0, $CHILD_STATUS.exitstatus
-
-    system "python", pkgshare/"demo.py"
   end
 end

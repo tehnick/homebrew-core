@@ -1,20 +1,18 @@
 class Pyside < Formula
   desc "Official Python bindings for Qt"
   homepage "https://wiki.qt.io/Qt_for_Python"
-  url "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-5.13.0-src/pyside-setup-everywhere-src-5.13.0.tar.xz"
-  sha256 "8e47e778a6c8ee86e9bc7dbf56371cf607e9f3c1a03a7d6df9e34f8dba555782"
-  revision 1
+  url "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-5.15.0-src/pyside-setup-opensource-src-5.15.0.tar.xz"
+  sha256 "f1cdee53de3b76e22c1117a014a91ed95ac16e4760776f4f12dc38cd5a7b6b68"
 
   bottle do
-    sha256 "d488a210760567bf8cd40c4f16ff24d2a2d8fadd98d4d6d2fb25023452dfaa48" => :catalina
-    sha256 "7f5196abed2367fe167bafee9d684855c458215f0459ecaa26e56f251f4ca482" => :mojave
-    sha256 "9913e73b0df42cc6248a9a03bb40b3ded4fc35cf90b382455cc78835827ac74a" => :high_sierra
-    sha256 "28a05e906f3957f748351d354d5df186b6c54d14184b044ea40db748cd0f3109" => :sierra
+    sha256 "e57b255441e9cd1aeeb0af012c69d54829b6f6fb0306bfa91e46ad4cebe33817" => :catalina
+    sha256 "926963a98a1d3490ccd21e91428edeef3fb13bd1a9062142625a94a69f1e0991" => :mojave
+    sha256 "a0c49e08f6a7e2d8d2b6744672c90537c15f9b98846d35a83d599d2e819dc733" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "llvm" => :build
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "qt"
 
   def install
@@ -26,13 +24,15 @@ class Pyside < Formula
       --install-scripts #{bin}
     ]
 
-    xy = Language::Python.major_minor_version "python3"
+    xy = Language::Python.major_minor_version Formula["python@3.8"].opt_bin/"python3"
 
-    system "python3", *Language::Python.setup_install_args(prefix),
+    system Formula["python@3.8"].opt_bin/"python3",
+           *Language::Python.setup_install_args(prefix),
            "--install-lib", lib/"python#{xy}/site-packages", *args,
            "--build-type=shiboken2"
 
-    system "python3", *Language::Python.setup_install_args(prefix),
+    system Formula["python@3.8"].opt_bin/"python3",
+           *Language::Python.setup_install_args(prefix),
            "--install-lib", lib/"python#{xy}/site-packages", *args,
            "--build-type=pyside2"
 
@@ -41,7 +41,7 @@ class Pyside < Formula
   end
 
   test do
-    system "python3", "-c", "import PySide2"
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import PySide2"
     %w[
       Core
       Gui
@@ -53,6 +53,6 @@ class Pyside < Formula
       WebEngineWidgets
       Widgets
       Xml
-    ].each { |mod| system "python3", "-c", "import PySide2.Qt#{mod}" }
+    ].each { |mod| system Formula["python@3.8"].opt_bin/"python3", "-c", "import PySide2.Qt#{mod}" }
   end
 end

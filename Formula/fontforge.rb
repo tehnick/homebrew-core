@@ -1,17 +1,19 @@
 class Fontforge < Formula
   desc "Command-line outline and bitmap font editor/converter"
   homepage "https://fontforge.github.io"
-  url "https://github.com/fontforge/fontforge/releases/download/20190801/fontforge-20190801.tar.gz"
-  sha256 "d92075ca783c97dc68433b1ed629b9054a4b4c74ac64c54ced7f691540f70852"
+  url "https://github.com/fontforge/fontforge/archive/20200314.tar.gz"
+  sha256 "ad0eb017379c6f7489aa8e2d7c160f19140d1ac6351f20df1d9857d9428efcf2"
+  license "GPL-3.0"
+  revision 1
 
   bottle do
-    cellar :any
-    sha256 "71a2e924ae1a70b91698172cb92eaa74ce6acc5f27ce28e00e218c733d9cd023" => :catalina
-    sha256 "1f9682e52b812f5b365ba32e7447afa6dfbffb0aa15b6f4687acd050638174e0" => :mojave
-    sha256 "e96f5fb275b708c9387e5968d7d97692221cd8b76805f65719601125bb7e6f6b" => :high_sierra
-    sha256 "5dedc46d7f5e9278e644318a50132cb4050f129c922aeed7b290bcb42c7aeb32" => :sierra
+    sha256 "6d2000c43d84a3353e7e27923c62ced0e5892338e69c6d341e61194cc70c1b4a" => :catalina
+    sha256 "3c94c039f0524bdf6e4748f65b7677c9d73ecd07718221dbc8eb1c143fe236d1" => :mojave
+    sha256 "1252f93604edae781fd5035ba5c367d820e341c13eec155bb24cf9ad5499dc4a" => :high_sierra
   end
 
+  depends_on "cmake" => :build
+  depends_on "ninja" => :build
   depends_on "pkg-config" => :build
   depends_on "cairo"
   depends_on "fontconfig"
@@ -26,48 +28,47 @@ class Fontforge < Formula
   depends_on "libtool"
   depends_on "libuninameslist"
   depends_on "pango"
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "readline"
+
   uses_from_macos "libxml2"
 
+  # Remove with next release (cmake: adjust Python linkage)
+  # Original patchset: https://github.com/fontforge/fontforge/pull/4258
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/99af4b5/fontforge/20200314.patch"
+    sha256 "3deed4d79a1fdf5fb6de2fca7da8ffe14301acbeb015441574a7a28e902561f5"
+  end
   def install
-    ENV["PYTHON_CFLAGS"] = `python3-config --cflags`.chomp
-    ENV["PYTHON_LIBS"] = `python3-config --ldflags`.chomp
+    mkdir "build" do
+      system "cmake", "..",
+                      "-GNinja",
+                      "-DENABLE_GUI=OFF",
+                      "-DENABLE_FONTFORGE_EXTRAS=ON",
+                      *std_cmake_args
+      system "ninja"
+      system "ninja", "install"
 
-    system "./configure", "--prefix=#{prefix}",
-                          "--enable-python-scripting=3",
-                          "--disable-dependency-tracking",
-                          "--disable-silent-rules",
-                          "--without-x"
-    system "make", "install"
-
-    # The app here is not functional.
-    # If you want GUI/App support, check the caveats to see how to get it.
-    (pkgshare/"osx/FontForge.app").rmtree
-
-    # Build extra tools
-    cd "contrib/fonttools" do
-      system "make"
-      bin.install Dir["*"].select { |f| File.executable? f }
+      # The "extras" built above don't get installed by default.
+      bin.install Dir["bin/*"].select { |f| File.executable? f }
     end
   end
 
-  def caveats; <<~EOS
-    This formula only installs the command line utilities.
+  def caveats
+    <<~EOS
+      This formula only installs the command line utilities.
 
-    FontForge.app can be downloaded directly from the website:
-      https://fontforge.github.io
+      FontForge.app can be downloaded directly from the website:
+        https://fontforge.github.io
 
-    Alternatively, install with Homebrew Cask:
-      brew cask install fontforge
-  EOS
+      Alternatively, install with Homebrew Cask:
+        brew cask install fontforge
+    EOS
   end
 
   test do
     system bin/"fontforge", "-version"
     system bin/"fontforge", "-lang=py", "-c", "import fontforge; fontforge.font()"
-    xy = Language::Python.major_minor_version "python3"
-    ENV.append_path "PYTHONPATH", lib/"python#{xy}/site-packages"
-    system "python3", "-c", "import fontforge; fontforge.font()"
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import fontforge; fontforge.font()"
   end
 end

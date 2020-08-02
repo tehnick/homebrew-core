@@ -3,6 +3,7 @@ class Lrzip < Formula
   homepage "http://lrzip.kolivas.org"
   url "http://ck.kolivas.org/apps/lrzip/lrzip-0.631.tar.bz2"
   sha256 "0d11e268d0d72310d6d73a8ce6bb3d85e26de3f34d8a713055f3f25a77226455"
+  license "GPL-2.0"
 
   bottle do
     cellar :any
@@ -16,6 +17,9 @@ class Lrzip < Formula
 
   depends_on "pkg-config" => :build
   depends_on "lzo"
+
+  uses_from_macos "bzip2"
+  uses_from_macos "zlib"
 
   def install
     system "./configure", "--disable-dependency-tracking",

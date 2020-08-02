@@ -13,7 +13,7 @@ class SpeechTools < Formula
     sha256 "a0794d1d7f424833d2fe92726d26b6ebcc8dcf63b7f9700b19e1119ed7e2ca62" => :el_capitan
   end
 
-  conflicts_with "align", :because => "both install `align` binaries"
+  conflicts_with "align", because: "both install `align` binaries"
 
   def install
     ENV.deparallelize
@@ -34,7 +34,9 @@ class SpeechTools < Formula
 
     File.open(txtfile, "w") do |f|
       scale = 2 ** 15 - 1
-      f.puts Array.new(duration_secs * rate_hz) { |i| (scale * Math.sin(frequency_hz * 2 * Math::PI * i / rate_hz)).to_i }
+      f.puts Array.new(duration_secs * rate_hz) do |i|
+        (scale * Math.sin(frequency_hz * 2 * Math::PI * i / rate_hz)).to_i
+      end
     end
 
     # convert to wav format using ch_wave
@@ -52,7 +54,8 @@ class SpeechTools < Formula
       "-otype", "est"
 
     # extract one frame from the middle using ch_track, capturing stdout
-    pitch = shell_output("#{bin}/ch_track #{ptcfile} -from #{frequency_hz * duration_secs / 2} -to #{frequency_hz * duration_secs / 2}")
+    pitch = shell_output("#{bin}/ch_track #{ptcfile} -from #{frequency_hz * duration_secs / 2} " \
+                                                    "-to #{frequency_hz * duration_secs / 2}")
 
     # should be 100 (Hz)
     assert_equal frequency_hz, pitch.to_i

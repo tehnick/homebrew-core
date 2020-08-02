@@ -1,23 +1,24 @@
 class Go < Formula
   desc "Open source programming language to build simple/reliable/efficient software"
   homepage "https://golang.org"
+  license "BSD-3-Clause"
 
   stable do
-    url "https://dl.google.com/go/go1.13.3.src.tar.gz"
-    mirror "https://fossies.org/linux/misc/go1.13.3.src.tar.gz"
-    sha256 "4f7123044375d5c404280737fbd2d0b17064b66182a65919ffe20ffe8620e3df"
+    url "https://dl.google.com/go/go1.14.6.src.tar.gz"
+    mirror "https://fossies.org/linux/misc/go1.14.6.src.tar.gz"
+    sha256 "73fc9d781815d411928eccb92bf20d5b4264797be69410eac854babe44c94c09"
 
     go_version = version.to_s.split(".")[0..1].join(".")
     resource "gotools" do
       url "https://go.googlesource.com/tools.git",
-          :branch => "release-branch.go#{go_version}"
+          branch: "release-branch.go#{go_version}"
     end
   end
 
   bottle do
-    sha256 "7dcc9e0ebc1f73596413552aea012585ae86f2db891037b5433f2c06a348d5a9" => :catalina
-    sha256 "e6d507bf402984b0c801286c9ebc5ac0b7627f8c07f6b40b5ba45c6372ccf2aa" => :mojave
-    sha256 "0a3f4481b23c9f21defea8c15829b06c5ec672256778f53f0b8bee10f87fd2b9" => :high_sierra
+    sha256 "5786bb953ecb3bafa434039198efa661e991157b29156335d52fc68c6bf6f02a" => :catalina
+    sha256 "8f55f72b30d6ce8de1621e7f2d11974558dfd3dcab87d5e183badd82df7926d7" => :mojave
+    sha256 "43ab69541a5cd1be7434b9376941575b4af65a8aa7195d7cbeaa2a8761bcec4e" => :high_sierra
   end
 
   head do
@@ -28,13 +29,19 @@ class Go < Formula
     end
   end
 
-  depends_on :macos => :yosemite
+  depends_on macos: :el_capitan
 
   # Don't update this unless this version cannot bootstrap the new version.
   resource "gobootstrap" do
-    url "https://storage.googleapis.com/golang/go1.7.darwin-amd64.tar.gz"
-    version "1.7"
-    sha256 "51d905e0b43b3d0ed41aaf23e19001ab4bc3f96c3ca134b48f7892485fc52961"
+    on_macos do
+      url "https://storage.googleapis.com/golang/go1.7.darwin-amd64.tar.gz"
+      sha256 "51d905e0b43b3d0ed41aaf23e19001ab4bc3f96c3ca134b48f7892485fc52961"
+    end
+
+    on_linux do
+      url "https://storage.googleapis.com/golang/go1.7.linux-amd64.tar.gz"
+      sha256 "702ad90f705365227e902b42d91dd1a40e48ca7f67a2f4b2fd052aaa4295cd95"
+    end
   end
 
   def install
@@ -85,6 +92,7 @@ class Go < Formula
     assert_predicate libexec/"bin/godoc", :executable?
 
     ENV["GOOS"] = "freebsd"
+    ENV["GOARCH"] = "amd64"
     system bin/"go", "build", "hello.go"
   end
 end

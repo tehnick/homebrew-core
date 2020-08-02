@@ -20,7 +20,7 @@ class AescryptPacketizer < Formula
     depends_on "libtool" => :build
   end
 
-  depends_on :xcode => :build
+  depends_on xcode: :build
 
   def install
     if build.head?
@@ -44,10 +44,11 @@ class AescryptPacketizer < Formula
     mv "#{bin}/aescrypt_keygen", "#{bin}/paescrypt_keygen"
   end
 
-  def caveats; <<~EOS
-    To avoid conflicting with our other AESCrypt package the binaries
-    have been renamed paescrypt and paescrypt_keygen.
-  EOS
+  def caveats
+    <<~EOS
+      To avoid conflicting with our other AESCrypt package the binaries
+      have been renamed paescrypt and paescrypt_keygen.
+    EOS
   end
 
   test do

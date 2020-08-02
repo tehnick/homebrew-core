@@ -2,34 +2,30 @@ class Kustomize < Formula
   desc "Template-free customization of Kubernetes YAML manifests"
   homepage "https://github.com/kubernetes-sigs/kustomize"
   url "https://github.com/kubernetes-sigs/kustomize.git",
-      :tag      => "kustomize/v3.2.1",
-      :revision => "d89b448c745937f0cf1936162f26a5aac688f840"
+      tag:      "kustomize/v3.8.1",
+      revision: "0b359d0ef0272e6545eda0e99aacd63aef99c4d0"
+  license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/kustomize.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1e47325d5013a7b05ea444099d3ccd746cd957e17915bd1b54c0187ad02d6d78" => :catalina
-    sha256 "a56bc3f26d7526f95467fee01d19da8f8efbe1c795180dff92d2d796f3eb098e" => :mojave
-    sha256 "382e90f81114ee7b082c2a211b6d9c380c1a8db5f658d3e5e6fe57ecabe8c746" => :high_sierra
+    sha256 "c3b6b0048d3adf6f9d35bf100767fcc2272bcee774faf02344c1a81d8c95e82d" => :catalina
+    sha256 "ee33783d479e3224e0d67142f349833f5cf1f0ec8b4b008cdd87b709391cb640" => :mojave
+    sha256 "8af188e8b832df5df7073b5065c1c869a832897d7e438b6e437e96d8da3bc138" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
+    revision = Utils.safe_popen_read("git", "rev-parse", "HEAD").strip
 
-    revision = Utils.popen_read("git", "rev-parse", "HEAD").strip
-
-    dir = buildpath/"src/kubernetes-sigs/kustomize"
-    dir.install buildpath.children
-    cd dir/"kustomize" do
+    cd "kustomize" do
       ldflags = %W[
-        -s -X sigs.k8s.io/kustomize/kustomize/v3/provenance.version=#{version}
-        -X sigs.k8s.io/kustomize/kustomize/v3/provenance.gitCommit=#{revision}
-        -X sigs.k8s.io/kustomize/kustomize/v3/provenance.buildDate=#{Time.now.iso8601}
+        -s -X sigs.k8s.io/kustomize/api/provenance.version=#{version}
+        -X sigs.k8s.io/kustomize/api/provenance.gitCommit=#{revision}
+        -X sigs.k8s.io/kustomize/api/provenance.buildDate=#{Time.now.iso8601}
       ]
       system "go", "build", "-ldflags", ldflags.join(" "), "-o", bin/"kustomize"
-      prefix.install_metafiles
     end
   end
 

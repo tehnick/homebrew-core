@@ -1,17 +1,20 @@
 class Libvirt < Formula
   desc "C virtualization API"
   homepage "https://www.libvirt.org"
-  url "https://libvirt.org/sources/libvirt-5.8.0.tar.xz"
-  sha256 "e23328289b18bdedc1e966f6c26402b2983149c660ed8bd52cda6feab0c20c55"
+  url "https://libvirt.org/sources/libvirt-6.5.0.tar.xz"
+  sha256 "4915d9eab299ed79288d7598b717c587156708c05f701fe55a72293f32eb3182"
+  license "LGPL-2.1"
   head "https://github.com/libvirt/libvirt.git"
 
   bottle do
-    sha256 "e14f69ece2a72dcf3ef80d21f47f5a224174a7c6cf7cbad91ef0caa079cbc7e1" => :catalina
-    sha256 "9b94b198813517fc302c8a4dc7ff13c391242f76a5ca9b3dc22e375c83de43e8" => :mojave
-    sha256 "d1e8c66bfe529affe72ed47f89abb785aa57c089675e34f2836dbe24e36658e5" => :high_sierra
+    sha256 "df81313d97bb0d43ce9b01988b3f0fd2369bcd8461bbd149114c3b33cad443ef" => :catalina
+    sha256 "2a4e264b22ba97272751649d3b8bade2d384d10414b66e998d33427f40a89a2c" => :mojave
+    sha256 "9edb82e3ac08e1df44333f95b0bf98e59392358b2b686d9c2d7f4301b357992a" => :high_sierra
   end
 
+  depends_on "docutils" => :build
   depends_on "pkg-config" => :build
+  depends_on "glib"
   depends_on "gnutls"
   depends_on "libgcrypt"
   depends_on "yajl"
@@ -44,45 +47,44 @@ class Libvirt < Formula
     # Work around a gnulib issue with macOS Catalina
     args << "gl_cv_func_ftello_works=yes"
 
-    system "./autogen.sh" if build.head?
-    system "./configure", *args
+    mkdir "build" do
+      system "../autogen.sh" if build.head?
+      system "../configure", *args
 
-    # Compilation of docs doesn't get done if we jump straight to "make install"
-    system "make"
-    system "make", "install"
-
-    # Update the libvirt daemon config file to reflect the Homebrew prefix
-    inreplace "#{etc}/libvirt/libvirtd.conf" do |s|
-      s.gsub! "/etc/", "#{HOMEBREW_PREFIX}/etc/"
-      s.gsub! "/var/", "#{HOMEBREW_PREFIX}/var/"
+      # Compilation of docs doesn't get done if we jump straight to "make install"
+      system "make"
+      system "make", "install"
     end
   end
 
-  plist_options :manual => "libvirtd"
+  plist_options manual: "libvirtd"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>EnvironmentVariables</key>
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
         <dict>
-          <key>PATH</key>
-          <string>#{HOMEBREW_PREFIX}/bin</string>
+          <key>EnvironmentVariables</key>
+          <dict>
+            <key>PATH</key>
+            <string>#{HOMEBREW_PREFIX}/bin</string>
+          </dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{sbin}/libvirtd</string>
+            <string>-f</string>
+            <string>#{etc}/libvirt/libvirtd.conf</string>
+          </array>
+          <key>KeepAlive</key>
+          <true/>
+          <key>RunAtLoad</key>
+          <true/>
         </dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{sbin}/libvirtd</string>
-        </array>
-        <key>KeepAlive</key>
-        <true/>
-        <key>RunAtLoad</key>
-        <true/>
-      </dict>
-    </plist>
-  EOS
+      </plist>
+    EOS
   end
 
   test do

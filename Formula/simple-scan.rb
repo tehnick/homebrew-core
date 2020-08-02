@@ -1,20 +1,20 @@
 class SimpleScan < Formula
   desc "GNOME document scanning application"
   homepage "https://gitlab.gnome.org/GNOME/simple-scan"
-  url "https://download.gnome.org/sources/simple-scan/3.34/simple-scan-3.34.1.tar.xz"
-  sha256 "d827fec3383a565724136b6fda543a94c8f8f161782ac6edf9e91ed6fad49f3e"
+  url "https://download.gnome.org/sources/simple-scan/3.36/simple-scan-3.36.4.tar.xz"
+  sha256 "56af18291a7763f763da5f0eded247d2f8ebf9112c286ef89013374969fef525"
+  license "GPL-3.0"
 
   bottle do
-    sha256 "cdc5762ccf853b05ee2e6137fc7659a9f39b07d6bc2928a3fc475451300ce6f3" => :catalina
-    sha256 "2c0c7c6b55375fbc5991696a488c5f6e8e91a8142edc3889d91feb0f5679bb95" => :mojave
-    sha256 "4f504978ec76795f48cbaa7872235e31e60e8b0d17064c8f7322c5249205911f" => :high_sierra
+    sha256 "4d96fe2a7b628fdbcb4e0133c84a345f6d46a83a17c228927cd78293389ca4ce" => :catalina
+    sha256 "3a217de17627f5cacbf6026ad6727c261294a971c1a35d35964d792b74de656b" => :mojave
+    sha256 "bd253f65e6ed1569b3eddbf06ad1b700cb4ac5756969bb86fb0d350a9b5c36f0" => :high_sierra
   end
 
   depends_on "itstool" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkg-config" => :build
-  depends_on "python" => :build
   depends_on "vala" => :build
   depends_on "glib"
   depends_on "gtk+3"
@@ -25,7 +25,7 @@ class SimpleScan < Formula
   def install
     ENV["DESTDIR"] = "/"
     mkdir "build" do
-      system "meson", "--prefix=#{prefix}", ".."
+      system "meson", *std_meson_args, ".."
       system "ninja", "-v"
       system "ninja", "install", "-v"
     end

@@ -1,35 +1,37 @@
 class Broot < Formula
   desc "New way to see and navigate directory trees"
-  homepage "https://dystroy.org/broot"
-  url "https://github.com/Canop/broot/archive/v0.9.6.tar.gz"
-  sha256 "af8b36d5d4242ec1bd86925f0f664a610e7e94309686ef0874df6bc0867a0c3e"
+  homepage "https://dystroy.org/broot/"
+  url "https://github.com/Canop/broot/archive/v0.19.4.tar.gz"
+  sha256 "839f9a2808e35ae78b184310e4c6940908dca2dd117b02c50bf55e5322efd3e1"
+  license "MIT"
   head "https://github.com/Canop/broot.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "03f8ef048da8c80992e8ea44b974ad3c439a4e6f16a3b0ba3685a7b37b2c1fdf" => :catalina
-    sha256 "01a1070f95600dc3308ae30c88f53b2424588ccc070e20a9811c6ee8aa3b66a4" => :mojave
-    sha256 "1e140bc58984129ae57938071e4dc0ab84f909857df218d8c26a7e6ffe5bb937" => :high_sierra
+    sha256 "51765da79e0a88716e2016bce2d5d1fbe4d68c3e6a00cf88229896b1a2424316" => :catalina
+    sha256 "181745c7eea44b754ce62848ad77a44fb1ebfd9678db5e93dfe47e472e3c8668" => :mojave
+    sha256 "e81e73d43a0b1cb6e91ee0c2fb485f64853746d7499b3fb707dd3bf13ccddbc2" => :high_sierra
   end
 
   depends_on "rust" => :build
 
+  uses_from_macos "zlib"
+
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do
+    assert_match "A tree explorer and a customizable launcher", shell_output("#{bin}/broot --help 2>&1")
+
     require "pty"
-
-    %w[a b c].each { |f| (testpath/"root"/f).write("") }
-    PTY.spawn("#{bin}/broot", "--cmd", ":pt", "--no-style", "--out", "#{testpath}/output.txt", testpath/"root") do |r, _w, _pid|
-      r.read
-
-      assert_match <<~EOS, (testpath/"output.txt").read.gsub(/\r\n?/, "\n")
-        ├──a
-        ├──b
-        └──c
-      EOS
+    require "io/console"
+    PTY.spawn(bin/"broot", "--cmd", ":pt", "--no-style", "--out", testpath/"output.txt", err: :out) do |r, w, pid|
+      r.winsize = [20, 80] # broot dependency termimad requires width > 2
+      w.write "n\r"
+      assert_match "New Configuration file written in", r.read
+      Process.wait(pid)
     end
+    assert_equal 0, $CHILD_STATUS.exitstatus
   end
 end

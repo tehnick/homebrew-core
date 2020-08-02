@@ -1,14 +1,16 @@
 class Simgrid < Formula
+  include Language::Python::Shebang
+
   desc "Studies behavior of large-scale distributed systems"
   homepage "https://simgrid.org/"
-  url "https://gforge.inria.fr/frs/download.php/file/37602/SimGrid-3.20.tar.gz"
-  sha256 "4d4757eb45d87cf18d990d589c31d223b0ea8cf6fcd8c94fca4d38162193cef6"
+  url "https://framagit.org/simgrid/simgrid/uploads/0365f13697fb26eae8c20fc234c5af0e/SimGrid-3.25.tar.gz"
+  sha256 "0b5dcdde64f1246f3daa7673eb1b5bd87663c0a37a2c5dcd43f976885c6d0b46"
+  revision 1
 
   bottle do
-    sha256 "a9c5cb5da50ab2b224e5d1882834d1e7c4428393e05bec3731823597a2da30e9" => :mojave
-    sha256 "75ce382a395f963425946d7f53361fa1143a2b6ca9292c63193e76139bcef91e" => :high_sierra
-    sha256 "58895cb0aed9235972377d2460a18c8bc03203212ae8246450c429e837a01bcf" => :sierra
-    sha256 "c0a6cf0fba37da1c281cac508bdde38aa4145fe7c50bcc9f466f5521cf95d722" => :el_capitan
+    sha256 "5f6acdf27e6f658a180026c72c52b36de25ee08d9eac609f762358277613ae0b" => :catalina
+    sha256 "66357d6bbddedef44f1f35db0870592b1d4a1786d4f7ff87417ce0a88e1f0486" => :mojave
+    sha256 "9fab4d4bb4eadbb23a20295d29c0fe2bd2823a85790c0287b315d80615eed649" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -16,24 +18,31 @@ class Simgrid < Formula
   depends_on "boost"
   depends_on "graphviz"
   depends_on "pcre"
-  depends_on "python"
+  depends_on "python@3.8"
 
   def install
+    # Avoid superenv shim references
+    inreplace "src/smpi/smpicc.in", "@CMAKE_C_COMPILER@", "/usr/bin/clang"
+    inreplace "src/smpi/smpicxx.in", "@CMAKE_CXX_COMPILER@", "/usr/bin/clang++"
+
     system "cmake", ".",
                     "-Denable_debug=on",
                     "-Denable_compile_optimizations=off",
+                    "-Denable_fortran=off",
                     *std_cmake_args
     system "make", "install"
+
+    bin.find { |f| rewrite_shebang detected_python_shebang, f }
   end
 
   test do
     (testpath/"test.c").write <<~EOS
       #include <stdio.h>
       #include <stdlib.h>
-      #include <simgrid/msg.h>
+      #include <simgrid/engine.h>
 
       int main(int argc, char* argv[]) {
-        printf("%f", MSG_get_clock());
+        printf("%f", simgrid_get_clock());
         return 0;
       }
     EOS

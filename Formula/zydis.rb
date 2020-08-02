@@ -1,16 +1,18 @@
 class Zydis < Formula
   desc "Fast and lightweight x86/x86_64 disassembler library"
   homepage "https://zydis.re"
-  url "https://github.com/zyantific/zydis/archive/v2.0.3.tar.gz"
-  sha256 "9a49b179ee2c787e1887e789867ca5c3a6c5e1fc929548c0a64f81272990ab01"
+  url "https://github.com/zyantific/zydis.git",
+    tag:      "v3.1.0",
+    revision: "bfee99f49274a0eec3ffea16ede3a5bda9cda88f",
+    shallow:  false
+  license "MIT"
   head "https://github.com/zyantific/zydis.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "00a9d49fa9a542eedd2332d14134c92b6c4022547bcd65a74db2797d43964afa" => :catalina
-    sha256 "30e492d8005033bdc38a2fc2b32573ee7f8567484d516cb39f9edd094ec2c9fe" => :mojave
-    sha256 "77aebf0f3ab130504dabdc08d54fcb1cc5748eaba01fcea3f7a6558a0e6868a3" => :high_sierra
-    sha256 "846e26eb8120db0797a69b8335743aa95d3feef9cacc5e04aa7a2ce21cfa84dc" => :sierra
+    sha256 "ceffe3459006c374498e06809f8d75e9f512d5a43482d9b4d3973bbe4b2e3944" => :catalina
+    sha256 "a51c744f89ed204c66e0699a960a3c58625a5f46f16f3710e68a4746bbc0fb7e" => :mojave
+    sha256 "cefab7b097b79ae4c04616c235e572ffc5416296eba2a10bd7b07c6f18148313" => :high_sierra
   end
 
   depends_on "cmake" => :build

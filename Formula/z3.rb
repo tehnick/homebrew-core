@@ -1,27 +1,29 @@
 class Z3 < Formula
   desc "High-performance theorem prover"
   homepage "https://github.com/Z3Prover/z3"
-  url "https://github.com/Z3Prover/z3/archive/z3-4.8.6.tar.gz"
-  sha256 "37922fa5085170cad6504498d9758fb63c61d5cb5b68689c11a6c5e84f0311b3"
+  url "https://github.com/Z3Prover/z3/archive/z3-4.8.8.tar.gz"
+  sha256 "6962facdcdea287c5eeb1583debe33ee23043144d0e5308344e6a8ee4503bcff"
   head "https://github.com/Z3Prover/z3.git"
 
   bottle do
     cellar :any
-    sha256 "77e5760f19f5acdf3b73adebdf1e93ad00d5bc43d695a0565728ca8e6aa02b70" => :catalina
-    sha256 "0c71a481c7232c4c93e4a28e85271959a7ec2fe4ff88f4245936bdf5dff5c389" => :mojave
-    sha256 "5999876e4ae35a590879c8f7caeace02aacc4fe77eb58819443dd2fb05aff495" => :high_sierra
-    sha256 "e08003ed5ac98409f7d9c0f6fbe2bd483d202079db5233ddbca53e3182a6108a" => :sierra
+    sha256 "06f1a289d9f846c31fd171ebcad05442eb03473b6aaf4bf1cbb1ca7c6e77d612" => :catalina
+    sha256 "3ac5deca9acb17a0a228766d6353048001747543ddcca607871cadaa6c736bbf" => :mojave
+    sha256 "e8c20ad5ef814ae9e8700f0e8f79590a11d46e8077be7204a9517a5a0af663a9" => :high_sierra
   end
 
-  depends_on "python"
+  # Has Python bindings but are supplementary to the main library
+  # which does not need Python.
+  depends_on "python@3.8" => :build
 
   def install
-    xy = Language::Python.major_minor_version "python3"
-    system "python3", "scripts/mk_make.py",
-                      "--prefix=#{prefix}",
-                      "--python",
-                      "--pypkgdir=#{lib}/python#{xy}/site-packages",
-                      "--staticlib"
+    python3 = Formula["python@3.8"].opt_bin/"python3"
+    xy = Language::Python.major_minor_version python3
+    system python3, "scripts/mk_make.py",
+                     "--prefix=#{prefix}",
+                     "--python",
+                     "--pypkgdir=#{lib}/python#{xy}/site-packages",
+                     "--staticlib"
 
     cd "build" do
       system "make"

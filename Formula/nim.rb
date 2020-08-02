@@ -1,19 +1,19 @@
 class Nim < Formula
   desc "Statically typed compiled systems programming language"
   homepage "https://nim-lang.org/"
-  url "https://nim-lang.org/download/nim-1.0.0.tar.xz"
-  sha256 "034817cc4dec86b7099bcf3e79e9e38842b50212b2fd96cd741fe90855a7e0dd"
+  url "https://nim-lang.org/download/nim-1.2.6.tar.xz"
+  sha256 "df88ea712e96ea847b610d56ef69f46ba587002052a46bf03c5c62affac7657e"
+  license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0123352a0944e25a72e7ff5b6dc9f0630d2e0dd338b48cc2846857ca2dbfc934" => :catalina
-    sha256 "f1103b3ea8487bdb70cdd722d422d685a2653fbdb300992c680970ad60c91468" => :mojave
-    sha256 "a7252c17df0988a82d3930a875b565c2efa7a2e0780b4272da4785b5c7c892d8" => :high_sierra
-    sha256 "e97874d77cbe882ad4fc71dc6c324fb3ffcbca3040a4aa1e21d6558d7185f596" => :sierra
+    sha256 "aaf875cdb7455b97b0584423bc89f13a7fb2f03db4b6eff90c4a1450272701ab" => :catalina
+    sha256 "75b50a98e4c5346c384ded525e0b24fc3c88cabcacd2aedc0a883acf6b3c004d" => :mojave
+    sha256 "ca9e1c7d809861ee7b8d250803cb7340afe91cf139a87cdd595c74e2e07a2d60" => :high_sierra
   end
 
   head do
-    url "https://github.com/nim-lang/Nim.git", :branch => "devel"
+    url "https://github.com/nim-lang/Nim.git", branch: "devel"
     resource "csources" do
       url "https://github.com/nim-lang/csources.git"
     end

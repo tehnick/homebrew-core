@@ -3,19 +3,20 @@ class Diskus < Formula
   homepage "https://github.com/sharkdp/diskus"
   url "https://github.com/sharkdp/diskus/archive/v0.6.0.tar.gz"
   sha256 "661687edefa3218833677660a38ccd4e2a3c45c4a66055c5bfa4667358b97500"
+  license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "0240a6a42c4c18fdcf0e578cb84c0dc8f532320df6a2f223891e5cada82cd477" => :catalina
-    sha256 "09f3ecb398c323353ea7d32d54691504eeacca1b01c494cc232bbf33a2040c0c" => :mojave
-    sha256 "ed4bce4e6350c6968696a27faa2271185739a546c1e402d76a8fcae50fbf4ea4" => :high_sierra
-    sha256 "b995363af6e1952e299db83d007de1b03d07f288c650aecec04a34b56a83926b" => :sierra
+    rebuild 1
+    sha256 "3c4f0aafa14c810b36b2d5dbeb6998bdc866aad7b531f12f14508ee2e8b1c46d" => :catalina
+    sha256 "16deb101df03efdcc20f56ed24d2e9608e8733e3bf9f552935ccc73428ac96a3" => :mojave
+    sha256 "e603cd7daf7d48e0f139b584ef77f4f59949470e4e2d0ee0f430ac229fe444ea" => :high_sierra
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", "--root", prefix, "--path", "."
+    system "cargo", "install", *std_cargo_args
   end
 
   test do

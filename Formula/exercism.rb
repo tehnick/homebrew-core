@@ -1,30 +1,28 @@
 class Exercism < Formula
   desc "Command-line tool to interact with exercism.io"
-  homepage "https://cli.exercism.io/"
-  url "https://github.com/exercism/cli/archive/v3.0.12.tar.gz"
-  sha256 "cdafd383d866dca4bc96be002d5d25eeea4801d003456a0215e28a2fba5a0820"
+  homepage "https://exercism.io/cli/"
+  url "https://github.com/exercism/cli/archive/v3.0.13.tar.gz"
+  sha256 "ecc27f272792bc8909d14f11dd08f0d2e9bde4cc663b3769e00eab6e65328a9f"
+  license "MIT"
   head "https://github.com/exercism/cli.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a6f79c60ab990d249f47af44310ecb93840c8af784aca73aeb413fdbd24b58ea" => :catalina
-    sha256 "832b5e24b5310320c075c083e149ea59d59f1b5916bfb3d47093053a26930491" => :mojave
-    sha256 "fdbe96b882426e313866bedb826b606842a9448ad9884e23b171bc97f2205803" => :high_sierra
-    sha256 "983714f0e0e358b0fed5f300214cfdd8404edd6817b0f5bb0fc756cb61cb4bf4" => :sierra
+    rebuild 2
+    sha256 "9a4080f7e35f37dc4eb15e733692314cec32cba7e0f76e8f58eb99850f708cb1" => :catalina
+    sha256 "7319920cfd6779984dfabbecdf3e15a37603f6bfbecfc1121bfa2a044fb8ed17" => :mojave
+    sha256 "b094a8441575b02f312f04760589f94d9f2b1d76330c07a67f7d07a40ad561a9" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
+    system "go", "build", "-ldflags", "-s -w", "-trimpath", "-o", bin/"exercism", "exercism/main.go"
+    prefix.install_metafiles
 
-    dir = buildpath/"src/github.com/exercism/cli"
-    dir.install buildpath.children
-
-    cd dir do
-      system "go", "build", "-ldflags", "-s -w", "-o", bin/"exercism", "exercism/main.go"
-      prefix.install_metafiles
-    end
+    bash_completion.install "shell/exercism_completion.bash"
+    zsh_completion.install "shell/exercism_completion.zsh" => "_exercism"
+    fish_completion.install "shell/exercism.fish"
   end
 
   test do
