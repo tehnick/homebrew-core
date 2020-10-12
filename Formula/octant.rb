@@ -2,16 +2,16 @@ class Octant < Formula
   desc "Kubernetes introspection tool for developers"
   homepage "https://octant.dev"
   url "https://github.com/vmware-tanzu/octant.git",
-      tag:      "v0.14.1",
-      revision: "51ce7f6a7e87c9cfcabc9bf402dff7eda5d6986b"
+      tag:      "v0.16.1",
+      revision: "8aebb34922f83894fb02ad393740e96ee1b3d8fe"
   license "Apache-2.0"
   head "https://github.com/vmware-tanzu/octant.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e489fb9b13a4515e1969d9de19ff13a03aa7ae0440dffd115d2649dfe575403a" => :catalina
-    sha256 "dd1284bed5ad386e94771d44f753a474b84440f5caba49c74ec5f005be3c6b85" => :mojave
-    sha256 "41f943d9a1284bd681c0a42ea793e970d3b2b8a677a4af0303a292b63a15d707" => :high_sierra
+    sha256 "30a8f2ff4c498c638647ce0c4a223ca1bb7712b940e2c333498b3c66b073ee76" => :catalina
+    sha256 "1327671fd6c2658fca5e9d7c2b1cc7be4e7971979dfee9a1867bb5a38ea0e9c7" => :mojave
+    sha256 "85cee095a6fcdd835de7ca830e9da0e92b00c0ccdbc9e4af2c2ecd3db91e554f" => :high_sierra
   end
 
   depends_on "go" => :build

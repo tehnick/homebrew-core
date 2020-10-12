@@ -2,7 +2,7 @@ class Mosh < Formula
   desc "Remote terminal application"
   homepage "https://mosh.org"
   license "GPL-3.0"
-  revision 11
+  revision 12
 
   stable do
     url "https://mosh.org/mosh-1.3.2.tar.gz"
@@ -17,9 +17,9 @@ class Mosh < Formula
 
   bottle do
     cellar :any
-    sha256 "d864ba6a3869df2fd47894862f5f0b7d8e5f5f55daf58742243fa3ca8c69d474" => :catalina
-    sha256 "1f46edf8fbd83303ea4156530357207b6ad538a6abbbd5118f9c39e4898a4a19" => :mojave
-    sha256 "c8aa1ef313d62059bd8abee131880d5fa73f45e961388c055bc5f89970bcaf24" => :high_sierra
+    sha256 "80aa0652a09eacf7e786012d1db2382d7423d476b44c536c1a7a3312b4a5e45a" => :catalina
+    sha256 "6d1567ab1ff2159a5bd346ed8b51bca5fd82506279b930bb10079dc1ea79f860" => :mojave
+    sha256 "e82a65883dc605e100b159ccd55ffee43c14eb65086a02b8cceba67f1b524066" => :high_sierra
   end
 
   head do
@@ -31,6 +31,7 @@ class Mosh < Formula
 
   depends_on "pkg-config" => :build
   depends_on "tmux" => :build
+  depends_on "openssl@1.1"
   depends_on "protobuf"
 
   uses_from_macos "ncurses"

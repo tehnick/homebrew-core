@@ -5,7 +5,14 @@ class ConfluentPlatform < Formula
   version "5.5.1"
   sha256 "60efb18fb5768d05bbe7d0194fc6b61018ea3bd562d8829f9b14d9b5dd35f790"
 
+  livecheck do
+    url "https://docs.confluent.io/current/release-notes/changelog.html"
+    regex(/>Version (\d+(?:\.\d+)+)</i)
+  end
+
   bottle :unneeded
+
+  disable! because: "does not have an OSI license"
 
   depends_on java: "1.8"
 

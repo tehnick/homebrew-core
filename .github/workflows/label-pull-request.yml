@@ -1,13 +1,9 @@
-name: Label pull requests
+name: Label pull request
 
-on:
-  schedule:
-    # Once every 30 minutes
-    - cron: '*/30 * * * *'
+on: pull_request_target
 
 jobs:
-  autolabel:
-    if: github.repository == 'Homebrew/homebrew-core'
+  label:
     runs-on: ubuntu-latest
     steps:
       - name: Label
@@ -27,7 +23,7 @@ jobs:
                 }, {
                     "label": "bottle unneeded",
                     "path": "Formula/.+",
-                    "content": "\n  bottle :unneeded\n"
+                    "content": "\n  (bottle :unneeded|depends_on :linux)\n"
                 }, {
                     "label": "formula deprecated",
                     "path": "Formula/.+",
@@ -35,10 +31,18 @@ jobs:
                 }, {
                     "label": "formula disabled",
                     "path": "Formula/.+",
-                    "content": "\n  disable!\n"
+                    "content": "\n  disable!.*\n"
                 }, {
                     "label": "legacy",
                     "path": "Formula/.+@.+"
+                }, {
+                    "label": "missing license",
+                    "path": "Formula/.+",
+                    "missing_content": "\n  license .+\n"
+                }, {
+                    "label": "deprecated license",
+                    "path": "Formula/.+",
+                    "content": "license .*\"(GPL|LGPL|AGPL|GFDL)-[0-9].[0-9][+]?\".*"
                 }, {
                     "label": "go",
                     "path": "Formula/.+",

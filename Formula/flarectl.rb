@@ -1,16 +1,16 @@
 class Flarectl < Formula
   desc "CLI application for interacting with a Cloudflare account"
   homepage "https://github.com/cloudflare/cloudflare-go/tree/master/cmd/flarectl"
-  url "https://github.com/cloudflare/cloudflare-go/archive/v0.13.0.tar.gz"
-  sha256 "8efb25d4831842788656736c4a2604208bd6bf8ff47912a0a2dd1174a096e9c5"
+  url "https://github.com/cloudflare/cloudflare-go/archive/v0.13.3.tar.gz"
+  sha256 "6a003660cce06286598848f9ea50f1b615fefedb3f251b764cbc6609f57d791e"
   license "BSD-3-Clause"
   head "https://github.com/cloudflare/cloudflare-go.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ffd5f05f779bb2e10d5df7c33ec592cf7f09158ae16744175dff7504cc3fee5a" => :catalina
-    sha256 "2ae9d69c1c49863261676210e3d19c35008becd60e2f3b6d219afcdfae1530ff" => :mojave
-    sha256 "ec33f389866a93ab7f290a0d17ad287e2da64dee4173bda1527822ff27ad349e" => :high_sierra
+    sha256 "2106b583bd9379c43bd3bbb7f6d31baa23500112b9256062485366631e1f45f5" => :catalina
+    sha256 "a5a6a2ed2ea41a55b541888c1c9de494903c332a33db84a9a88e59e14abb11ff" => :mojave
+    sha256 "0094a1b52cdb846d0c5cd343d9e939cb0dc96afd62242b576c733baff9ca8101" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -22,6 +22,6 @@ class Flarectl < Formula
 
   test do
     ENV["CF_API_TOKEN"] = "invalid"
-    assert_match "Invalid format for Authorization header", shell_output("#{bin}/flarectl u i")
+    assert_match "Invalid format for Authorization header", shell_output("#{bin}/flarectl u i", 1)
   end
 end

@@ -1,15 +1,20 @@
 class Ncmpc < Formula
   desc "Curses Music Player Daemon (MPD) client"
   homepage "https://www.musicpd.org/clients/ncmpc/"
-  url "https://www.musicpd.org/download/ncmpc/0/ncmpc-0.38.tar.xz"
-  sha256 "2bc1aa38aacd23131895cd9aa3abd9d1ca5700857034d9f35209e13e061e27a2"
-  license "GPL-2.0"
+  url "https://www.musicpd.org/download/ncmpc/0/ncmpc-0.40.tar.xz"
+  sha256 "09fa587caceb96b3de71c57c9b07dba9129824aa256272739ee79542bf70d3dd"
+  license "GPL-2.0-or-later"
+
+  livecheck do
+    url "https://www.musicpd.org/download/ncmpc/0/"
+    regex(/href=.*?ncmpc[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     cellar :any
-    sha256 "ca880e781bb617e6fbbcfb70168ac8939b8b5a04bbc24128d68bb9450b4af498" => :catalina
-    sha256 "aacbb298f4ceb0911d117babf04e5ce7e2dc17f8999805bc40cd784c256814be" => :mojave
-    sha256 "7891f4939522591774bdeab323a49c53f3f0742f64eed19389ece06762b2beec" => :high_sierra
+    sha256 "b0d7f89faa7f1a6a0d39b2e257f8ca0abca93bb6654b69251a3261e2b1fc075b" => :catalina
+    sha256 "d2bbc8836a5c0cb5380c4698706e30876fad06788771129ad0cf953e0b219f50" => :mojave
+    sha256 "da45a87cc0e143418c66f468f94f3930c24544b4ef5d22396aa5280d5878dd45" => :high_sierra
   end
 
   depends_on "boost" => :build

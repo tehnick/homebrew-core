@@ -1,7 +1,7 @@
 class Archey < Formula
   desc "Graphical system information display for macOS"
   homepage "https://obihann.github.io/archey-osx/"
-  license "GPL-2.0"
+  license "GPL-2.0-or-later"
   revision 1
   head "https://github.com/obihann/archey-osx.git"
 
@@ -18,7 +18,7 @@ class Archey < Formula
 
   bottle :unneeded
 
-  deprecate! date: "2017-04-28"
+  deprecate! date: "2017-04-28", because: :repo_archived
 
   def install
     bin.install "bin/archey"

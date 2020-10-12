@@ -1,15 +1,15 @@
 class Gitui < Formula
   desc "Blazing fast terminal-ui for git written in rust"
   homepage "https://github.com/extrawurst/gitui"
-  url "https://github.com/extrawurst/gitui/archive/v0.8.1.tar.gz"
-  sha256 "41662bb14ae89b9f25c2a956571a2855f977273261228f1ceba856fc8b7f2eca"
+  url "https://github.com/extrawurst/gitui/archive/v0.10.1.tar.gz"
+  sha256 "2d6fa87d88002716cf0fedef9d4332b7212ee05fbfa4b8c536ae4270bef99bce"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "b94f377f1976908862b4c0a7245066882b12b22c30917ce8c4cc200820fbdf9c" => :catalina
-    sha256 "91dc87cfe10bec502b3a3b8085164fcfc23061c1f0c5a3f6fe8f459bb69e3191" => :mojave
-    sha256 "dacd4f58f87566bf594b8985c4a03446a9523607b05505b177f8823a9ab3084c" => :high_sierra
+    sha256 "15fc69a2aef24cc4292dba4f0de18bc6baa176788d044973e79a11fbc2ccb103" => :catalina
+    sha256 "466fbe53bd0775b5cacb9281a9c5846178ae448fbe079d32cb9dc19f037411d2" => :mojave
+    sha256 "5e725a78841410e48a7a932c79cb98bb02d8c567a0c0705334d24549fdfcc81f" => :high_sierra
   end
 
   depends_on "rust" => :build
@@ -31,7 +31,9 @@ class Gitui < Formula
     # select log tab
     input.puts "2"
     sleep 1
-    # inspect commit (right arrow key)
+    # inspect commit (return + right arrow key)
+    input.puts "\r"
+    sleep 1
     input.puts "\e[C"
     sleep 1
     input.close
@@ -45,7 +47,7 @@ class Gitui < Formula
     screenlog.gsub! /\e\[([;\d]+)?m/, ""
     assert_match "Author: Stephan Dilly", screenlog
     assert_match "Date: 2020-06-15", screenlog
-    assert_match "SHA: 9c2a31846c417d8775a346ceaf38e77b710d3aab", screenlog
+    assert_match "Sha: 9c2a31846c417d8775a346ceaf38e77b710d3aab", screenlog
   ensure
     Process.kill("TERM", wait_thr.pid)
   end

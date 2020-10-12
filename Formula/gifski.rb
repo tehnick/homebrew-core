@@ -1,22 +1,23 @@
 class Gifski < Formula
   desc "Highest-quality GIF encoder based on pngquant"
   homepage "https://gif.ski/"
-  url "https://github.com/ImageOptim/gifski/archive/0.10.4.tar.gz"
-  sha256 "0fd4b6beb880bb7719a3fb707f8f42678a62c8cf9bbb90f369f043864bbcc5ed"
-  license "AGPL-3.0"
+  url "https://github.com/ImageOptim/gifski/archive/1.2.2.tar.gz"
+  sha256 "e5830f18b38fb333f1d89af99d651c173c816d71f764e703460a38d241ce8df4"
+  license "AGPL-3.0-only"
 
   bottle do
-    cellar :any_skip_relocation
-    sha256 "e00f209f81a6ae5e7b5f75427480776298d8cf4f9d8b5261e7c1a38e19858076" => :catalina
-    sha256 "a654fc60bf8ff9e29499f3514c4ab85227886380cd9126591cfd1c1afb137dfa" => :mojave
-    sha256 "a9e6089442617d5df7aa8b6e0baf11e5a5152adff89bb3d6cb018b61a8e3d387" => :high_sierra
+    cellar :any
+    sha256 "a182e69abac92bdf599cc3d3ebacb1ea35e927fd3e449b59998d91bdcd869a9b" => :catalina
+    sha256 "e741a3a221748d34c244db43da3b8823087bb82bd5ab78e29914292f5a4120a1" => :mojave
+    sha256 "b0de13b3b0b300bf7c6317db0bfcb619384ec0809ef4c75e984b457e2713db65" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
+  depends_on "ffmpeg"
 
   def install
-    system "cargo", "install", *std_cargo_args
+    system "cargo", "install", "--features=video", *std_cargo_args
   end
 
   test do

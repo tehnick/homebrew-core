@@ -7,6 +7,10 @@ class Nettle < Formula
   # license ["GPL-2.0", "GPL-3.0", "LGPL-3.0"] - pending https://github.com/Homebrew/brew/pull/7953
   license "GPL-2.0"
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any
     sha256 "7ac7677ba653dbef81dd83ed8cde3dfcb7b464d04442886c396179932f4f9faa" => :catalina
@@ -29,7 +33,7 @@ class Nettle < Formula
     end
 
     args = []
-    args << "--build=aarch64-apple-darwin#{`uname -r`.chomp}" if Hardware::CPU.arm?
+    args << "--build=aarch64-apple-darwin#{OS.kernel_version}" if Hardware::CPU.arm?
 
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}",

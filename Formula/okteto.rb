@@ -1,15 +1,15 @@
 class Okteto < Formula
   desc "Build better apps by developing and testing code directly in Kubernetes"
   homepage "https://okteto.com"
-  url "https://github.com/okteto/okteto/archive/1.8.15.tar.gz"
-  sha256 "5a8012a0673fed85eceb6e14690461f2896e85a8d54850d03abe295241cb737e"
+  url "https://github.com/okteto/okteto/archive/1.9.1.tar.gz"
+  sha256 "31a7d0da0e815f7284ba129a8965d88cfdb9ed3f9056abdf4ac196c2fd449ef1"
   license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4132a3c465f53c6b9f6d90558348013d94f35007f6e01ff42a0544b66342c51d" => :catalina
-    sha256 "c7f572cc6905692aff03c7b24e1af2c8882095c5fa0e690b6361b270a0aefbb9" => :mojave
-    sha256 "573f8fc286e80c88d730d1cfe0a8f7954cef3cdebf9714594814bf68bd1bca26" => :high_sierra
+    sha256 "aa002c3af9dc17c894ba08a7b6f686763d22c98964d025ec45d7d7deda43ff0f" => :catalina
+    sha256 "2194a95a4230a88f5c96c242abd9d7eff74ccae0e703d250b39bc87789f8b8c7" => :mojave
+    sha256 "c80d1ec0799babd5f82292e7fa69b9e487bd37a91e8867ce14ea93ceb5aa9573" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -26,12 +26,13 @@ class Okteto < Formula
     expected = <<~EOS
       name: #{Pathname.getwd.basename}
       image: okteto/ruby:2
-      command:
-      - bash
-      workdir: /okteto
+      command: bash
+      sync:
+      - .:/usr/src/app
       forward:
       - 1234:1234
       - 8080:8080
+      persistentVolume: {}
     EOS
     got = File.read("test.yml")
     assert_equal expected, got

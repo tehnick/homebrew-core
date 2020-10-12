@@ -3,20 +3,26 @@ class RobotFramework < Formula
 
   desc "Open source test framework for acceptance testing"
   homepage "https://robotframework.org/"
-  url "https://github.com/robotframework/robotframework/archive/v3.2.1.tar.gz"
-  sha256 "9805faa0990125ff2c9689b673448d5f47e78470e7a8e95af1606a775fa8379f"
+  url "https://github.com/robotframework/robotframework/archive/v3.2.2.tar.gz"
+  sha256 "6b2bddcecb5d1c6198999e38aeaf4c0366542a5e7b5bd788c6a3a36b055d5ea2"
   license "Apache-2.0"
+  revision 1
   head "https://github.com/robotframework/robotframework.git"
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any
-    sha256 "bf2616c09938e74e4f02b6539c4e63ce5a930a367a624256f9cb236ec40332a1" => :catalina
-    sha256 "8bf25bce831e36a1dea5abec244c246900d6aeea405228400c43122b34c5e742" => :mojave
-    sha256 "19aafae1b8d94f325b596e44938c6d105052fdfcaadc892e14f650af33f0509d" => :high_sierra
+    sha256 "a503c2658071bf333557928bc35ddf4f7ee2b6c83b0fbc894990d084dc0b3b79" => :catalina
+    sha256 "91d269cae3227f25424d703791f655e85c7862d7deb7187740f38bc7417bb352" => :mojave
+    sha256 "cbb701dbc690b5e0ef53a6a66b913eaaaf797af9f8463d01a4fc341ee09918e3" => :high_sierra
   end
 
   depends_on "openssl@1.1"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
   depends_on :x11
 
   resource "bcrypt" do

@@ -1,16 +1,21 @@
 class Ethereum < Formula
   desc "Official Go implementation of the Ethereum protocol"
   homepage "https://ethereum.github.io/go-ethereum/"
-  url "https://github.com/ethereum/go-ethereum/archive/v1.9.18.tar.gz"
-  sha256 "6d8e4bd9ab797f3e0df182b7220a65592bda1cf517a2130a044ec5f41ffa72db"
-  license "LGPL-3.0"
+  url "https://github.com/ethereum/go-ethereum/archive/v1.9.22.tar.gz"
+  sha256 "cda67de8e76afaad28b8bb4d3e5a95d01f88f69ab2c25964bc8ee2d368794d8c"
+  license "LGPL-3.0-or-later"
   head "https://github.com/ethereum/go-ethereum.git"
+
+  livecheck do
+    url "https://github.com/ethereum/go-ethereum/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2a3be416c7502c6090c16cba63f8ef2435345ce0cd385484e66921a071f50303" => :catalina
-    sha256 "ba1d275e1e2750454fc709aebe2fc80814b81fea8684427d837cae02035ebe1a" => :mojave
-    sha256 "ab2ad93e2f7591623e4e7d30f69060c2572232e13675286e63a228308b5033bc" => :high_sierra
+    sha256 "104bea4cb698b9561cef9f0c55c468997693122bbe139efd44898316dea39923" => :catalina
+    sha256 "1c715a2be52f98fb342cada0e13a9bcf6e90e72d195b8a1fbc7df7a6f069a332" => :mojave
+    sha256 "1c70421aebfe0fd03145780a7b212516e386d9ca79d02d764aa41e7120f2a557" => :high_sierra
   end
 
   depends_on "go" => :build

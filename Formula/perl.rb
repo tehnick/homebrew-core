@@ -3,8 +3,13 @@ class Perl < Formula
   homepage "https://www.perl.org/"
   url "https://www.cpan.org/src/5.0/perl-5.32.0.tar.xz"
   sha256 "6f436b447cf56d22464f980fac1916e707a040e96d52172984c5d184c09b859b"
-  license "Artistic-1.0-Perl"
+  license any_of: ["Artistic-1.0-Perl", "GPL-1.0-or-later"]
   head "https://github.com/perl/perl5.git", branch: "blead"
+
+  livecheck do
+    url "https://www.cpan.org/src/"
+    regex(/href=.*?perl[._-]v?(\d+\.\d*[02468](?:\.\d+)*)\.t/i)
+  end
 
   bottle do
     sha256 "bc6c97521b6edf723c8ee0742aebb1954b5c8fec81bf2d96861c3f8bcc4e404d" => :catalina
@@ -16,6 +21,13 @@ class Perl < Formula
 
   # Prevent site_perl directories from being removed
   skip_clean "lib/perl5/site_perl"
+
+  patch do
+    # Enable build support on macOS 11.x
+    # Remove when https://github.com/Perl/perl5/pull/17946 is merged
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/526faca9830646b974f563532fa27a1515e51ca1/perl/version_check.patch"
+    sha256 "cff250437f141eb677ec2215a9f2dfcbacba77304dac06499db6c722c9d30b58"
+  end
 
   def install
     args = %W[

@@ -1,16 +1,20 @@
 class FbClient < Formula
   desc "Shell-script client for https://paste.xinu.at"
   homepage "https://paste.xinu.at"
-  url "https://paste.xinu.at/data/client/fb-2.0.4.tar.gz"
-  sha256 "330c9593afd2b2480162786992d0bfb71be25faf105f3c24c71d514b58ee0cd3"
-  revision 2
+  url "https://paste.xinu.at/data/client/fb-2.1.1.tar.gz"
+  sha256 "8fbcffc853b298a8497ab0f66b254c0c9ae4cbd31ab9889912a44a8c5c7cef0e"
   head "https://git.server-speed.net/users/flo/fb", using: :git
+
+  livecheck do
+    url :homepage
+    regex(%r{Latest release:.*?href=.*?/fb[._-]v?(\d+(?:\.\d+)+)\.t}i)
+  end
 
   bottle do
     cellar :any
-    sha256 "45db897c3f383834be56906412e419c2d203f3fd8ce1ce2d6077358890c7116e" => :catalina
-    sha256 "b0d14486e7eb0927ac5b41f45f6effd6bb0999aa1c9ce50628fabd3090b5a2ab" => :mojave
-    sha256 "f5456a27456904c7262ceb81fdfe12efcf01619ea85a67c8e3048189ecee720e" => :high_sierra
+    sha256 "bbbad25721959b383df725f73e0ae2b4c88d6004a57e518db166d61b21257192" => :catalina
+    sha256 "0f388dab8af256ce96a76174468a10d584985ef5750727197d266feb17b6664f" => :mojave
+    sha256 "47b2c5ec2421f9382dd7a918f9002cb858748490d2605cb07e47b911a0eba2be" => :high_sierra
   end
 
   depends_on "pkg-config" => :build

@@ -2,15 +2,15 @@ class CartridgeCli < Formula
   desc "Tarantool Cartridge command-line utility"
   homepage "https://tarantool.org/"
   url "https://github.com/tarantool/cartridge-cli.git",
-      tag:      "2.1.0",
-      revision: "52f3f6837ea4896d9b476169813aa48de8e1e659"
+      tag:      "2.3.0",
+      revision: "06a5dadcf259200cc08bb195e35488bb1e161930"
   license "BSD-2-Clause"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4c8b2341f80eb3a9c66e84cfa74892e489627663d63cb79db2a147aeac8e6718" => :catalina
-    sha256 "9c5ec77dff83e767202cd587f985d62f1562242e62b26ce6e6db6625e0d57b3d" => :mojave
-    sha256 "c4d1b6f7ef9560bca26cf6880f9cc531bbe4188994cd82716ea8b74431d7fd32" => :high_sierra
+    sha256 "3d044f1e0620b309d415c4743f44d44543f26ca472b88c9019f07db8f640830a" => :catalina
+    sha256 "259e9332a58594c3facd9b50132d8e1e2cb5722eba693baf447f296bd6017671" => :mojave
+    sha256 "d1d3f83fad8e8bc815a5494fa177a32c86edfa4f2202b8058b43c53205c191d9" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -25,6 +25,10 @@ class CartridgeCli < Formula
     ]
 
     system "go", "build", "-o", bin/"cartridge", "-ldflags", ldflags.join(" "), "cli/main.go"
+    system bin/"cartridge", "gen", "completion"
+
+    bash_completion.install "completion/bash/cartridge"
+    zsh_completion.install "completion/zsh/_cartridge"
   end
 
   test do

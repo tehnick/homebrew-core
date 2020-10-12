@@ -2,24 +2,24 @@
 class Macvim < Formula
   desc "GUI for vim, made for macOS"
   homepage "https://github.com/macvim-dev/macvim"
-  url "https://github.com/macvim-dev/macvim/archive/snapshot-163.tar.gz"
-  version "8.2-163"
-  sha256 "3af72f22b25cf4f94b1b6e27a74d74bdefa8ed1529fe6edec59ae2756b3ca209"
+  url "https://github.com/macvim-dev/macvim/archive/snapshot-166.tar.gz"
+  version "8.2-166"
+  sha256 "d9745f01c45fb2c1c99ce3b74bf1db6b888805bbb2d2a570bfb5742828ca601a"
   license "Vim"
-  revision 2
+  revision 1
   head "https://github.com/macvim-dev/macvim.git"
 
   bottle do
-    cellar :any
-    sha256 "316de5c66d247961309a072307784c1073f650b5fac87af32c67ca80bf62b0c1" => :catalina
-    sha256 "56c860f1dd98ebe374cf0721bac29e830dfc9665a5fe4f2dd26697d58713f9e1" => :mojave
-    sha256 "4b67795ddfcf1018ac1f260231f8a534072edbcb7b4ff060296667fd965a0abb" => :high_sierra
+    sha256 "7f672f36e953d8eee8136c9303ac3679da19834e9fea06df2c6735aa3108dd98" => :catalina
+    sha256 "1f352a5857f1c071fec1e8acb2a1634d48b2b991b5bc47e50725a3d497aaf4b2" => :mojave
+    sha256 "b1cafc8cea7e9f3c3a1692b0c4b33c3f9347626a78bc7171e9013c54494a9994" => :high_sierra
   end
 
   depends_on xcode: :build
   depends_on "cscope"
+  depends_on "gettext"
   depends_on "lua"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
   depends_on "ruby"
 
   conflicts_with "vim",
@@ -64,9 +64,10 @@ class Macvim < Formula
   test do
     output = shell_output("#{bin}/mvim --version")
     assert_match "+ruby", output
+    assert_match "+gettext", output
 
     # Simple test to check if MacVim was linked to Homebrew's Python 3
-    py3_exec_prefix = shell_output(Formula["python@3.8"].opt_bin/"python3-config --exec-prefix")
+    py3_exec_prefix = shell_output(Formula["python@3.9"].opt_bin/"python3-config --exec-prefix")
     assert_match py3_exec_prefix.chomp, output
     (testpath/"commands.vim").write <<~EOS
       :python3 import vim; vim.current.buffer[0] = 'hello python3'

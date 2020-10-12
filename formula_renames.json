@@ -49,6 +49,7 @@
   "google-app-engine": "app-engine-python",
   "google-perftools": "gperftools",
   "grunt": "grunt-cli",
+  "gst-validate": "gst-devtools",
   "gtef": "tepl",
   "gtksourceview@4": "gtksourceview4",
   "gutenberg": "zola",
@@ -123,5 +124,6 @@
   "usbmuxd": "libusbmuxd",
   "v8-315": "v8@3.15",
   "wires": "geckodriver",
-  "wpcli-completion": "wp-cli-completion"
+  "wpcli-completion": "wp-cli-completion",
+  "xu4": "scummvm"
 }

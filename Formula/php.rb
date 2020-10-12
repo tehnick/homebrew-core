@@ -2,16 +2,20 @@ class Php < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   # Should only be updated if the new version is announced on the homepage, https://www.php.net/
-  url "https://www.php.net/distributions/php-7.4.8.tar.xz"
-  mirror "https://fossies.org/linux/www/php-7.4.8.tar.xz"
-  sha256 "642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245"
+  url "https://www.php.net/distributions/php-7.4.11.tar.xz"
+  mirror "https://fossies.org/linux/www/php-7.4.11.tar.xz"
+  sha256 "5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce"
   license "PHP-3.01"
-  revision 1
+
+  livecheck do
+    url "https://www.php.net/releases/feed.php"
+    regex(/PHP (\d+(?:\.\d+)+) /i)
+  end
 
   bottle do
-    sha256 "ec3af8e7bcfda01b5b0370cd33e97b12ce0988c2743e2437be4efc7d15a15f74" => :catalina
-    sha256 "fb211d4a9cf8fddb20c0c40b0934c09db7c0d5514bd5cb4d7692b115fec4b9e2" => :mojave
-    sha256 "d3c4639e3b5d8ba7e33c73a5e52cf3e3825fd0c7e3a647af6364e8ddeb25d90d" => :high_sierra
+    sha256 "494b05d2febe3bee62d4a8005be46a393f2543698f5b4f03d91d1973465f718a" => :catalina
+    sha256 "65d655c96ef35ef6f40209b0b1773226da890cb8cb900a1641f6a1206e18b8b4" => :mojave
+    sha256 "907959a1d23ddada77d2e201ff4e18d594017478aa3415ca075486ebf9d46046" => :high_sierra
   end
 
   head do
@@ -88,7 +92,7 @@ class Php < Formula
 
     inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
 
-    config_path = etc/"php/#{php_version}"
+    config_path = etc/"php/#{version.major_minor}"
     # Prevent system pear config from inhibiting pear install
     (config_path/"pear.conf").delete if (config_path/"pear.conf").exist?
 
@@ -239,7 +243,7 @@ class Php < Formula
     pear_path = HOMEBREW_PREFIX/"share/pear"
     cp_r pkgshare/"pear/.", pear_path
     {
-      "php_ini"  => etc/"php/#{php_version}/php.ini",
+      "php_ini"  => etc/"php/#{version.major_minor}/php.ini",
       "php_dir"  => pear_path,
       "doc_dir"  => pear_path/"doc",
       "ext_dir"  => pecl_path/php_basename,
@@ -260,7 +264,7 @@ class Php < Formula
     %w[
       opcache
     ].each do |e|
-      ext_config_path = etc/"php/#{php_version}/conf.d/ext-#{e}.ini"
+      ext_config_path = etc/"php/#{version.major_minor}/conf.d/ext-#{e}.ini"
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,
@@ -287,12 +291,8 @@ class Php < Formula
           DirectoryIndex index.php index.html
 
       The php.ini and php-fpm.ini file can be found in:
-          #{etc}/php/#{php_version}/
+          #{etc}/php/#{version.major_minor}/
     EOS
-  end
-
-  def php_version
-    version.to_s.split(".")[0..1].join(".")
   end
 
   plist_options manual: "php-fpm"

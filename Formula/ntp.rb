@@ -1,9 +1,14 @@
 class Ntp < Formula
-  desc "The Network Time Protocol (NTP) Distribution"
+  desc "Network Time Protocol (NTP) Distribution"
   homepage "https://www.eecis.udel.edu/~mills/ntp/html/"
   url "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p15.tar.gz"
   version "4.2.8p15"
   sha256 "f65840deab68614d5d7ceb2d0bb9304ff70dcdedd09abb79754a87536b849c19"
+
+  livecheck do
+    url "https://www.ntp.org/downloads.html"
+    regex(/href=.*?ntp[._-]v?(\d+(?:\.\d+)+(?:p\d+)?)\.t/i)
+  end
 
   bottle do
     cellar :any

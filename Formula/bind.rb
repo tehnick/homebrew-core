@@ -8,15 +8,23 @@ class Bind < Formula
   # "version_scheme" because someone upgraded to 9.15.0, and required a
   # downgrade.
 
-  url "https://downloads.isc.org/isc/bind9/9.16.5/bind-9.16.5.tar.xz"
-  sha256 "6378b3e51fef11a8be4794dc48e8111ba92d211c0dfd129a0c296ed06a3dc075"
+  url "https://downloads.isc.org/isc/bind9/9.16.7/bind-9.16.7.tar.xz"
+  sha256 "9f7d1812ebbd26a699f62b6fa8522d5dec57e4bf43af0042a0d60d39ed8314d1"
+  license "MPL-2.0"
   version_scheme 1
   head "https://gitlab.isc.org/isc-projects/bind9.git"
 
+  # BIND indicates stable releases with an even-numbered minor (e.g., x.2.x)
+  # and the regex below only matches these versions.
+  livecheck do
+    url "https://www.isc.org/downloads/"
+    regex(/href=.*?bind[._-]v?(\d+\.\d*[02468](?:\.\d+)*)\.t/i)
+  end
+
   bottle do
-    sha256 "1fefd0e2f062786cdfd9a3bdf6b81839430032d1c62b7f7b0a65e58b2160c21d" => :catalina
-    sha256 "a308059d7b9d14e00460d2982cdd487d8884e9a458a2e7000aa6b67dddc13ae8" => :mojave
-    sha256 "6be976d462e67dc8d545006af4cb51230cb7ac702fc87f8877f1da7614db0851" => :high_sierra
+    sha256 "18f25bc05253751cd74b30547c4abc32948ea71381d0c20911b1b9b39206214f" => :catalina
+    sha256 "43874746fb0e50cd80195b1498234713aa7a1250fc2cd03dc446a66d3981314f" => :mojave
+    sha256 "5d5646151f026eac651fc1ee663346cb7929e5d11e1c43da6a1d4c31705e7cf2" => :high_sierra
   end
 
   depends_on "pkg-config" => :build

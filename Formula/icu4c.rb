@@ -6,6 +6,11 @@ class Icu4c < Formula
   sha256 "94a80cd6f251a53bd2a997f6f1b5ac6653fe791dfab66e1eb0227740fb86d5dc"
   license "ICU"
 
+  livecheck do
+    url "https://github.com/unicode-org/icu/releases/latest"
+    regex(%r{href=.*?/tag/release[._-]v?(\d+(?:[.-]\d+)+)["' >]}i)
+  end
+
   bottle do
     cellar :any
     sha256 "2d1e91b5127f66e7941790c004817c94c892725c88f84f1e4c37297fcbc0c72f" => :catalina
@@ -14,6 +19,13 @@ class Icu4c < Formula
   end
 
   keg_only :provided_by_macos, "macOS provides libicucore.dylib (but nothing else)"
+
+  # fix C++14 compatibility of U_ASSERT macro.
+  # Remove with next release (ICU 68).
+  patch :p2 do
+    url "https://github.com/unicode-org/icu/commit/715d254a02b0b22681cb6f861b0921ae668fa7d6.patch?full_index=1"
+    sha256 "a87e1b9626ec5803b1220489c0d6cc544a5f293f1c5280e3b27871780c4ecde8"
+  end
 
   def install
     args = %W[

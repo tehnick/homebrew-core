@@ -1,22 +1,22 @@
 class Vale < Formula
   desc "Syntax-aware linter for prose"
   homepage "https://errata-ai.github.io/vale/"
-  url "https://github.com/errata-ai/vale/archive/v2.2.2.tar.gz"
-  sha256 "bf90648b364c36eecbf2c7b510439507e27d8107016f23cf4f26b32550cf1674"
+  url "https://github.com/errata-ai/vale/archive/v2.4.2.tar.gz"
+  sha256 "27f9046bda890f8fa64d8af17095b97a8c0e0db1fbec792f90c2ba61b8a550da"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9adcdb7c49fec71387a0cd4a4beb8c81e0bb5467eb2e16db27a02ab94c0d4b2f" => :catalina
-    sha256 "fcf77f5465bef0f72403fe09154e591cecc03637d85bd0bad767fd66c6ce9a3c" => :mojave
-    sha256 "2294ed7b45cfd56714e540a89f408345e925cba457b64f5dd177b64257a218fb" => :high_sierra
+    sha256 "0d8764e447d458f3c62d7f778b82660af11eb8ff6185cc3e07083321127a6d01" => :catalina
+    sha256 "6e0c92d27e17f5631aa375f4655d0c61f4a9369f50efb83eedbf64d7d1ce6571" => :mojave
+    sha256 "68d7a21d87e17be0cc4bd7dcf2426de22ea6459635c6488f52017caa5e6cf9f2" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    flags = "-X main.version=#{version} -s -w"
-    system "go", "build", "-ldflags=#{flags}", "-o", "#{bin}/#{name}"
+    ldflags = "-X main.version=#{version} -s -w"
+    system "go", "build", *std_go_args, "-ldflags=#{ldflags}"
   end
 
   test do
@@ -38,6 +38,6 @@ class Vale < Formula
     (testpath/"document.md").write("# heading is not capitalized")
 
     output = shell_output("#{bin}/vale --config=#{testpath}/vale.ini #{testpath}/document.md 2>&1")
-    assert_match("✖ 0 errors, 1 warning and 0 suggestions in 1 file.", output)
+    assert_match(/✖ .*0 errors.*, .*1 warning.* and .*0 suggestions.* in 1 file\./, output)
   end
 end

@@ -1,15 +1,15 @@
 class Geph2 < Formula
   desc "Modular Internet censorship circumvention system"
   homepage "https://geph.io"
-  url "https://github.com/geph-official/geph2/archive/v0.22.2.tar.gz"
-  sha256 "dd1ccd9c5aac06b46d57b9ba7aab00b6f42b3ec8fde85d00f09e2e474e7c1dc1"
-  license "GPL-3.0"
+  url "https://github.com/geph-official/geph2/archive/v0.22.3.tar.gz"
+  sha256 "1a0aeb6722c79460070db86319fab1ae3d9eec90618a3b6960faacc88731d98a"
+  license "GPL-3.0-only"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7c48c5f3498c0baa1aacd187d715e12ef0625eed6012af544e8a10ff3768a2ef" => :catalina
-    sha256 "7c48c5f3498c0baa1aacd187d715e12ef0625eed6012af544e8a10ff3768a2ef" => :mojave
-    sha256 "7c48c5f3498c0baa1aacd187d715e12ef0625eed6012af544e8a10ff3768a2ef" => :high_sierra
+    sha256 "3bb066d5037011005e96467b055349395684098af46b9e8bbafa6d6ca23f28f3" => :catalina
+    sha256 "8be3fa40789dc634416626db3aaf4c7457da63178ee04005edd2d5b807c92553" => :mojave
+    sha256 "2632e8c16a9df74e0278db220961e15e9ff3bb421a15db944c8aa801e7125626" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -25,6 +25,6 @@ class Geph2 < Formula
   end
 
   test do
-    assert_match "-username", shell_output("#{bin}/geph-client -h 2>&1", 2)
+    assert_match "username = homebrew", shell_output("#{bin}/geph-client -username homebrew -dumpflags")
   end
 end

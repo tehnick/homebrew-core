@@ -1,14 +1,20 @@
 class Gdal < Formula
   desc "Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
-  sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
+  url "https://download.osgeo.org/gdal/3.1.3/gdal-3.1.3.tar.xz"
+  sha256 "161cf55371a143826f1d76ce566db1f0a666496eeb4371aed78b1642f219d51d"
   license "MIT"
+  revision 3
+
+  livecheck do
+    url "https://download.osgeo.org/gdal/CURRENT/"
+    regex(/href=.*?gdal[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
-    sha256 "b781dd4174e448f161d1e3f38fa898fea35ea16cb9fa6212cbcd0cffd6951e81" => :catalina
-    sha256 "5a517fafd975da2c073cbca3946b481683f88e832432efdc6c3951c8aac325d3" => :mojave
-    sha256 "d3e3b959e7c6f80ff748a345ba26c1876568de7f0edffe69ae6ed40959ddeee9" => :high_sierra
+    sha256 "64a8b994f4caaa431c4bf2fa55737c205f7bbc4c8cabfa7868259a093fd82f81" => :catalina
+    sha256 "9d6ce11fcb8008f7df4e45ebdc5abff1e171f6f58bd975ef80fa94572fa4d92b" => :mojave
+    sha256 "f7bd35d249b4cd714726afe84e1dae7e93d782efe1c0192518e20791a1f34b06" => :high_sierra
   end
 
   head do
@@ -25,7 +31,6 @@ class Gdal < Formula
   depends_on "geos"
   depends_on "giflib"
   depends_on "hdf5"
-  depends_on "jasper"
   depends_on "jpeg"
   depends_on "json-c"
   depends_on "libdap"
@@ -37,6 +42,7 @@ class Gdal < Formula
   depends_on "libxml2"
   depends_on "netcdf"
   depends_on "numpy"
+  depends_on "openjpeg"
   depends_on "pcre"
   depends_on "poppler"
   depends_on "proj"
@@ -66,8 +72,6 @@ class Gdal < Formula
       "--with-threads",
 
       # GDAL native backends
-      "--with-bsb",
-      "--with-grib",
       "--with-pam",
       "--with-pcidsk=internal",
       "--with-pcraster=internal",
@@ -92,7 +96,7 @@ class Gdal < Formula
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["netcdf"].opt_prefix}",
-      "--with-jasper=#{Formula["jasper"].opt_prefix}",
+      "--with-openjpeg",
       "--with-xerces=#{Formula["xerces-c"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
       "--with-dods-root=#{Formula["libdap"].opt_prefix}",
@@ -104,6 +108,7 @@ class Gdal < Formula
       "--with-armadillo=no",
       "--with-qhull=no",
       "--without-grass",
+      "--without-jasper",
       "--without-jpeg12",
       "--without-libgrass",
       "--without-mysql",
@@ -113,24 +118,23 @@ class Gdal < Formula
       # Unsupported backends are either proprietary or have no compatible version
       # in Homebrew. Podofo is disabled because Poppler provides the same
       # functionality and then some.
-      "--without-gta",
-      "--without-ogdi",
-      "--without-fme",
-      "--without-hdf4",
-      "--without-openjpeg",
-      "--without-fgdb",
       "--without-ecw",
+      "--without-fgdb",
+      "--without-fme",
+      "--without-gta",
+      "--without-hdf4",
+      "--without-idb",
+      "--without-ingres",
+      "--without-jp2mrsid",
       "--without-kakadu",
       "--without-mrsid",
-      "--without-jp2mrsid",
       "--without-mrsid_lidar",
       "--without-msg",
       "--without-oci",
-      "--without-ingres",
-      "--without-idb",
-      "--without-sde",
+      "--without-ogdi",
       "--without-podofo",
       "--without-rasdaman",
+      "--without-sde",
       "--without-sosi",
     ]
 

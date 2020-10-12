@@ -1,24 +1,24 @@
 class Caddy < Formula
   desc "Powerful, enterprise-ready, open source web server with automatic HTTPS"
   homepage "https://caddyserver.com/"
-  url "https://github.com/caddyserver/caddy/archive/v2.1.1.tar.gz"
-  sha256 "77beb13b39b670bfe9e0cc1c71b720d5b037cca60e1426a9a485bbfae34ba8d2"
+  url "https://github.com/caddyserver/caddy/archive/v2.2.0.tar.gz"
+  sha256 "82dde471af56db86f96a2dffc0631c4e0a9eea19debe966605a73b89fbb945b4"
   license "Apache-2.0"
   head "https://github.com/caddyserver/caddy.git"
 
   bottle do
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "602b81872d922b82c774674e7adcd62057faebc79ba3e625dd428f985aeaa4a5" => :catalina
-    sha256 "2c5fefa2bc48ea2e0ba42f7940f8fb8282f74c38a63a92708ae67c6854d0d365" => :mojave
-    sha256 "96b8d15646c1396a1a28b583a7c13a2311bad789cd50e70c5499b74be7c4bd8e" => :high_sierra
+    rebuild 3
+    sha256 "43c78b7199840b49df3f33aa81e4d9102a37f0f7a157ced0bce8b58c9a63edbb" => :catalina
+    sha256 "12e1bb3c41460e96bb62d86f5f0973b37fd48c3a9a653b25fa03341542a971dd" => :mojave
+    sha256 "f3421ddb7ce78d02e99eb75f2c3084b055c86cc7ed133c844e75f031946a06b1" => :high_sierra
   end
 
   depends_on "go" => :build
 
   resource "xcaddy" do
-    url "https://github.com/caddyserver/xcaddy/archive/v0.1.3.tar.gz"
-    sha256 "160244a67fca5a9ba448b98f4a94c6023e9ac64e3456a76ceea444d7a1f00767"
+    url "https://github.com/caddyserver/xcaddy/archive/v0.1.5.tar.gz"
+    sha256 "eb84bf79f5cb5b64d6929a88d2082d3fdafabd928c862c122a385b0d4c68284c"
   end
 
   def install
@@ -81,5 +81,7 @@ class Caddy < Formula
     assert_match "\":#{port2}\"",
       shell_output("curl -s http://127.0.0.1:#{port1}/config/apps/http/servers/srv0/listen/0")
     assert_match "Hello, Caddy!", shell_output("curl -s http://127.0.0.1:#{port2}")
+
+    assert_match version.to_s, shell_output("#{bin}/caddy version")
   end
 end

@@ -1,8 +1,13 @@
 class SuiteSparse < Formula
   desc "Suite of Sparse Matrix Software"
-  homepage "http://faculty.cse.tamu.edu/davis/suitesparse.html"
+  homepage "https://people.engr.tamu.edu/davis/suitesparse.html"
   url "https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v5.8.1.tar.gz"
   sha256 "06726e471fbaa55f792578f9b4ab282ea9d008cf39ddcc3b42b73400acddef40"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     sha256 "0a451d3abea1c06bb2fe629acb97ac970512d4ff583d39ff1264ece13a09a5f4" => :catalina

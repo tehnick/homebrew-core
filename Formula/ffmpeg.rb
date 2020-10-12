@@ -5,18 +5,24 @@ class Ffmpeg < Formula
   sha256 "ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb"
   # None of these parts are used by default, you have to explicitly pass `--enable-gpl`
   # to configure to activate them. In this case, FFmpeg's license changes to GPL v2+.
-  license "GPL-2.0"
+  license "GPL-2.0-or-later"
+  revision 1
   head "https://github.com/FFmpeg/FFmpeg.git"
 
+  livecheck do
+    url "https://ffmpeg.org/download.html"
+    regex(/href=.*?ffmpeg[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
-    sha256 "45a432a330239f38a11c77a0decd32b44b80d77669ca73eff4ed93b257569a3a" => :catalina
-    sha256 "87d27a92d7d5ebfbdd3ada8f658d34c81a300352ce68d995e29b389ba773c49f" => :mojave
-    sha256 "9566b4ca9d24ab172295cb9a348af359e67b0620ef2e92ac579444549cf67870" => :high_sierra
+    rebuild 1
+    sha256 "1924b8c971e7c2b2fd4a49ffdd2825df5048f5047b18a6454d0df6107e49d9a8" => :catalina
+    sha256 "e67748ccac6f4920ea740e526c34ce0a6c1087b645d41abbeed2c8e570c9a636" => :mojave
+    sha256 "5c2967fa5562347cabe3678a809463b28636f544f975bd4545720aca66de90c3" => :high_sierra
   end
 
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
-  depends_on "texi2html" => :build
   depends_on "aom"
   depends_on "dav1d"
   depends_on "fontconfig"
@@ -51,6 +57,13 @@ class Ffmpeg < Formula
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
   uses_from_macos "zlib"
+
+  # https://trac.ffmpeg.org/ticket/8760
+  # Remove in next release
+  patch do
+    url "https://github.com/FFmpeg/FFmpeg/commit/7c59e1b0f285cd7c7b35fcd71f49c5fd52cf9315.patch?full_index=1"
+    sha256 "1cbe1b68d70eadd49080a6e512a35f3e230de26b6e1b1c859d9119906417737f"
+  end
 
   def install
     args = %W[

@@ -1,9 +1,14 @@
 class KimApi < Formula
-  desc "The Knowledgebase of Interatomic Models (KIM) API"
+  desc "Knowledgebase of Interatomic Models (KIM) API"
   homepage "https://openkim.org"
   url "https://s3.openkim.org/kim-api/kim-api-2.1.3.txz"
   sha256 "88a5416006c65a2940d82fad49de0885aead05bfa8b59f87d287db5516b9c467"
   revision 1
+
+  livecheck do
+    url "https://openkim.org/kim-api/previous-versions/"
+    regex(/href=.*?kim-api[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     sha256 "585be65f52b6c5dd3b9c5ea0da1af889e24ef085f8174485d9256b84d9b01d84" => :catalina

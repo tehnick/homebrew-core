@@ -1,16 +1,21 @@
 class Imagemagick < Formula
   desc "Tools and libraries to manipulate images in many formats"
   homepage "https://www.imagemagick.org/"
-  url "https://dl.bintray.com/homebrew/mirror/ImageMagick-7.0.10-25.tar.xz"
-  mirror "https://www.imagemagick.org/download/releases/ImageMagick-7.0.10-25.tar.xz"
-  sha256 "0a125992e63b2a7f13fb966718304fe5f8142192c275d55b497a3bfe1f554ae6"
+  url "https://dl.bintray.com/homebrew/mirror/ImageMagick-7.0.10-34.tar.xz"
+  mirror "https://www.imagemagick.org/download/releases/ImageMagick-7.0.10-34.tar.xz"
+  sha256 "d35e02bab707611fa28f13244a0d91e251a9a8d6a4a8de405738f5ead49a06aa"
   license "ImageMagick"
   head "https://github.com/ImageMagick/ImageMagick.git"
 
+  livecheck do
+    url "https://www.imagemagick.org/download/"
+    regex(/href=.*?ImageMagick[._-]v?(\d+(?:\.\d+)+-\d+)\.t/i)
+  end
+
   bottle do
-    sha256 "d61106e1611c7c285d8b562d69e84fe55293d3104ca578a60e9f8293c96325fd" => :catalina
-    sha256 "eea1d413c394d708e8b649336c1591fa7647f16fc9a45809a714fa9fcced41a8" => :mojave
-    sha256 "fc24076d091df606e3be1faaf85cd2ba0959558ffeb30391e36454287ed23244" => :high_sierra
+    sha256 "d486b811e4a2e01b5d45f10f7372a5b00c543b4205fe6336a6cf108f1f2e27e9" => :catalina
+    sha256 "01616d61e598b4b5b86d0ff49cece04b98ef2e142ffb0f8d526acced5db22ec5" => :mojave
+    sha256 "aab7d3ea92bab1986c3a0f9ffd895d705aaeff3fa072f6c5dd9ae439bf68add8" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
@@ -31,6 +36,7 @@ class Imagemagick < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
+  uses_from_macos "zlib"
 
   skip_clean :la
 
@@ -39,7 +45,7 @@ class Imagemagick < Formula
     inreplace Dir["**/*-config.in"], "@PKG_CONFIG@", Formula["pkg-config"].opt_bin/"pkg-config"
 
     args = %W[
-      --disable-osx-universal-binary
+      --enable-osx-universal-binary=no
       --prefix=#{prefix}
       --disable-dependency-tracking
       --disable-silent-rules
@@ -62,7 +68,7 @@ class Imagemagick < Formula
       --enable-openmp
       ac_cv_prog_c_openmp=-Xpreprocessor\ -fopenmp
       ac_cv_prog_cxx_openmp=-Xpreprocessor\ -fopenmp
-      LDFLAGS=-lomp
+      LDFLAGS=-lomp\ -lz
     ]
 
     # versioned stuff in main tree is pointless for us

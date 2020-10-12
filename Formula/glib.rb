@@ -3,15 +3,18 @@ class Glib < Formula
 
   desc "Core application library for C"
   homepage "https://developer.gnome.org/glib/"
-  url "https://download.gnome.org/sources/glib/2.64/glib-2.64.4.tar.xz"
-  sha256 "f7e0b325b272281f0462e0f7fff25a833820cac19911ff677251daf6d87bce50"
-  license "LGPL-2.1"
-  revision 2
+  url "https://download.gnome.org/sources/glib/2.66/glib-2.66.1.tar.xz"
+  sha256 "a269ffe69fbcc3a21ff1acb1b6146b2a5723499d6e2de33ae16ccb6d2438ef60"
+  license "LGPL-2.1-or-later"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
-    sha256 "288fc814fdcc2b48b4296d700ce59468ae3a79bc11fa7978ca4de715afe88619" => :catalina
-    sha256 "0f0caafe83c71689fadef8bfd71339bbec3647101dfa623e98e566b0bda33b00" => :mojave
-    sha256 "60d204b976de73876d740a691f00e4c3d6af0255d5e8ee4787a93bf523ff84b4" => :high_sierra
+    sha256 "262f87a82d6409a34bec932f4bfae6c30fa8a39c8886161dd46043243ffcdd9f" => :catalina
+    sha256 "202946f77d5bde6c9bad1f3bad818bc0f01b2493a7c826dbd4a18bd451410f97" => :mojave
+    sha256 "8457442f4db9c331cabeca46344354b5177ff0cc54bef1d3ede8981aeda84b6b" => :high_sierra
   end
 
   depends_on "meson" => :build
@@ -32,22 +35,6 @@ class Glib < Formula
   patch do
     url "https://raw.githubusercontent.com/Homebrew/formula-patches/6164294a75541c278f3863b111791376caa3ad26/glib/hardcoded-paths.diff"
     sha256 "a57fec9e85758896ff5ec1ad483050651b59b7b77e0217459ea650704b7d422b"
-  end
-
-  # Fixes a runtime error on ARM and PowerPC Macs.
-  # Can be removed in the next release.
-  # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1566
-  patch do
-    url "https://gitlab.gnome.org/GNOME/glib/-/commit/c60d6599c9182ce44fdfaa8dde2955f55fc0d628.patch"
-    sha256 "9e3de41571edaa4bce03959abf885aad4edd069a622a5b642bf40294d748792e"
-  end
-
-  # Enables G_GNUC_FALLTHROUGH on clang.
-  # Necessary for pango to build on recent versions of clang.
-  # Will be in the next release.
-  patch do
-    url "https://gitlab.gnome.org/GNOME/glib/-/commit/5f38ae5ffca3213addc5b279a46d537792d031db.patch"
-    sha256 "12128966a693dd45d2e20286437aea13b1fe554aed0907cbc33131d3b76be890"
   end
 
   def install

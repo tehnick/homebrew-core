@@ -1,14 +1,20 @@
 class Libpq < Formula
   desc "Postgres C API library"
   homepage "https://www.postgresql.org/docs/12/libpq.html"
-  url "https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2"
-  sha256 "94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41"
+  url "https://ftp.postgresql.org/pub/source/v13.0/postgresql-13.0.tar.bz2"
+  sha256 "80e750be8d436b54197636a02636f8fd3263ba6779bf865b04832495ea592296"
   license "PostgreSQL"
+  revision 1
+
+  livecheck do
+    url "https://ftp.postgresql.org/pub/source/?C=M&O=A"
+    regex(%r{href=.*?v?(\d+(?:\.\d+)+)/?["' >]}i)
+  end
 
   bottle do
-    sha256 "2278f4c6e51a0be17b8fe91667c2bda6318c2dabe39c120be1afa374ee68d4a5" => :catalina
-    sha256 "d8e3e4541a895293cdf7f081747bcac80fe2a85665ca8165b69e8c6e7061acca" => :mojave
-    sha256 "98289d8fe1c54cd352e0c216607f5097107e96552df6f01d4d5842bd0d3aae28" => :high_sierra
+    sha256 "8ab2180b01b7e43605d077b6e9c6ed9efe435d7f17c6b57e9548d72d0bf32c7a" => :catalina
+    sha256 "e55e956275960813739d1a5b614e080b69f2f633070cf9b90d580077d2dc3cc4" => :mojave
+    sha256 "9c7349214b312520ec92070dc10bd6112e0cf5890bee053b6cc5b42eb8be1e63" => :high_sierra
   end
 
   keg_only "conflicts with postgres formula"

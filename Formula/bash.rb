@@ -1,7 +1,7 @@
 class Bash < Formula
   desc "Bourne-Again SHell, a UNIX command interpreter"
   homepage "https://www.gnu.org/software/bash/"
-  license "GPL-3.0"
+  license "GPL-3.0-or-later"
   head "https://git.savannah.gnu.org/git/bash.git"
 
   stable do
@@ -40,6 +40,11 @@ class Bash < Formula
         sha256 checksum
       end
     end
+  end
+
+  livecheck do
+    url "http://www.ravenports.com/catalog/bucket_C8/bash/standard/"
+    regex(%r{<td id="pkgversion">v?(\d+(?:\.\d+)+)(?:_\d+)?</td>}i)
   end
 
   bottle do

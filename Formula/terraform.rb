@@ -1,19 +1,24 @@
 class Terraform < Formula
   desc "Tool to build, change, and version infrastructure"
   homepage "https://www.terraform.io/"
-  url "https://github.com/hashicorp/terraform/archive/v0.12.29.tar.gz"
-  sha256 "17df1258f99865681fda2086c804336246407e74c195ae7a45e3e34de98b82ca"
+  url "https://github.com/hashicorp/terraform/archive/v0.13.4.tar.gz"
+  sha256 "a8fd0574594c534b3bf2c0b71eee88aff502a551a788f610f88b52a715f00c10"
   license "MPL-2.0"
   head "https://github.com/hashicorp/terraform.git"
 
-  bottle do
-    cellar :any_skip_relocation
-    sha256 "f7c787a4c42bb1291200f19b112aae5f725fc0fad068ad2422003e73ab74e4f7" => :catalina
-    sha256 "f7c787a4c42bb1291200f19b112aae5f725fc0fad068ad2422003e73ab74e4f7" => :mojave
-    sha256 "f7c787a4c42bb1291200f19b112aae5f725fc0fad068ad2422003e73ab74e4f7" => :high_sierra
+  livecheck do
+    url "https://releases.hashicorp.com/terraform/"
+    regex(%r{href=.*?v?(\d+(?:\.\d+)+)/?["' >]}i)
   end
 
-  depends_on "go@1.13" => :build
+  bottle do
+    cellar :any_skip_relocation
+    sha256 "05e7bf567f54c8396df8cf90470e573f5b08ebe8920bad1e638f531a54a152b6" => :catalina
+    sha256 "e1a7f05f31ad593a8d6822cd410872cccb513b2d9d5535a33b7a489ffc21e206" => :mojave
+    sha256 "ffc0d620e8b3ec23b0265ff4b46aa1158b9149cd05210c2da498b6ac1bc4b9aa" => :high_sierra
+  end
+
+  depends_on "go@1.14" => :build
 
   conflicts_with "tfenv", because: "tfenv symlinks terraform binaries"
 

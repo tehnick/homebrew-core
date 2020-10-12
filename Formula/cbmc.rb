@@ -1,17 +1,16 @@
 class Cbmc < Formula
-  desc "CBMC: The C Bounded Model Checker"
+  desc "C Bounded Model Checker"
   homepage "https://www.cprover.org/cbmc/"
   url "https://github.com/diffblue/cbmc.git",
-      using:    :git,
-      tag:      "cbmc-5.12.4",
-      revision: "b0b322501b29b30d8767e756ae641dc338d95caa"
+      tag:      "cbmc-5.16.0",
+      revision: "4451960f8b8172bc91bc8f1cc84ad78e05b12536"
   license "BSD-4-Clause"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ae760e8d4ebef48795153e008b9f973280fb9012ee0f187a92ba1ebd5f7176e0" => :catalina
-    sha256 "fdb290684027c7732887d5735d133d91787488feebff3febfa5ea52c0e1956c0" => :mojave
-    sha256 "3d35aded8e36a10a7a400b8084c7d76c9557f4a6a8327adb09c06ecd02209370" => :high_sierra
+    sha256 "522eca83aab9f5be593aee42c560fcbd00a0c08d414ef4b934b0eb13e46d924b" => :catalina
+    sha256 "a8d71aac43d2777c6f4b09abf24f8bddefa39aeb0fe00fe6e10eace1830e7b19" => :mojave
+    sha256 "9f37e32f681c707b041e7fdedb3aaf6d2fdf33101beade0080f8872f2d263f53" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -19,12 +18,9 @@ class Cbmc < Formula
   depends_on "openjdk" => :build
 
   def install
-    system "git", "submodule", "update", "--init"
-
-    # Build CBMC
-    system "cmake", "-S.", "-Bbuild", *std_cmake_args
-    system "cmake", "--build", "build"
-    cd "build" do
+    mkdir "build" do
+      system "cmake", "..", *std_cmake_args
+      system "cmake", "--build", "."
       system "make", "install"
     end
   end

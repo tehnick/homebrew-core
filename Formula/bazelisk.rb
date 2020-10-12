@@ -2,17 +2,16 @@ class Bazelisk < Formula
   desc "User-friendly launcher for Bazel"
   homepage "https://github.com/bazelbuild/bazelisk/"
   url "https://github.com/bazelbuild/bazelisk.git",
-      tag:      "v1.5.0",
-      revision: "9f7127db3c137e32a21484f9345bbc0da8301135"
+      tag:      "v1.7.1",
+      revision: "e86203d58e7cc61203c4b6cb74cb5177b497a6c5"
   license "Apache-2.0"
-  revision 1
   head "https://github.com/bazelbuild/bazelisk.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d1462676651a8d389cdd4114b61d05db442b1b73806797f8033a7c7bf76dc638" => :catalina
-    sha256 "30e28be7758c0c4675deb753081bb32b6a9053bdf825dca6087d99c3f17fb3e9" => :mojave
-    sha256 "df36ce6e180c27bc5f9edd1ab5e3d34594da5ad9f21a2ded037f6a622c5adf5f" => :high_sierra
+    sha256 "1ec24d040d1b3d60ed7c72516902dad7c9be5b07fdcba0a812ff734ae4f9aca8" => :catalina
+    sha256 "24aa0ab97fade951c35831699ef458d459ec5c17ad6210d96cb62938c3876eb4" => :mojave
+    sha256 "1d71e5f18f013f7d47e63f1b706e5aa54ccc771bbaf8093bb1cf66bc0c7c580c" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -39,12 +38,12 @@ class Bazelisk < Formula
 
   test do
     ENV["USE_BAZEL_VERSION"] = Formula["bazel"].version
-    assert_match /Bazelisk version: #{version}/, shell_output("#{bin}/bazelisk version")
+    assert_match "Build label: #{Formula["bazel"].version}", shell_output("#{bin}/bazelisk version")
 
     # This is an older than current version, so that we can test that bazelisk
     # will target an explicit version we specify. This version shouldn't need to
     # be bumped.
     ENV["USE_BAZEL_VERSION"] = "0.28.0"
-    assert_match /Build label: 0.28.0/, shell_output("#{bin}/bazelisk version")
+    assert_match "Build label: 0.28.0", shell_output("#{bin}/bazelisk version")
   end
 end

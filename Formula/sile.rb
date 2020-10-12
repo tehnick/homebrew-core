@@ -1,15 +1,15 @@
 class Sile < Formula
   desc "Modern typesetting system inspired by TeX"
   homepage "https://www.sile-typesetter.org"
-  url "https://github.com/sile-typesetter/sile/releases/download/v0.10.9/sile-0.10.9.tar.xz"
-  sha256 "44eaaf286b059b46eb51f28ef813d149538b06f4541c1eb7fb6faef26d60a564"
+  url "https://github.com/sile-typesetter/sile/releases/download/v0.10.12/sile-0.10.12.tar.xz"
+  sha256 "8a985db79252c6a8d946f0e4d9df07ae2ae9ca8741af7f1fdb0909b5e01eb52f"
   license "MIT"
   head "https://github.com/sile-typesetter/sile.git", shallow: false
 
   bottle do
-    sha256 "da79266a0ae28efab9e34eba745beff0a8fe5c7e9756ddcb56538e9bab0b46de" => :catalina
-    sha256 "94d9b2d884f07f593da6fd31a656e1997db9b661f1b6d7f0147603cc4ad5d041" => :mojave
-    sha256 "d01b305462816ca2d9bc48abe62e30b86f10c7febb1d8e2c6f82adf41d4fb418" => :high_sierra
+    sha256 "47e8d67b67dc3fd70dfbfe953f7abc3522f226412e59f7c8fae2fa06b6877b71" => :catalina
+    sha256 "79461b1dffdcd73b026d9f0cf77a7a2274e86ac72955310379f9182eee6208a2" => :mojave
+    sha256 "e9a41f0ca6ba90d7b5cc8a5dd3aec1302823613021f0ea5706d4ccdadd30af76" => :high_sierra
   end
 
   if build.head?
@@ -90,8 +90,8 @@ class Sile < Formula
   end
 
   resource "penlight" do
-    url "https://github.com/Tieske/Penlight/archive/1.7.0.tar.gz"
-    sha256 "5b793fc93fa7227190e191e5b24a8f0ce9dd5958ccebe7a53842a58b5d46057f"
+    url "https://github.com/Tieske/Penlight/archive/1.8.0.tar.gz"
+    sha256 "a1a41c5ec82c0459bc0508a0fb1cb56dfaa83a1dd7754d7174b336ad65420d3d"
   end
 
   resource "stdlib" do

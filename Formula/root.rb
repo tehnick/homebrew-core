@@ -1,17 +1,21 @@
 class Root < Formula
   desc "Object oriented framework for large scale data analysis"
   homepage "https://root.cern.ch/"
-  url "https://root.cern.ch/download/root_v6.22.00.source.tar.gz"
-  version "6.22.00"
-  sha256 "efd961211c0f9cd76cf4a486e4f89badbcf1d08e7535bba556862b3c1a80beed"
-  license "LGPL-2.1"
+  url "https://root.cern.ch/download/root_v6.22.02.source.tar.gz"
+  sha256 "89784afa9c9047e9da25afa72a724f32fa8aa646df267b7731e4527cc8a0c340"
+  license "LGPL-2.1-or-later"
   revision 1
   head "https://github.com/root-project/root.git"
 
+  livecheck do
+    url "https://root.cern.ch/download/"
+    regex(/href=.*?root[._-]v?(\d+(?:\.\d*[02468])+)\.source\.t/i)
+  end
+
   bottle do
-    sha256 "22f63d109ebc3d2a831df49744a404a8794aa8f55c55f2f2ecfe63f8f081b1c0" => :catalina
-    sha256 "572b4654f5514d888c97609c36c4409f5c0a82ad9a9d8046b99abd05759b04da" => :mojave
-    sha256 "e77cccf4df06bb140b3b7ec38832b0edd6097a6f8fd24cd025b5b7178f077d1a" => :high_sierra
+    sha256 "486f9e341af9643151ac07d2088edb2e1af6606762e0018a173a83843f9a4902" => :catalina
+    sha256 "c011943bd9c0571202c9cbb2de294204d49928280cd884f2c221e588f8967d18" => :mojave
+    sha256 "704b9c68020baf0b5ab836afc0de8170d88fe783e53e5d5aa3ef97c7a1deb692" => :high_sierra
   end
 
   # https://github.com/Homebrew/homebrew-core/issues/30726

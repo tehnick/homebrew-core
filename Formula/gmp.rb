@@ -4,7 +4,12 @@ class Gmp < Formula
   url "https://gmplib.org/download/gmp/gmp-6.2.0.tar.xz"
   mirror "https://ftp.gnu.org/gnu/gmp/gmp-6.2.0.tar.xz"
   sha256 "258e6cd51b3fbdfc185c716d55f82c08aff57df0c6fbd143cf6ed561267a1526"
-  license "GPL-3.0"
+  license any_of: ["LGPL-3.0-or-later", "GPL-2.0-or-later"]
+
+  livecheck do
+    url "https://gmplib.org/download/gmp/"
+    regex(/href=.*?gmp[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     cellar :any
@@ -38,10 +43,10 @@ class Gmp < Formula
     args = %W[--prefix=#{prefix} --enable-cxx --with-pic]
 
     if Hardware::CPU.arm?
-      args << "--build=aarch64-apple-darwin#{`uname -r`.to_i}"
+      args << "--build=aarch64-apple-darwin#{OS.kernel_version.major}"
       system "autoreconf", "-fiv"
     else
-      args << "--build=#{Hardware.oldest_cpu}-apple-darwin#{`uname -r`.to_i}"
+      args << "--build=#{Hardware.oldest_cpu}-apple-darwin#{OS.kernel_version.major}"
     end
     system "./configure", *args
     system "make"

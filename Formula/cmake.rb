@@ -1,16 +1,21 @@
 class Cmake < Formula
   desc "Cross-platform make"
   homepage "https://www.cmake.org/"
-  url "https://github.com/Kitware/CMake/releases/download/v3.18.1/cmake-3.18.1.tar.gz"
-  sha256 "c0e3338bd37e67155b9d1e9526fec326b5c541f74857771b7ffed0c46ad62508"
+  url "https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4.tar.gz"
+  sha256 "597c61358e6a92ecbfad42a9b5321ddd801fc7e7eca08441307c9138382d4f77"
   license "BSD-3-Clause"
   head "https://gitlab.kitware.com/cmake/cmake.git"
 
+  livecheck do
+    url "https://cmake.org/download/"
+    regex(/Latest Release \(v?(\d+(?:\.\d+)+)\)/i)
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "590ad7be94461516a5e9c2c4b52316bd77124671bc294835bb7caefc0056d0f6" => :catalina
-    sha256 "9f0cf88ec2b2f5ba8f0e2dadaae8d287e650136a792589587d3472f481c90dda" => :mojave
-    sha256 "38522cf8d87c44416649c349835e76583bdaa0c23bd68ce1ab4cc4df73f36658" => :high_sierra
+    sha256 "c7c42e66c63448e4aee44498b374c9985f477b129fccca5dd9c13530d1e680ef" => :catalina
+    sha256 "a0b167ad7f2fbf6f6dbcca9d74cb09acbd7822c54873803e940abf04272f8028" => :mojave
+    sha256 "98704ab50ed76df9214083c01e373277ba02aad43c858182be7ed1466d005326" => :high_sierra
   end
 
   on_linux do

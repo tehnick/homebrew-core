@@ -6,6 +6,11 @@ class Pjproject < Formula
   license "GPL-2.0"
   head "https://github.com/pjsip/pjproject.git"
 
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
     cellar :any
     rebuild 1
@@ -24,8 +29,7 @@ class Pjproject < Formula
     system "make", "install"
 
     arch = Utils.safe_popen_read("uname", "-m").chomp
-    rel = Utils.safe_popen_read("uname", "-r").chomp
-    bin.install "pjsip-apps/bin/pjsua-#{arch}-apple-darwin#{rel}" => "pjsua"
+    bin.install "pjsip-apps/bin/pjsua-#{arch}-apple-darwin#{OS.kernel_version}" => "pjsua"
   end
 
   test do

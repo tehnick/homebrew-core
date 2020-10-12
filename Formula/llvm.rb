@@ -3,64 +3,89 @@ class Llvm < Formula
   homepage "https://llvm.org/"
   # The LLVM Project is under the Apache License v2.0 with LLVM Exceptions
   license "Apache-2.0"
-  revision 3
+  revision 2
   head "https://github.com/llvm/llvm-project.git"
 
   stable do
-    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/llvm-10.0.0.src.tar.xz"
-    sha256 "df83a44b3a9a71029049ec101fb0077ecbbdf5fe41e395215025779099a98fdf"
+    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/llvm-10.0.1.src.tar.xz"
+    sha256 "c5d8e30b57cbded7128d78e5e8dad811bff97a8d471896812f57fa99ee82cdf3"
 
     resource "clang" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/clang-10.0.0.src.tar.xz"
-      sha256 "885b062b00e903df72631c5f98b9579ed1ed2790f74e5646b4234fa084eacb21"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/clang-10.0.1.src.tar.xz"
+      sha256 "f99afc382b88e622c689b6d96cadfa6241ef55dca90e87fc170352e12ddb2b24"
+
+      patch :p1 do
+        url "https://raw.githubusercontent.com/Homebrew/formula-patches/c7da61787c62822804dd90192dd9dd254511192c/llvm/10.0.1-clang.diff"
+        sha256 "44a605f614a26fb20d127b041e2a87e6adc9b8332e07cbbb6b457bc391cda660"
+      end
     end
 
     resource "clang-tools-extra" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/clang-tools-extra-10.0.0.src.tar.xz"
-      sha256 "acdf8cf6574b40e6b1dabc93e76debb84a9feb6f22970126b04d4ba18b92911c"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/clang-tools-extra-10.0.1.src.tar.xz"
+      sha256 "d093782bcfcd0c3f496b67a5c2c997ab4b85816b62a7dd5b27026634ccf5c11a"
     end
 
     resource "compiler-rt" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/compiler-rt-10.0.0.src.tar.xz"
-      sha256 "6a7da64d3a0a7320577b68b9ca4933bdcab676e898b759850e827333c3282c75"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/compiler-rt-10.0.1.src.tar.xz"
+      sha256 "d90dc8e121ca0271f0fd3d639d135bfaa4b6ed41e67bd6eb77808f72629658fa"
+
+      patch :p1 do
+        url "https://raw.githubusercontent.com/Homebrew/formula-patches/c7da61787c62822804dd90192dd9dd254511192c/llvm/10.0.1-compiiler-rt.diff"
+        sha256 "8ad0ce521b010dfb941c0979c1c072a2b40e4a69424374541d28122ba74ce4a0"
+      end
     end
 
     resource "libcxx" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/libcxx-10.0.0.src.tar.xz"
-      sha256 "270f8a3f176f1981b0f6ab8aa556720988872ec2b48ed3b605d0ced8d09156c7"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/libcxx-10.0.1.src.tar.xz"
+      sha256 "def674535f22f83131353b3c382ccebfef4ba6a35c488bdb76f10b68b25be86c"
     end
 
     resource "libunwind" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/libunwind-10.0.0.src.tar.xz"
-      sha256 "09dc5ecc4714809ecf62908ae8fe8635ab476880455287036a2730966833c626"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/libunwind-10.0.1.src.tar.xz"
+      sha256 "741903ec1ebff2253ff19d803629d88dc7612598758b6e48bea2da168de95e27"
     end
 
     resource "lld" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/lld-10.0.0.src.tar.xz"
-      sha256 "b9a0d7c576eeef05bc06d6e954938a01c5396cee1d1e985891e0b1cf16e3d708"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/lld-10.0.1.src.tar.xz"
+      sha256 "591449e0aa623a6318d5ce2371860401653c48bb540982ccdd933992cb88df7a"
+
+      patch :p1 do
+        url "https://raw.githubusercontent.com/Homebrew/formula-patches/c7da61787c62822804dd90192dd9dd254511192c/llvm/10.0.1-lld.diff"
+        sha256 "734f87580e89d76507b8c41a5a75b5105c41a2d03a8dc2fad5c7ef027d771a3e"
+      end
     end
 
     resource "lldb" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/lldb-10.0.0.src.tar.xz"
-      sha256 "dd1ffcb42ed033f5167089ec4c6ebe84fbca1db4a9eaebf5c614af09d89eb135"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/lldb-10.0.1.src.tar.xz"
+      sha256 "07abe87c25876aa306e73127330f5f37d270b6b082d50cc679e31b4fc02a3714"
+
+      patch :p1 do
+        url "https://raw.githubusercontent.com/Homebrew/formula-patches/c7da61787c62822804dd90192dd9dd254511192c/llvm/10.0.1-lldb.diff"
+        sha256 "69c7d4c803a174dff6809d02255e7e4c19d80f25c73dd5fcf2657769db158e25"
+      end
     end
 
     resource "openmp" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/openmp-10.0.0.src.tar.xz"
-      sha256 "3b9ff29a45d0509a1e9667a0feb43538ef402ea8cfc7df3758a01f20df08adfa"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/openmp-10.0.1.src.tar.xz"
+      sha256 "d19f728c8e04fb1e94566c8d76aef50ec926cd2f95ef3bf1e0a5de4909b28b44"
     end
 
     resource "polly" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/polly-10.0.0.src.tar.xz"
-      sha256 "35fba6ed628896fe529be4c10407f1b1c8a7264d40c76bced212180e701b4d97"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/polly-10.0.1.src.tar.xz"
+      sha256 "d2fb0bb86b21db1f52402ba231da7c119c35c21dfb843c9496fe901f2d6aa25a"
     end
+  end
+
+  livecheck do
+    url :homepage
+    regex(/LLVM (\d+.\d+.\d+)/i)
   end
 
   bottle do
     cellar :any
-    sha256 "ea9b9f579df49499d9ab0084e10edecc5350298d6c5db399a1dabc8694dab7db" => :catalina
-    sha256 "14f59a25e73e3a00fd36632f2106b41eda1b54aa1039b4b979bd957a8c041bf4" => :mojave
-    sha256 "6e09ca233790a58edae55bba453fd50179369b5514acb5f8b86156401227a75e" => :high_sierra
+    sha256 "d8ad1f1c539c4c643017882878d60bc3a45b7e4a67e4d697ac071d20926d121c" => :catalina
+    sha256 "7a5600152cc5d8c7043b9c92db2194e757e17cae6f9e0a498468c3921efb9770" => :mojave
+    sha256 "9ce34ed1a0be220267b76e8c81d7b4955cca470957a4f921fe7e380b0a81b67f" => :high_sierra
   end
 
   # Clang cannot find system headers if Xcode CLT is not installed
@@ -75,14 +100,18 @@ class Llvm < Formula
   # We intentionally use Make instead of Ninja.
   # See: Homebrew/homebrew-core/issues/35513
   depends_on "cmake" => :build
-  depends_on "python@3.8" => :build
-  depends_on xcode: :build
+  depends_on "python@3.9" => :build
   depends_on "libffi"
 
   uses_from_macos "libedit"
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
+
+  patch :p1 do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/c7da61787c62822804dd90192dd9dd254511192c/llvm/10.0.1-llvm.diff"
+    sha256 "86b4e2bf10dfb9a04153e3d4fc744c3f323f3e13fc7b3a7d22e6791d47eb2e2c"
+  end
 
   def install
     projects = %w[
@@ -109,7 +138,7 @@ class Llvm < Formula
       (projects + runtimes).each { |p| resource(p).stage(buildpath/p) }
     end
 
-    py_ver = "3.8"
+    py_ver = "3.9"
 
     # Apple's libstdc++ is too old to build LLVM
     ENV.libcxx if ENV.compiler == :clang
@@ -124,7 +153,6 @@ class Llvm < Formula
     args = %W[
       -DLLVM_ENABLE_PROJECTS=#{projects.join(";")}
       -DLLVM_ENABLE_RUNTIMES=#{runtimes.join(";")}
-      -DLIBOMP_ARCH=x86_64
       -DLLVM_POLLY_LINK_INTO_TOOLS=ON
       -DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON
       -DLLVM_LINK_LLVM_DYLIB=ON
@@ -141,7 +169,7 @@ class Llvm < Formula
       -DLLVM_TARGETS_TO_BUILD=all
       -DFFI_INCLUDE_DIR=#{Formula["libffi"].opt_lib}/libffi-#{Formula["libffi"].version}/include
       -DFFI_LIBRARY_DIR=#{Formula["libffi"].opt_lib}
-      -DLLVM_CREATE_XCODE_TOOLCHAIN=ON
+      -DLLVM_CREATE_XCODE_TOOLCHAIN=#{MacOS::Xcode.installed? ? "ON" : "OFF"}
       -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
       -DLLDB_ENABLE_PYTHON=OFF
       -DLLDB_ENABLE_LUA=OFF
@@ -153,11 +181,17 @@ class Llvm < Formula
     sdk = MacOS.sdk_path_if_needed
     args << "-DDEFAULT_SYSROOT=#{sdk}" if sdk
 
+    if MacOS.version == :mojave && MacOS::CLT.installed?
+      # Mojave CLT linker via software update is older than Xcode.
+      # Use it to retain compatibility.
+      args << "-DCMAKE_LINKER=/Library/Developer/CommandLineTools/usr/bin/ld"
+    end
+
     mkdir llvmpath/"build" do
       system "cmake", "-G", "Unix Makefiles", "..", *(std_cmake_args + args)
       system "make"
       system "make", "install"
-      system "make", "install-xcode-toolchain"
+      system "make", "install-xcode-toolchain" if MacOS::Xcode.installed?
     end
 
     # Install LLVM Python bindings

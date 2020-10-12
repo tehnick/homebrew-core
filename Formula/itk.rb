@@ -1,15 +1,20 @@
 class Itk < Formula
   desc "Insight Toolkit is a toolkit for performing registration and segmentation"
   homepage "https://itk.org"
-  url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.1.0/InsightToolkit-5.1.0.tar.gz"
-  sha256 "121020a1611508cec8123eb5226215598cec07be627d843a2e6b6da891e61d13"
+  url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.1.1/InsightToolkit-5.1.1.tar.gz"
+  sha256 "39e2a63840054361b728878a35b21bbe38374682ffb4b5c4f8f8f7514dedb58e"
   license "Apache-2.0"
   head "https://github.com/InsightSoftwareConsortium/ITK.git"
 
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
-    sha256 "a164746cce8e23e169a967bae3c8b455f63674ee3e74f677d7e1214253db3975" => :catalina
-    sha256 "e633ca1823a1f35e0d2e025a4f2ce7e1cad26342d934e9a41a29396e0808f374" => :mojave
-    sha256 "d7e3580065e5c49d5af1a403bbb7a3a0532471494c87e15f50ca295c74a30123" => :high_sierra
+    sha256 "0f61a4a6db8935c74dad672472a9df7a920dcad0081db2ff9b8af62291cd27f7" => :catalina
+    sha256 "cdab5fa00fc056cb691b95ee762bee986af9f90bf388dc178cd71fc708be5cab" => :mojave
+    sha256 "6693ad5cd1d63c568eb9613553333e04b0fd808a6ebace4e6fdaee2cddaee0fd" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -19,7 +24,12 @@ class Itk < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
-  depends_on "vtk"
+  depends_on "vtk@8.2" # needed for gdcm
+
+  on_linux do
+    depends_on "alsa-lib"
+    depends_on "unixodbc"
+  end
 
   def install
     args = std_cmake_args + %W[
@@ -42,7 +52,6 @@ class Itk < Formula
       -DITK_USE_SYSTEM_TIFF=ON
       -DITK_USE_SYSTEM_GDCM=ON
       -DITK_LEGACY_REMOVE=ON
-      -DModule_ITKLevelSetsv4Visualization=ON
       -DModule_ITKReview=ON
       -DModule_ITKVtkGlue=ON
       -DITK_USE_GPU=ON
@@ -80,7 +89,7 @@ class Itk < Formula
       }
     EOS
 
-    v = version.to_s.split(".")[0..1].join(".")
+    v = version.major_minor
     # Build step
     system ENV.cxx, "-std=c++11", "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
     # Linking step

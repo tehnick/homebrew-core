@@ -2,16 +2,16 @@ class Minikube < Formula
   desc "Run a Kubernetes cluster locally"
   homepage "https://minikube.sigs.k8s.io/"
   url "https://github.com/kubernetes/minikube.git",
-      tag:      "v1.12.1",
-      revision: "5664228288552de9f3a446ea4f51c6f29bbdd0e0"
+      tag:      "v1.13.1",
+      revision: "1fd1f67f338cbab4b3e5a6e4c71c551f522ca138"
   license "Apache-2.0"
   head "https://github.com/kubernetes/minikube.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "84aa48991e5a90287fe9bdb52ccd9c936b29446a0bac701d8a518c88562ab6f7" => :catalina
-    sha256 "a2c0efddddd1ad734a6b24ab9380e7a5718e169e48f7ff35cbc5fd9f85db96a2" => :mojave
-    sha256 "419d870347183de062fb01c36386ff106b5c7c0f78432fd5f39586614609fe89" => :high_sierra
+    sha256 "757e6a6d4828d91b301af40eab4104f9e128fbeadd006aceab2da79a819974ea" => :catalina
+    sha256 "cb87484e52c6c6c1c644d8a43a84682d7282ac3527da74e240ccd2b83e2fc882" => :mojave
+    sha256 "d7a42d0ec3ab5a356a72786b8d0c5246cc724253981ea9116097f8d43cdabf64" => :high_sierra
   end
 
   depends_on "go" => :build

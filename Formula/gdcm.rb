@@ -1,15 +1,19 @@
 class Gdcm < Formula
   desc "Grassroots DICOM library and utilities for medical files"
   homepage "https://sourceforge.net/projects/gdcm/"
-  url "https://github.com/malaterre/GDCM/archive/v3.0.7.tar.gz"
-  sha256 "e00881f0a93d2db4a686231d5f1092a4bc888705511fe5d90114f2226147a18d"
+  url "https://github.com/malaterre/GDCM/archive/v3.0.8.tar.gz"
+  sha256 "47b96be345b1611784f9e65fc39367c7450c9a1ef81c21f8acddfb6207098315"
   license "BSD-3-Clause"
 
+  livecheck do
+    url "https://github.com/malaterre/GDCM/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
+
   bottle do
-    rebuild 1
-    sha256 "b4fcbfc9a2dd14f8d5b0cc1fd1f5900465b469a1f05fbae51f09bc209a578dac" => :catalina
-    sha256 "67a12632e5705ed9ce8b72061b88b16246114d89a9e0594c1dd60100869e7412" => :mojave
-    sha256 "6210fcdf8afd786ec2b49c74f1d5bd6d4e0f40e1404ffdbb0ee40c66ef53715d" => :high_sierra
+    sha256 "a683f203fffdce1bb6be629ebfe39aa054ea7cba40477210e55a021cb4c905d2" => :catalina
+    sha256 "779a058d24149d36c09d1e6033d790dbf389a1f16d45fbf0bef6757a0d0578ad" => :mojave
+    sha256 "fa625ec8b9b4d3d2b56101346dacaec35c02fc71ea916c2461afcecbaf5cd657" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -19,7 +23,7 @@ class Gdcm < Formula
   depends_on "openjpeg"
   depends_on "openssl@1.1"
   depends_on "python@3.8"
-  depends_on "vtk"
+  depends_on "vtk@8.2"
 
   def install
     ENV.cxx11

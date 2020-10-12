@@ -1,20 +1,21 @@
 class GoAT113 < Formula
   desc "Go programming environment (1.13)"
   homepage "https://golang.org"
-  url "https://dl.google.com/go/go1.13.14.src.tar.gz"
-  mirror "https://fossies.org/linux/misc/go1.13.14.src.tar.gz"
-  sha256 "197333e97290e9ea8796f738d61019dcba1c377c2f3961fd6a114918ecc7ab06"
+  url "https://golang.org/dl/go1.13.15.src.tar.gz"
+  mirror "https://fossies.org/linux/misc/go1.13.15.src.tar.gz"
+  sha256 "5fb43171046cf8784325e67913d55f88a683435071eef8e9da1aa8a1588fcf5d"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 "1b95cff8f94bcf3926511d4bac481e6593eaff5a47b2547e70cad7f6c733b794" => :catalina
-    sha256 "c36ef71328bab2c9229d91bbc9b7477ad56fa010aad022a197675cdda4c65486" => :mojave
-    sha256 "00f0a722e2dee59002d6adc91571505e047361dff60e2f466ab1e230edd0b042" => :high_sierra
+    rebuild 1
+    sha256 "4c728bf1466cdd0d9fa6f9ed3a565e4a2203717730603189d8b5f2675a008c88" => :catalina
+    sha256 "d994ff2b27c191bb74dd44a373e254ef92472c1cb13e381cf6bf9d3d118bdaef" => :mojave
+    sha256 "4c62c487e96657aabebc01f662c2506724e123a08bdf3ead0715945c9838429c" => :high_sierra
   end
 
   keg_only :versioned_formula
 
-  depends_on macos: :el_capitan
+  deprecate! date: "2020-08-11", because: :unsupported
 
   resource "gotools" do
     url "https://go.googlesource.com/tools.git",
@@ -40,7 +41,6 @@ class GoAT113 < Formula
 
     cd "src" do
       ENV["GOROOT_FINAL"] = libexec
-      ENV["GOOS"]         = "darwin"
       system "./make.bash", "--no-clean"
     end
 

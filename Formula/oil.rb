@@ -1,15 +1,15 @@
 class Oil < Formula
   desc "Bash-compatible Unix shell with more consistent syntax and semantics"
   homepage "https://www.oilshell.org/"
-  url "https://www.oilshell.org/download/oil-0.7.0.tar.gz"
-  sha256 "da462387a467661cb9d0ec9b667aecd7be3f54ce662cfbb2292f4795fd3f7f20"
+  url "https://www.oilshell.org/download/oil-0.8.1.tar.gz"
+  sha256 "d2ebfe83b5ea1c3fbc77cb90241cab6115d2152f61b53db3c8f39bbff73be1da"
   license "Apache-2.0"
   head "https://github.com/oilshell/oil.git"
 
   bottle do
-    sha256 "8e5714ec5cc0700623b37e8c6e64c2fc85bec5cb91a48ecdd23c2139d2e0615c" => :catalina
-    sha256 "8e135274574ff3c21248feca2ba837e8197bba55b78c41b0f80f7a3ff0cdb3b1" => :mojave
-    sha256 "89427ac26ef12831c9e1a737abad953791a753d2c806bc5cf369b152fa308b1d" => :high_sierra
+    sha256 "38ff82b2a9792212b4fe218c9cca824642090b9ff5d8f2e0d595c56e5bf37659" => :catalina
+    sha256 "14201c3b8aef65af80c4f54018f6393042491dab629e25cc9ddcecdb532d9308" => :mojave
+    sha256 "88edd8bee8e6509e565ef943fcf42ea7cf9b83678a873c3d0d06332b81c13569" => :high_sierra
   end
 
   def install

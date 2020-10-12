@@ -2,15 +2,20 @@ class Inlets < Formula
   desc "Expose your local endpoints to the Internet"
   homepage "https://github.com/inlets/inlets"
   url "https://github.com/inlets/inlets.git",
-      tag:      "2.7.3",
-      revision: "2934c3c247ea28996ebb50889403befced94b29a"
+      tag:      "2.7.6",
+      revision: "9d88c2ba279728412c7219772bd42fb2eca8d4c7"
   license "MIT"
+
+  livecheck do
+    url "https://github.com/inlets/inlets/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8706b38a917c0acfa8343479db33c206a78132d01992834a39816400d65949f9" => :catalina
-    sha256 "20ee65ae593585ac381997df0862a2267383a216a14440e75f775373df9117fb" => :mojave
-    sha256 "43a486286ab55be362fd2c2a5c3a5764b00fd671fc93077d82b70b2719a62e5a" => :high_sierra
+    sha256 "b5425af7764a67a1267fc1706cd37113174af8c471e4db289a76aabf558ceef8" => :catalina
+    sha256 "2fe155a85f9c0f58381ea0a965810627cc1c81f3e6d48fb9643abbfa28129978" => :mojave
+    sha256 "863e1aab4656c01178121d27a0ebc2921e3580f967b7c31039c5a91e5086dd07" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -18,16 +23,10 @@ class Inlets < Formula
   uses_from_macos "ruby" => :test
 
   def install
-    ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/inlets/inlets").install buildpath.children
-    cd "src/github.com/inlets/inlets" do
-      commit = Utils.safe_popen_read("git", "rev-parse", "HEAD").chomp
-      system "go", "build", "-ldflags",
-             "-s -w -X main.GitCommit=#{commit} -X main.Version=#{version}",
-             "-a",
-             "-installsuffix", "cgo", "-o", bin/"inlets"
-      prefix.install_metafiles
-    end
+    commit = Utils.safe_popen_read("git", "rev-parse", "HEAD").chomp
+    system "go", "build", *std_go_args,
+            "-ldflags", "-s -w -X main.GitCommit=#{commit} -X main.Version=#{version}",
+            "-a", "-installsuffix", "cgo"
   end
 
   def cleanup(name, pid)
@@ -39,8 +38,8 @@ class Inlets < Formula
   test do
     upstream_port = free_port
     remote_port = free_port
-    MOCK_RESPONSE = "INLETS OK".freeze
-    SECRET_TOKEN = "itsasecret-sssshhhhh".freeze
+    mock_response = "INLETS OK".freeze
+    secret_token = "itsasecret-sssshhhhh".freeze
 
     (testpath/"mock_upstream_server.rb").write <<~EOS
       require 'socket'
@@ -52,7 +51,7 @@ class Inlets < Formula
         response = "OK\\n"
         shutdown = false
         if request.include? "inlets-test"
-          response = "#{MOCK_RESPONSE}\\n"
+          response = "#{mock_response}\\n"
           shutdown = true
         end
         socket.print "HTTP/1.1 200 OK\\r\\n" +
@@ -89,17 +88,17 @@ class Inlets < Formula
       # testing that we can hit the mock server upstream_port via the tunnel remote_port
       sleep 3 # Waiting for mock server
       server_pid = fork do
-        exec "#{bin}/inlets server --port #{remote_port} --token #{SECRET_TOKEN}"
+        exec "#{bin}/inlets server --port #{remote_port} --token #{secret_token}"
       end
 
       client_pid = fork do
         # Starting inlets client
         exec "#{bin}/inlets client --remote localhost:#{remote_port} " \
-             "--upstream localhost:#{upstream_port} --token #{SECRET_TOKEN}"
+             "--upstream localhost:#{upstream_port} --token #{secret_token}"
       end
 
       sleep 3 # Waiting for inlets websocket tunnel
-      assert_match MOCK_RESPONSE, shell_output("curl -s http://localhost:#{remote_port}/inlets-test")
+      assert_match mock_response, shell_output("curl -s http://localhost:#{remote_port}/inlets-test")
     ensure
       cleanup("Mock Server", mock_upstream_server_pid)
       cleanup("Inlets Server", server_pid)

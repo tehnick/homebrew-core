@@ -1,14 +1,19 @@
 class Netdata < Formula
   desc "Diagnose infrastructure problems with metrics, visualizations & alarms"
   homepage "https://netdata.cloud/"
-  url "https://github.com/netdata/netdata/releases/download/v1.23.2/netdata-v1.23.2.tar.gz"
-  sha256 "761aec15901e09f963361752c6e5b5cb723e342a3c5bf6b0624067fceb2ccdfd"
-  license "GPL-3.0"
+  url "https://github.com/netdata/netdata/releases/download/v1.25.0/netdata-v1.25.0.tar.gz"
+  sha256 "3315e9daee052d961ac0eb2cd86a249c877619dd6c3b44701957180fd956a19c"
+  license "GPL-3.0-or-later"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
-    sha256 "b4080d267775bc62f01d18fc4c6dc0b9d38a3eeb8da84175ed6ccd26f4475018" => :catalina
-    sha256 "ebc0d753c80938968f05979485a3974302e9136959de31d6dff0145dfed10283" => :mojave
-    sha256 "259aad4b0d234de4265e2ef95239d47fdf46271f7c269a0548c72adb442bf69c" => :high_sierra
+    sha256 "e7e259b56d6ea0c105fdd4615fc145adb8afc425632d2265629bca33b7326f8e" => :catalina
+    sha256 "f87dd60958a01b747c07c57678e9451b913f8445ce48b4742ec800d1599b6e75" => :mojave
+    sha256 "0fa96dbd7bfbba64435fab9b084136731fb1f16807f4788cd7b90591d2081298" => :high_sierra
   end
 
   depends_on "autoconf" => :build

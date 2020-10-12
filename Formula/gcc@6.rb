@@ -6,6 +6,11 @@ class GccAT6 < Formula
   sha256 "7ef1796ce497e89479183702635b14bb7a46b53249209a5e0f999bebf4740945"
   revision 5
 
+  livecheck do
+    url :stable
+    regex(%r{href=.*?gcc[._-]v?(6(?:\.\d+)+)(?:/?["' >]|\.t)}i)
+  end
+
   bottle do
     sha256 "59e24c6441d4ebd6e6462406d07a4722f765b81aa96b0c81117376cf342641b0" => :catalina
     sha256 "2280bb37e05ca20d3d797a4b75695ea6d57196c2f4b4003d43ba191883558073" => :mojave
@@ -44,17 +49,15 @@ class GccAT6 < Formula
     # C, C++, ObjC, Fortran compilers are always built
     languages = %w[c c++ objc obj-c++ fortran]
 
-    version_suffix = version.to_s.slice(/\d/)
+    version_suffix = version.major.to_s
 
     # Even when suffixes are appended, the info pages conflict when
     # install-info is run so pretend we have an outdated makeinfo
     # to prevent their build.
     ENV["gcc_cv_prog_makeinfo_modern"] = "no"
 
-    osmajor = `uname -r`.chomp
-
     args = [
-      "--build=x86_64-apple-darwin#{osmajor}",
+      "--build=x86_64-apple-darwin#{OS.kernel_version}",
       "--prefix=#{prefix}",
       "--libdir=#{lib}/gcc/#{version_suffix}",
       "--enable-languages=#{languages.join(",")}",
@@ -124,7 +127,7 @@ class GccAT6 < Formula
         return 0;
       }
     EOS
-    system "#{bin}/gcc-6", "-o", "hello-c", "hello-c.c"
+    system "#{bin}/gcc-#{version.major}", "-o", "hello-c", "hello-c.c"
     assert_equal "Hello, world!\n", `./hello-c`
 
     (testpath/"hello-cc.cc").write <<~EOS
@@ -135,7 +138,7 @@ class GccAT6 < Formula
         return 0;
       }
     EOS
-    system "#{bin}/g++-6", "-o", "hello-cc", "hello-cc.cc"
+    system "#{bin}/g++-#{version.major}", "-o", "hello-cc", "hello-cc.cc"
     assert_equal "Hello, world!\n", `./hello-cc`
 
     fixture = <<~EOS
@@ -150,7 +153,7 @@ class GccAT6 < Formula
       end
     EOS
     (testpath/"in.f90").write(fixture)
-    system "#{bin}/gfortran-6", "-o", "test", "in.f90"
+    system "#{bin}/gfortran-#{version.major}", "-o", "test", "in.f90"
     assert_equal "done", `./test`.strip
   end
 end

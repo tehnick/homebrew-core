@@ -2,26 +2,32 @@ class Kustomize < Formula
   desc "Template-free customization of Kubernetes YAML manifests"
   homepage "https://github.com/kubernetes-sigs/kustomize"
   url "https://github.com/kubernetes-sigs/kustomize.git",
-      tag:      "kustomize/v3.8.1",
-      revision: "0b359d0ef0272e6545eda0e99aacd63aef99c4d0"
+      tag:      "kustomize/v3.8.5",
+      revision: "4052cd4fd8c76a17b5f64e32509f3fba9713fe75"
   license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/kustomize.git"
 
+  livecheck do
+    url :head
+    regex(%r{kustomize/v?(\d+(?:\.\d+)+)$}i)
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "c3b6b0048d3adf6f9d35bf100767fcc2272bcee774faf02344c1a81d8c95e82d" => :catalina
-    sha256 "ee33783d479e3224e0d67142f349833f5cf1f0ec8b4b008cdd87b709391cb640" => :mojave
-    sha256 "8af188e8b832df5df7073b5065c1c869a832897d7e438b6e437e96d8da3bc138" => :high_sierra
+    sha256 "ae6590ed9ddd4bf5697034c6dfa8a12e93d1eee46f07dcf9ec496aef309f1357" => :catalina
+    sha256 "3f1a26e793438964f70a3800eb478bf24c17372addac545ecb29efb490f6eae5" => :mojave
+    sha256 "c359c96d2b8ee8cfc28ea78483f653b46df0bdcfb57a8df082e43588d183d2b4" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
     revision = Utils.safe_popen_read("git", "rev-parse", "HEAD").strip
+    tag = Utils.safe_popen_read("git", "tag", "--contains", "HEAD").strip
 
     cd "kustomize" do
       ldflags = %W[
-        -s -X sigs.k8s.io/kustomize/api/provenance.version=#{version}
+        -s -X sigs.k8s.io/kustomize/api/provenance.version=#{tag}
         -X sigs.k8s.io/kustomize/api/provenance.gitCommit=#{revision}
         -X sigs.k8s.io/kustomize/api/provenance.buildDate=#{Time.now.iso8601}
       ]
@@ -30,7 +36,7 @@ class Kustomize < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/kustomize version")
+    assert_match "kustomize/v#{version}", shell_output("#{bin}/kustomize version")
 
     (testpath/"kustomization.yaml").write <<~EOS
       resources:

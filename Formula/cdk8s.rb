@@ -3,15 +3,19 @@ require "language/node"
 class Cdk8s < Formula
   desc "Define k8s native apps and abstractions using object-oriented programming"
   homepage "https://github.com/awslabs/cdk8s"
-  url "https://registry.npmjs.org/cdk8s-cli/-/cdk8s-cli-0.26.0.tgz"
-  sha256 "d4cd0eca893011420765bea1aed6a198a1f21b09d9650223dac33c17ed5eb4fa"
+  url "https://registry.npmjs.org/cdk8s-cli/-/cdk8s-cli-0.30.0.tgz"
+  sha256 "9e53bcf5b0aa3b1ae49cdb3929c0d665eb4b8d2b456262c09107496bc48fb566"
   license "Apache-2.0"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a6a3d58777381571fbabf4c023cb13da0145f1e77e58c39b50bc90616755578d" => :catalina
-    sha256 "945c71f494fcba0afecf91172181f826d4bb311256a7999b8912098d835f5e7f" => :mojave
-    sha256 "51fc6cfa21ea4d2f42a93de0908f12a3fea0f3cc3dea4bc83e663c4854a9a440" => :high_sierra
+    sha256 "9aa9e251872a6ed43dbaf3c06b761779286f8f10608775d23c6789197470cf98" => :catalina
+    sha256 "119db77f81ff73cdcc0deb457b711565c4c4b7f8d69e45f140f99916a571486a" => :mojave
+    sha256 "254e068917bcbacf60c9dac975e01c304a1913ba0d8be43257cbc933f321885d" => :high_sierra
   end
 
   depends_on "node"
@@ -22,7 +26,7 @@ class Cdk8s < Formula
   end
 
   test do
-    system "#{bin}/cdk8s", "import", "k8s", "-l", "python"
-    assert_predicate testpath/"imports/k8s", :exist?, "cdk8s import did not work"
+    assert_match "Cannot initialize a project in a non-empty directory",
+      shell_output("#{bin}/cdk8s init python-app 2>&1", 1)
   end
 end

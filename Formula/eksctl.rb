@@ -1,17 +1,17 @@
 class Eksctl < Formula
-  desc "The official CLI for Amazon EKS"
+  desc "Simple command-line tool for creating clusters on Amazon EKS"
   homepage "https://eksctl.io"
   url "https://github.com/weaveworks/eksctl.git",
-      tag:      "0.25.0",
-      revision: "673de795554c4138baeda442268026c2b22c3bd6"
+      tag:      "0.29.2",
+      revision: "7762887bc6795a6c86f75cf8fc2d19e9265cb2ab"
   license "Apache-2.0"
   head "https://github.com/weaveworks/eksctl.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "cf8a03c796d6f493dc9fe9ba7b7b0808ad3c7ffcd1ddbca1bbaf2cf085bda15f" => :catalina
-    sha256 "a9736fefe784bf7b47e69661e008e6a968fd2986047315f07aaf261fd4cf3cbd" => :mojave
-    sha256 "5b3f1be5f403c90219ca57de78a06f2776a70536f8315aebd6136600fde6ed86" => :high_sierra
+    sha256 "92f1316df511a420c17599f206ad2acc861571fca817103314d98ffd90fc0012" => :catalina
+    sha256 "a84ef5be4da7b10db2ee8145022dae156531dc1f741e0b0ffe92c6df55ec6161" => :mojave
+    sha256 "eab296324fe7d9f5cef1dee9a902174ddc27c2d27ab81e66a4c40478d3b40315" => :high_sierra
   end
 
   depends_on "go" => :build

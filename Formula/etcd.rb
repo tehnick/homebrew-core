@@ -2,25 +2,19 @@ class Etcd < Formula
   desc "Key value store for shared configuration and service discovery"
   homepage "https://github.com/etcd-io/etcd"
   url "https://github.com/etcd-io/etcd.git",
-    tag:      "v3.4.10",
-    revision: "18dfb9cca345bb2b2fbe73d5fc31028c2477bef1"
+    tag:      "v3.4.13",
+    revision: "ae9734ed278b7a1a7dfc82e800471ebbf9fce56f"
   license "Apache-2.0"
   head "https://github.com/etcd-io/etcd.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "fc23b5d35f29b1c36af2c9bd52073a5c135cfeca73ae3d497b153e5157716d10" => :catalina
-    sha256 "c0bc859d50bf26f2850189806b0a0a2966189cb51a7cbcf5563d7f2803b94a25" => :mojave
-    sha256 "7d85f49b8a8aeaf5c23ed97dddf6ca37ef74d1ff92289eb8823d94afd296534a" => :high_sierra
+    sha256 "ff3603b21a38568e3a2ae9964cdacbb5adfdc8b094c98b8e0423d2e4fb82c8ca" => :catalina
+    sha256 "8c3f78a11d36c7c934deb4faa1007645d8cdb8293b04242e92e536551752a805" => :mojave
+    sha256 "642a6b2ef0dbfabad3645e512c507aca25fa777a84e1790f7d18f8f63a2c637d" => :high_sierra
   end
 
   depends_on "go" => :build
-
-  # See https://github.com/etcd-io/etcd/pull/11937
-  patch do
-    url "https://github.com/etcd-io/etcd/commit/45297c8790bef13baf5b905b3927029a701848c4.patch?full_index=1"
-    sha256 "90f44278806323ddb8cc8160cb0bd00dd892698d90f27db505dca57e3c773df2"
-  end
 
   def install
     # Fix vendored deps issue (remove this in the next release)

@@ -1,10 +1,15 @@
 class Logstash < Formula
   desc "Tool for managing events and logs"
   homepage "https://www.elastic.co/products/logstash"
-  url "https://artifacts.elastic.co/downloads/logstash/logstash-oss-7.8.1.tar.gz"
-  sha256 "4d8039c24f3d62f94902b218dbaacc8b058061ecc14cfd4f86d68674572cd679"
+  url "https://artifacts.elastic.co/downloads/logstash/logstash-oss-7.9.2.tar.gz"
+  sha256 "611bbb38222c266b813c2fa67fa050969ec2b006db8ad9c93e7b80a9a5fa4ed3"
   license "Apache-2.0"
   head "https://github.com/elastic/logstash.git"
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle :unneeded
 

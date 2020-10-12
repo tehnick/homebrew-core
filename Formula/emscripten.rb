@@ -3,42 +3,24 @@ require "language/node"
 class Emscripten < Formula
   desc "LLVM bytecode to JavaScript compiler"
   homepage "https://emscripten.org/"
+  url "https://github.com/emscripten-core/emscripten/archive/2.0.5.tar.gz"
+  sha256 "35377ca91921c29b44d78a2de4c98a70b3eba31ae95d6ac843ea5cb361a857fc"
   # Emscripten is available under 2 licenses, the MIT license and the
   # University of Illinois/NCSA Open Source License.
   license "MIT"
+  head "https://github.com/emscripten-core/emscripten.git"
 
-  stable do
-    url "https://github.com/emscripten-core/emscripten/archive/1.40.1.tar.gz"
-    sha256 "e15ad7ffa1cce35c25cac7c797d6daa0c5868905eaaf5ed1431a8228b8803dfc"
-
-    resource "fastcomp" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp/archive/1.40.1.tar.gz"
-      sha256 "c34868ab566e9f073df319d9872608cef47ed1ea74852acacb12a22fd7c99a4c"
-    end
-
-    resource "fastcomp-clang" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp-clang/archive/1.40.1.tar.gz"
-      sha256 "9ce4612df39684348d78acb711ec10bee98ad4ac136fb0dcb70d4c884b8bb6b3"
-    end
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
   bottle do
     cellar :any
-    sha256 "ac8892b0aba032f395821b0141c58ca952499df9b05902ec64dacfd4b4be8831" => :catalina
-    sha256 "4915b3e0d93807bf0cbe42dfd9ddf6b6df93441c7560fd7857515e3bb8948fc0" => :mojave
-    sha256 "e6b1f5a22fa597b045cdd52bf16a49892c227a27a84a0f16adfa4745b662ac6a" => :high_sierra
-  end
-
-  head do
-    url "https://github.com/emscripten-core/emscripten.git", branch: "incoming"
-
-    resource "fastcomp" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp.git", branch: "incoming"
-    end
-
-    resource "fastcomp-clang" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp-clang.git", branch: "incoming"
-    end
+    rebuild 1
+    sha256 "bc614abf0032ef9cafa7fed38525951c579a135051b04f7f76eb8f174e74ad52" => :catalina
+    sha256 "c0fd4df4c536d467539315eac3374655e660301da1193b6fdd6180edf145e352" => :mojave
+    sha256 "6d6a5fcea2398a13d4c85032b8fa2f60d7551153b1248b83274b3b3ec18e3860" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -46,6 +28,13 @@ class Emscripten < Formula
   depends_on "node"
   depends_on "python@3.8"
   depends_on "yuicompressor"
+
+  # emscripten needs argument '-fignore-exceptions', which is only available
+  # starting in llvm >= 12
+  resource "llvm" do
+    url "https://github.com/llvm/llvm-project/archive/llvmorg-12-init.tar.gz"
+    sha256 "a8f00b95f81722009bdcc2cc07235fad752e5f539006621ad055023fe0d58987"
+  end
 
   def install
     ENV.cxx11
@@ -55,25 +44,80 @@ class Emscripten < Formula
     # repository.
     libexec.install Dir["*"]
 
-    (buildpath/"fastcomp").install resource("fastcomp")
-    (buildpath/"fastcomp/tools/clang").install resource("fastcomp-clang")
+    resource("llvm").stage do
+      projects = %w[
+        clang
+        clang-tools-extra
+        lld
+        lldb
+        polly
+      ]
+      # OpenMP currently fails to build on ARM
+      # https://github.com/Homebrew/brew/issues/7857#issuecomment-661484670
+      projects << "openmp" unless Hardware::CPU.arm?
+      runtimes = %w[
+        compiler-rt
+        libcxx
+        libcxxabi
+        libunwind
+      ]
 
-    cmake_args = std_cmake_args.reject { |s| s["CMAKE_INSTALL_PREFIX"] }
-    cmake_args = [
-      "-DCMAKE_BUILD_TYPE=Release",
-      "-DCMAKE_INSTALL_PREFIX=#{libexec}/llvm",
-      "-DLLVM_TARGETS_TO_BUILD='X86;JSBackend'",
-      "-DLLVM_INCLUDE_EXAMPLES=OFF",
-      "-DLLVM_INCLUDE_TESTS=OFF",
-      "-DCLANG_INCLUDE_TESTS=OFF",
-      "-DOCAMLFIND=/usr/bin/false",
-      "-DGO_EXECUTABLE=/usr/bin/false",
-    ]
+      llvmpath = Pathname.pwd/"llvm"
 
-    mkdir "fastcomp/build" do
-      system "cmake", "..", *cmake_args
-      system "make"
-      system "make", "install"
+      # Apple's libstdc++ is too old to build LLVM
+      ENV.libcxx if ENV.compiler == :clang
+
+      # compiler-rt has some iOS simulator features that require i386 symbols
+      # I'm assuming the rest of clang needs support too for 32-bit compilation
+      # to work correctly, but if not, perhaps universal binaries could be
+      # limited to compiler-rt. llvm makes this somewhat easier because compiler-rt
+      # can almost be treated as an entirely different build from llvm.
+      ENV.permit_arch_flags
+
+      args = std_cmake_args.reject { |s| s["CMAKE_INSTALL_PREFIX"] } + %W[
+        -DCMAKE_INSTALL_PREFIX=#{libexec}/llvm
+        -DLLVM_ENABLE_PROJECTS=#{projects.join(";")}
+        -DLLVM_ENABLE_RUNTIMES=#{runtimes.join(";")}
+        -DLLVM_POLLY_LINK_INTO_TOOLS=ON
+        -DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON
+        -DLLVM_LINK_LLVM_DYLIB=ON
+        -DLLVM_BUILD_LLVM_C_DYLIB=ON
+        -DLLVM_ENABLE_EH=ON
+        -DLLVM_ENABLE_FFI=ON
+        -DLLVM_ENABLE_LIBCXX=ON
+        -DLLVM_ENABLE_RTTI=ON
+        -DLLVM_INCLUDE_DOCS=OFF
+        -DLLVM_INCLUDE_TESTS=OFF
+        -DLLVM_INSTALL_UTILS=ON
+        -DLLVM_ENABLE_Z3_SOLVER=OFF
+        -DLLVM_OPTIMIZED_TABLEGEN=ON
+        -DLLVM_TARGETS_TO_BUILD=all
+        -DFFI_INCLUDE_DIR=#{Formula["libffi"].opt_lib}/libffi-#{Formula["libffi"].version}/include
+        -DFFI_LIBRARY_DIR=#{Formula["libffi"].opt_lib}
+        -DLLVM_CREATE_XCODE_TOOLCHAIN=#{MacOS::Xcode.installed? ? "ON" : "OFF"}
+        -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
+        -DLLDB_ENABLE_PYTHON=OFF
+        -DLLDB_ENABLE_LUA=OFF
+        -DLLDB_ENABLE_LZMA=OFF
+        -DLIBOMP_INSTALL_ALIASES=OFF
+        -DCLANG_INCLUDE_TESTS=OFF
+      ]
+
+      sdk = MacOS.sdk_path_if_needed
+      args << "-DDEFAULT_SYSROOT=#{sdk}" if sdk
+
+      if MacOS.version == :mojave && MacOS::CLT.installed?
+        # Mojave CLT linker via software update is older than Xcode.
+        # Use it to retain compatibility.
+        args << "-DCMAKE_LINKER=/Library/Developer/CommandLineTools/usr/bin/ld"
+      end
+
+      mkdir llvmpath/"build" do
+        system "cmake", "-G", "Unix Makefiles", "..", *args
+        system "make"
+        system "make", "install"
+        system "make", "install-xcode-toolchain" if MacOS::Xcode.installed?
+      end
     end
 
     cd libexec do
@@ -87,18 +131,28 @@ class Emscripten < Formula
     end
   end
 
-  def caveats
-    <<~EOS
-      Manually set LLVM_ROOT to
-        #{opt_libexec}/llvm/bin
-      and BINARYEN_ROOT to
-        #{Formula["binaryen"].opt_prefix}
-      in ~/.emscripten after running `emcc` for the first time.
-    EOS
+  def post_install
+    system bin/"emcc"
+    inreplace "#{libexec}/.emscripten" do |s|
+      s.gsub! /^(LLVM_ROOT.*)/, "#\\1\nLLVM_ROOT = \"#{opt_libexec}/llvm/bin\"\\2"
+      s.gsub! /^(BINARYEN_ROOT.*)/, "#\\1\nBINARYEN_ROOT = \"#{Formula["binaryen"].opt_prefix}\"\\2"
+    end
   end
 
   test do
-    system bin/"emcc"
-    assert_predicate testpath/".emscripten", :exist?, "Failed to create sample config"
+    # Fixes "Unsupported architecture" Xcode prepocessor error
+    ENV.delete "CPATH"
+
+    (testpath/"test.c").write <<~EOS
+      #include <stdio.h>
+      int main()
+      {
+        printf("Hello World!");
+        return 0;
+      }
+    EOS
+
+    system bin/"emcc", "test.c", "-o", "test.js", "-s", "NO_EXIT_RUNTIME=0"
+    assert_equal "Hello World!", shell_output("node test.js").chomp
   end
 end

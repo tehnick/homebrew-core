@@ -1,17 +1,22 @@
 class Openrtsp < Formula
   desc "Command-line RTSP client"
   homepage "http://www.live555.com/openRTSP"
-  url "http://www.live555.com/liveMedia/public/live.2020.07.31.tar.gz"
-  mirror "https://download.videolan.org/pub/videolan/testing/contrib/live555/live.2020.07.31.tar.gz"
+  url "http://www.live555.com/liveMedia/public/live.2020.08.19.tar.gz"
+  mirror "https://download.videolan.org/pub/videolan/testing/contrib/live555/live.2020.08.19.tar.gz"
   # Keep a mirror as upstream tarballs are removed after each version
-  sha256 "4bba6b249b714d88a634e4e6e10982abe5e13c7a5d9a01a959d620002a5f25f9"
-  license "GPL-3.0"
+  sha256 "af3af7f2510b0b45f38892c232abca2cee2ab36a62503e7085b47ed2c3c2c537"
+  license "LGPL-3.0-or-later"
+
+  livecheck do
+    url "http://www.live555.com/liveMedia/public/"
+    regex(/href=.*?live[._-]v?(\d+(?:\.\d+)+[a-z]?)\.t/i)
+  end
 
   bottle do
     cellar :any
-    sha256 "96ed2108f05af0e69f5d8ca0dee31c20c448d1f31d483e0c8fdf104314760484" => :catalina
-    sha256 "6f5d0d67092381f169ca9054a900121eee275dd69533822b0170e64f8371c3a9" => :mojave
-    sha256 "b7ed3ed9d779d38de8a725503b34c392a0b1953111b764b2518a233f36cc4786" => :high_sierra
+    sha256 "7843987b297a82dd8528990c0b5f8b262871b6421765798a684eb360065a4869" => :catalina
+    sha256 "8e3d0ebec29c89b1b42b3a469a750d5dc947565297e4d3877962a7dde0baffce" => :mojave
+    sha256 "668801a282a83ee70ddd2aa62090cf9c4101e1d0b73e4654a88505971dd03f0d" => :high_sierra
   end
 
   depends_on "openssl@1.1"

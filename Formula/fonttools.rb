@@ -3,19 +3,20 @@ class Fonttools < Formula
 
   desc "Library for manipulating fonts"
   homepage "https://github.com/fonttools/fonttools"
-  url "https://github.com/fonttools/fonttools/releases/download/4.13.0/fonttools-4.13.0.zip"
-  sha256 "63987cd374c39a75146748f8be8637634221e53fef15cdf76f17777676d8545a"
+  url "https://github.com/fonttools/fonttools/releases/download/4.16.1/fonttools-4.16.1.zip"
+  sha256 "991eb05e0366af5a6e620551f950a4f49433c5a8de70770a7066bcbe78bb86cc"
   license "MIT"
+  revision 1
   head "https://github.com/fonttools/fonttools.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ca4cebdcc20adb4a2baf2d046bf473442ccfdb0e5b0fcaf29d3d59e41191a402" => :catalina
-    sha256 "b6a07cdc0477ecd7b33280284cebb828561545b7eb2596cb02043c34eb5ca2e2" => :mojave
-    sha256 "ad3109af81809ff975094d7cff4ef352b4661e20f3a419e3ff9e97997c31fcf2" => :high_sierra
+    sha256 "c0fc8efd6caaabf9b3340e2eb6d84ebba1f4065e7f82869262f4fb69dfbe115b" => :catalina
+    sha256 "ec3b0c20e2f9517ff3037e07b07881e4d8d4e0a765735bb6a136635ae6d13112" => :mojave
+    sha256 "ee8e0c4b45dcbeb31f147907e257a1478972dca701556755a8149510245f571c" => :high_sierra
   end
 
-  depends_on "python@3.8"
+  depends_on "python@3.9"
 
   def install
     virtualenv_install_with_resources

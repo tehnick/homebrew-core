@@ -1,17 +1,20 @@
 class Postgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2"
-  sha256 "94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41"
+  url "https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2"
+  sha256 "bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc"
   license "PostgreSQL"
-  revision 4
   head "https://github.com/postgres/postgres.git"
 
+  livecheck do
+    url "https://www.postgresql.org/docs/current/static/release.html"
+    regex(/Release v?(\d+(?:\.\d+)+)/i)
+  end
+
   bottle do
-    rebuild 1
-    sha256 "04bc235fe7f8c459dec8fc0bac18ef002207ae41f087b8609f0ba0a6e903d187" => :catalina
-    sha256 "1c5b0d008d9c9f7deeae50686544aeac817072c1fb34d464f42ad557f1c74d8d" => :mojave
-    sha256 "08ee9da0e2e6346902797443604132d7fcc3c613f87f3940fed2844cd7f1c0e5" => :high_sierra
+    sha256 "cf7e64a4a702db6667582d6a8d83107b67d1457a623fbe04426d9702023612fa" => :catalina
+    sha256 "199d0fa0c97e376933c8cca82e44503b36f610f7edb2170e6a1e7e7491c82017" => :mojave
+    sha256 "c210ec1143b73616108891c3cefaa31754c5bd5fda0222e2e3266035488a1353" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
@@ -91,7 +94,7 @@ class Postgresql < Formula
       This formula has created a default database cluster with:
         initdb --locale=C -E UTF-8 #{var}/postgres
       For more details, read:
-        https://www.postgresql.org/docs/#{version.to_s.slice(/\d+/)}/app-initdb.html
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

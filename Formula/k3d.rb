@@ -1,15 +1,20 @@
 class K3d < Formula
   desc "Little helper to run Rancher Lab's k3s in Docker"
   homepage "https://github.com/rancher/k3d"
-  url "https://github.com/rancher/k3d/archive/v3.0.0.tar.gz"
-  sha256 "939fae09600ae7edb5e92ecab5c25ac2adec5be432c8a7ee34a14e01a0245b11"
+  url "https://github.com/rancher/k3d/archive/v3.1.3.tar.gz"
+  sha256 "47e3388cb7960253af625550462f47867936b07625a0318eccde2551048eb5a2"
   license "MIT"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1363893ef0fefaa579ea21f1dd546d2d88b44316e2df7746e31a0732aa1beb81" => :catalina
-    sha256 "51e0a32d8d8ddba6386c5243e3a3a22a730020769d30962e2778c586da8088da" => :mojave
-    sha256 "2958a2c668ebe0d064610e680898e895ede437775b2f7fa225a30ee5c9aa3ae5" => :high_sierra
+    sha256 "88ab5b832c60780a77a5ab23fb9279e7aa8fffb54f9c372e835cbfb335961b9c" => :catalina
+    sha256 "469179e733517139915d369b4deb1587291ee4f1e635d86a47ef8aeae7b84372" => :mojave
+    sha256 "243b148634fa7f0e756fbac37a9ade3e380ceee3806479cf1a9883ce9ee14f95" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -17,10 +22,17 @@ class K3d < Formula
   def install
     system "go", "build",
            "-mod", "vendor",
-           "-ldflags", "-s -w -X github.com/rancher/k3d/v3/version.Version=v#{version}"\
-           " -X github.com/rancher/k3d/v3/version.K3sVersion=latest",
+           "-ldflags", "-s -w -X github.com/rancher/k3d/v#{version.major}/version.Version=v#{version}"\
+           " -X github.com/rancher/k3d/v#{version.major}/version.K3sVersion=latest",
            "-trimpath", "-o", bin/"k3d"
-    prefix.install_metafiles
+
+    # Install bash completion
+    output = Utils.safe_popen_read("#{bin}/k3d", "completion", "bash")
+    (bash_completion/"k3d").write output
+
+    # Install zsh completion
+    output = Utils.safe_popen_read("#{bin}/k3d", "completion", "zsh")
+    (zsh_completion/"_k3d").write output
   end
 
   test do

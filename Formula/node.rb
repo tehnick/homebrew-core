@@ -1,36 +1,45 @@
 class Node < Formula
   desc "Platform built on V8 to build network applications"
   homepage "https://nodejs.org/"
-  url "https://nodejs.org/dist/v14.7.0/node-v14.7.0.tar.xz"
-  sha256 "ca2f1c63f3f2bf22247d7386bfc31e0295caa953f39f7079210170a886288e6f"
+  url "https://nodejs.org/dist/v14.13.1/node-v14.13.1.tar.gz"
+  sha256 "f0080d3284ea1585e255a3f459ce151e8106a33f4ce8bed0da15ff99c6a082a5"
   license "MIT"
+  revision 1
   head "https://github.com/nodejs/node.git"
+
+  livecheck do
+    url "https://nodejs.org/dist/"
+    regex(%r{href=["']?v?(\d+(?:\.\d+)+)/?["' >]}i)
+  end
 
   bottle do
     cellar :any
-    sha256 "9145dbfc69cfb951ca8f8cada7fa3afb230617dafd1cbbb22593d0153297ca15" => :catalina
-    sha256 "8df9c2f42eb862914664cbf5a84b69b8597dcec3547c8b051dcc09437f558e97" => :mojave
-    sha256 "4a489345741e08ac4cf6ec9f72d27c2f40aa87d2321345aa5c1b93b038f1bd9e" => :high_sierra
+    sha256 "2f3555e90de308f24f5b9a65fc1f3c1f5cc3f14c534f167b3ce4af3f3b7ba3d1" => :catalina
+    sha256 "3442abd6c0b2fd94721cc4b7ae8af0afda7289d66f4fd038f842cbea8868d84e" => :mojave
+    sha256 "a4cf1045d1e9e2544bb0482dc3ad38242b374a817f17215be9129189b8bd595f" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
-  depends_on "python@3.8" => :build
+  depends_on "python@3.9" => :build
   depends_on "icu4c"
 
   # We track major/minor from upstream Node releases.
   # We will accept *important* npm patch releases when necessary.
   resource "npm" do
-    url "https://registry.npmjs.org/npm/-/npm-6.14.7.tgz"
-    sha256 "510091d3b42b60ab75c9d46cebb769ee5204d58d948a61bf913455437fa768c5"
+    url "https://registry.npmjs.org/npm/-/npm-6.14.8.tgz"
+    sha256 "fe8e873cb606c06f67f666b4725eb9122c8927f677c8c0baf1477f0ff81f5a2c"
   end
 
   def install
     # make sure subprocesses spawned by make are using our Python 3
-    ENV["PYTHON"] = Formula["python@3.8"].opt_bin/"python3"
+    ENV["PYTHON"] = Formula["python@3.9"].opt_bin/"python3"
 
     # Never install the bundled "npm", always prefer our
     # installation from tarball for better packaging control.
     args = %W[--prefix=#{prefix} --without-npm --with-intl=system-icu]
+    # Remove `--openssl-no-asm` workaround when upstream releases a fix
+    # See also: https://github.com/nodejs/node/issues/34043
+    args << "--openssl-no-asm" if Hardware::CPU.arm?
     args << "--tag=head" if build.head?
 
     system "./configure", *args

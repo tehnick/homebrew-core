@@ -1,10 +1,15 @@
 class Ucon64 < Formula
   desc "ROM backup tool and emulator's Swiss Army knife program"
   homepage "https://ucon64.sourceforge.io/"
-  url "https://downloads.sourceforge.net/ucon64/ucon64-2.2.0-src.tar.gz"
+  url "https://downloads.sourceforge.net/project/ucon64/ucon64/ucon64-2.2.0/ucon64-2.2.0-src.tar.gz"
   sha256 "5727e0be9ee878bba84d204135a7ca25662db6b56fee6895301e50c1bdda70af"
   license "GPL-2.0"
   head "https://svn.code.sf.net/p/ucon64/svn/trunk/ucon64"
+
+  livecheck do
+    url :stable
+    regex(%r{url=.*?/ucon64[._-]v?(\d+(?:\.\d+)+)-src\.t}i)
+  end
 
   bottle do
     sha256 "f0bf36d7828e138e2fe1068b4b5bf1b9e70f80cef564c186950a30ab2cb1df85" => :catalina

@@ -29,7 +29,8 @@ class Imake < Formula
     ENV.deparallelize
 
     # imake runtime is broken when used with clang's cpp
-    cpp_program = Formula["gcc"].opt_bin/"cpp-#{Formula["gcc"].version_suffix}"
+    gcc_major_ver = Formula["gcc"].any_installed_version.major
+    cpp_program = Formula["gcc"].opt_bin/"cpp-#{gcc_major_ver}"
     inreplace "imakemdep.h", /::CPPCMD::/, cpp_program
     inreplace "imake.man", /__cpp__/, cpp_program
 
@@ -42,7 +43,7 @@ class Imake < Formula
     resource("xorg-cf-files").stage do
       # Fix for different X11 locations.
       inreplace "X11.rules", "define TopXInclude	/**/",
-                "define TopXInclude	-I#{MacOS::X11.include}"
+                "define TopXInclude	-I#{MacOS::XQuartz.include}"
       system "./configure", "--with-config-dir=#{lib}/X11/config",
                             "--prefix=#{HOMEBREW_PREFIX}"
       system "make", "install"
@@ -52,7 +53,7 @@ class Imake < Formula
   test do
     # Use pipe_output because the return code is unimportant here.
     output = pipe_output("#{bin}/imake -v -s/dev/null -f/dev/null -T/dev/null 2>&1")
-    gcc_major_ver = Formula["gcc"].version_suffix
+    gcc_major_ver = Formula["gcc"].any_installed_version.major
     assert_match "#{Formula["gcc"].opt_bin}/cpp-#{gcc_major_ver}", output
   end
 end

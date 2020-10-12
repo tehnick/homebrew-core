@@ -1,19 +1,20 @@
 class Arangodb < Formula
-  desc "The Multi-Model NoSQL Database"
+  desc "Multi-Model NoSQL Database"
   homepage "https://www.arangodb.com/"
-  url "https://download.arangodb.com/Source/ArangoDB-3.6.5.tar.gz"
-  sha256 "e5edc1af5f186dda485f06aeeaba0e621a479f145eaa9d1b411be0bba9c3b547"
+  url "https://download.arangodb.com/Source/ArangoDB-3.7.2-1.tar.gz"
+  sha256 "de79c04b6b15d9b7a415f8cbfd6682e000414725be1c25966aeab19dfbb49195"
   license "Apache-2.0"
   head "https://github.com/arangodb/arangodb.git", branch: "devel"
 
   bottle do
-    sha256 "5286e70078293e13d40c35ee31aa936a2aea80aa0ea0262fc86fea71ca47b00a" => :catalina
-    sha256 "dc40b9f2cb3eaea5cb8cc47b243d5816b808e934159a02abcd8f364340b448ac" => :mojave
+    sha256 "f66b2c46e2c8201e8e7a9ff32b5bf22cebe948d6d5dc1cedb1cc09f9dae72bd2" => :catalina
+    sha256 "4c6b0c1ecf14fdb837c52b3205ce98c820768b57a50526e51cb93133d95123ef" => :mojave
   end
 
   depends_on "ccache" => :build
   depends_on "cmake" => :build
   depends_on "go@1.13" => :build
+  depends_on "python@3.8" => :build
   depends_on macos: :mojave
   depends_on "openssl@1.1"
 
@@ -22,6 +23,7 @@ class Arangodb < Formula
   # with a unified CLI
   resource "starter" do
     url "https://github.com/arangodb-helper/arangodb.git",
+      tag:      "0.14.15",
       revision: "e32307e9ae5a0046214cb066355a8577e6fc4148"
   end
 
@@ -29,15 +31,17 @@ class Arangodb < Formula
     ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version
 
     resource("starter").stage do
-      ENV["GOPATH"] = Dir.pwd + "/.gobuild"
+      ENV["GO111MODULE"] = "on"
       ENV["DOCKERCLI"] = ""
       # use commit-id as projectBuild
       commit = `git rev-parse HEAD`.chomp
       system "make", "deps"
-      system "go", "build", "-ldflags", "-X main.projectVersion=0.14.15 -X main.projectBuild=#{commit}",
-                            "-o", "arangodb",
-                            "github.com/arangodb-helper/arangodb"
-      bin.install "arangodb"
+      ldflags = %W[
+        -s -w
+        -X main.projectVersion=#{resource("starter").version}
+        -X main.projectBuild=#{commit}
+      ]
+      system "go", "build", *std_go_args, "-ldflags", ldflags.join(" "), "github.com/arangodb-helper/arangodb"
     end
 
     mkdir "build" do

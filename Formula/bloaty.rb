@@ -4,13 +4,13 @@ class Bloaty < Formula
   url "https://github.com/google/bloaty/releases/download/v1.1/bloaty-1.1.tar.bz2"
   sha256 "a308d8369d5812aba45982e55e7c3db2ea4780b7496a5455792fb3dcba9abd6f"
   license "Apache-2.0"
-  revision 1
+  revision 3
 
   bottle do
     cellar :any
-    sha256 "94aa3561343dc487bc3c6ac1d08c7d8fada44d9309236153b3140030aa63ccf4" => :catalina
-    sha256 "85dd26047db38e0fe9bbe2ce6eda78f757fe699df9b737d8b1f90a185533f19c" => :mojave
-    sha256 "ec2cfde251cf64f4c132c108a45df0859d68a19963dccbd12c24306e23a1a330" => :high_sierra
+    sha256 "5d5fc675f9ca5faf03a75b9f4aaff3ef7c86a153288172a7599ade39725c3477" => :catalina
+    sha256 "379ac8affe21a3dbd384c507762f5dc86262384e593c6bd8058c3f3dfe2195bf" => :mojave
+    sha256 "3828160b02578c2cee7111a8bb024ae15824f8ca9e2eecc51d21c008df43ac41" => :high_sierra
   end
 
   depends_on "cmake" => :build

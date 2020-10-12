@@ -3,31 +3,36 @@ class Mycli < Formula
 
   desc "CLI for MySQL with auto-completion and syntax highlighting"
   homepage "https://www.mycli.net/"
-  url "https://files.pythonhosted.org/packages/ad/ac/e0ad44ecd36dcba4bb8808a855f7edd5eb876d323e15cefc8fb99ed1e71f/mycli-1.22.1.tar.gz"
-  sha256 "4e7f32c825531257a023fc687a434d6f9211f95cd31eb5c7d1e3e9d96eee1da3"
+  url "https://files.pythonhosted.org/packages/67/51/89811ac28b7ae365be43359e7612d19c4342a12483880d7a963e6d31193a/mycli-1.22.2.tar.gz"
+  sha256 "fb2e5dc74a8ec75049ebf02c0d7f14238a279a7eacb31138ac6d8f524aea02d3"
+  revision 1
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any
-    sha256 "8fe785f30fc5ecde1f53a30e28fe695154c9cb2d3f6ab32b34f1d7949304788e" => :catalina
-    sha256 "5a69f3fc336a734572114c80b816cd743dcee469b393699c75e724575009bb86" => :mojave
-    sha256 "8bcb5b1bff1b8e797ced8bd52a1449df3f064da3329ec1737dca9e7375508dee" => :high_sierra
+    sha256 "148c8d3fe7e328e2899b75941b3e88c4fca4e3f0390cec739003a87237c13200" => :catalina
+    sha256 "79cb57a2bb7bd883b22c0b10172c20b33b31ee3dc27733229131b82f60d54d0c" => :mojave
+    sha256 "32f9330970d4170af94bf12bc030999dea7c4188a1a3c92b0c7dcdb9d9671269" => :high_sierra
   end
 
   depends_on "openssl@1.1"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
 
   on_linux do
     depends_on "pkg-config" => :build
   end
 
   resource "cffi" do
-    url "https://files.pythonhosted.org/packages/05/54/3324b0c46340c31b909fcec598696aaec7ddc8c18a63f2db352562d3354c/cffi-1.14.0.tar.gz"
-    sha256 "2d384f4a127a15ba701207f7639d94106693b6cd64173d6c8988e2c25f3ac2b6"
+    url "https://files.pythonhosted.org/packages/54/1d/15eae71ab444bd88a1d69f19592dcf32b9e3166ecf427dd9243ef0d3b7bc/cffi-1.14.1.tar.gz"
+    sha256 "b2a2b0d276a136146e012154baefaea2758ef1f56ae9f4e01c612b0831e0bd2f"
   end
 
   resource "cli-helpers" do
-    url "https://files.pythonhosted.org/packages/54/c5/d660b7d34ef5fe558142e397310393a39ecd6568480f12d8b0ddfad5cffc/cli_helpers-2.0.1.tar.gz"
-    sha256 "18f7d8c5a22d85fc685d56a9f301d8b9f7f0d7d4e9033a27563b066c2ab41833"
+    url "https://files.pythonhosted.org/packages/3f/3f/6ecd0ddf2394b698dd82ff3ddbcda235f8d6dadf124af6222eff49b32e87/cli_helpers-2.1.0.tar.gz"
+    sha256 "dd6f164310f7d86fa3da1f82043a9c784e44a02ad49be932a80624261e56979b"
   end
 
   resource "click" do

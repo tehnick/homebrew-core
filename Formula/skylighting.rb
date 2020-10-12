@@ -1,16 +1,16 @@
 class Skylighting < Formula
   desc "Flexible syntax highlighter using KDE XML syntax descriptions"
   homepage "https://github.com/jgm/skylighting"
-  url "https://github.com/jgm/skylighting/archive/0.9.tar.gz"
-  sha256 "a9087166ee341e9f2e7c67e2ce7840c9e8e0f6872380a773219498a198e76cd0"
-  license "GPL-2.0"
+  url "https://github.com/jgm/skylighting/archive/0.10.0.2.tar.gz"
+  sha256 "14f359264d111853bf92ebf7d21c6886f1c87dde94dde85de694d965bc47b5e7"
+  license "GPL-2.0-or-later"
   head "https://github.com/jgm/skylighting.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6f774e298df1a41e987ef7a2acc6e1ec45c4dc1175f07f2032586987dbf0e2e5" => :catalina
-    sha256 "9050fe0920451616678dde41951490e87512f0a508d67f07cefb1ed8d91f6013" => :mojave
-    sha256 "0dc7eb5496b414c2269785b3857b1f35eb1cfedc7526dc8bcb7651195d961c2f" => :high_sierra
+    sha256 "9f79c2977a6a7a61681648a5265f0af39af3d76b443f639dfb9cec09e6a50c64" => :catalina
+    sha256 "4423fa1101b990bde1f13018b944b6a625c5dc34eb8d7e6efbe150c10211498b" => :mojave
+    sha256 "838c031c9df93b7bf899b5332f4a8cd95d0125240f30d0f828ca6c859a9bc6bc" => :high_sierra
   end
 
   depends_on "cabal-install" => :build

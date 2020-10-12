@@ -1,16 +1,16 @@
 class Starship < Formula
-  desc "The cross-shell prompt for astronauts"
+  desc "Cross-shell prompt for astronauts"
   homepage "https://starship.rs"
-  url "https://github.com/starship/starship/archive/v0.44.0.tar.gz"
-  sha256 "b002fa0e2b34ad59330a543461a51648751db4ae8d439d58065a3b9656772fe3"
+  url "https://github.com/starship/starship/archive/v0.46.0.tar.gz"
+  sha256 "e53087b4bd206fb971fb21daf27b1640a7c72adddcdbed1e469f0f3a0863d4ae"
   license "ISC"
   head "https://github.com/starship/starship.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "b421825645ddabfdb25559d2db0293fff3823c00d42e56343fd80a103ece3879" => :catalina
-    sha256 "ca22a2ed29177cebaeae173fb783c4c66448582f1ab8becc847276c1c3b9eb6d" => :mojave
-    sha256 "76f716ed29e6fbb85a5342ff36e6d0af4d14d35a7fec513a72e2b8d57fe30465" => :high_sierra
+    sha256 "4c6bdaaf8b3a3f18a5c13b674914adb5474428efae9255541a30ce4b86c1fb66" => :catalina
+    sha256 "d8090b56eb20d60df867272e0f1550513272727a782f9b19b742c09356992c5a" => :mojave
+    sha256 "5378cfef00826a09fa321b1fe28543ba5e4d807608626d5868048fec755fa24a" => :high_sierra
   end
 
   depends_on "rust" => :build
@@ -19,6 +19,15 @@ class Starship < Formula
 
   def install
     system "cargo", "install", *std_cargo_args
+
+    bash_output = Utils.safe_popen_read("#{bin}/starship", "completions", "bash")
+    (bash_completion/"starship").write bash_output
+
+    zsh_output = Utils.safe_popen_read("#{bin}/starship", "completions", "zsh")
+    (zsh_completion/"_starship").write zsh_output
+
+    fish_output = Utils.safe_popen_read("#{bin}/starship", "completions", "fish")
+    (fish_completion/"starship.fish").write fish_output
   end
 
   test do

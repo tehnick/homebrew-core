@@ -1,14 +1,14 @@
 class KdeThreadweaver < Formula
   desc "Helper for multithreaded programming"
   homepage "https://api.kde.org/frameworks/threadweaver/html/index.html"
-  url "https://download.kde.org/stable/frameworks/5.72/threadweaver-5.72.0.tar.xz"
-  sha256 "0fcd0fe46e8d2730986034b76b73fc1ecf4ae78f1796c6d5bc04a57ade0e20e9"
+  url "https://download.kde.org/stable/frameworks/5.75/threadweaver-5.75.0.tar.xz"
+  sha256 "d082f863fb119e2b98c9e01877b2730eedc0b54392449e3cc9bd54d7803d16ff"
   head "https://invent.kde.org/frameworks/threadweaver.git"
 
   bottle do
-    sha256 "acf936c2df151adceffc6f2acc28a59e3664e6de345c8dec38ce8b7375b1adda" => :catalina
-    sha256 "5c65c3b8e4abd38359c27a383f34448b3143c1ee9ef2c3d551dc6cf157394c30" => :mojave
-    sha256 "5e9a3beb252a9433daa21032d9e07e33b85a518ebfeb08bee3a9b6042f832b7d" => :high_sierra
+    sha256 "4c193cb67d347e478fe5e1dbf9497ef6bce628da8975044ab3119ee28709caa6" => :catalina
+    sha256 "9106cc8922688c54846dafb52030644dc248e3917e65638fc40d59090cb11ba9" => :mojave
+    sha256 "c5b8a683bc9e1263883570777c9d2357df4018ef6536ca73a7bb646955bcfcbe" => :high_sierra
   end
 
   depends_on "cmake" => [:build, :test]

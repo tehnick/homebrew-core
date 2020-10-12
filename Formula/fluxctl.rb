@@ -2,15 +2,20 @@ class Fluxctl < Formula
   desc "Command-line tool to access Weave Flux, the Kubernetes GitOps operator"
   homepage "https://github.com/fluxcd/flux"
   url "https://github.com/fluxcd/flux.git",
-      tag:      "1.20.0",
-      revision: "04e9e50311c3bf407629b0a9d75996ead187e952"
+      tag:      "1.21.0",
+      revision: "cb08da1b356a87cdcbc81c151826cad7e3b72a9a"
   license "Apache-2.0"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ed81ef5db5d20fbed5cb41b18eb72f3fcf0fa2c4c2a82f54ca4b1f8373f05a75" => :catalina
-    sha256 "a9691fe7bf2eaeb531051db2b7b2b80dba3f047380de9c94bae16664068d8f86" => :mojave
-    sha256 "5cb2b12b8a7356aed94e54cb1f540de4119bed4fe55decd4c98ccb50dccfa819" => :high_sierra
+    sha256 "c4fc57db22d48f9d0abd9a077e4b9111eba82e08d6adb3db5edaf51751d0b893" => :catalina
+    sha256 "e7942d1b174b0ff28a7fad0b8d1a72bdb13d739d5748d8a53a70986de353905a" => :mojave
+    sha256 "554b1b055d2e4d3b650c5a5895b3e01a97606497cc7b6329225fc06ac8f88a49" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -18,7 +23,6 @@ class Fluxctl < Formula
   def install
     cd buildpath/"cmd/fluxctl" do
       system "go", "build", "-ldflags", "-s -w -X main.version=#{version}", "-trimpath", "-o", bin/"fluxctl"
-      prefix.install_metafiles
     end
   end
 

@@ -3,14 +3,20 @@ class Nginx < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.19.1.tar.gz"
-  sha256 "a004776c64ed3c5c7bc9b6116ba99efab3265e6b81d49a57ca4471ff90655492"
+  url "https://nginx.org/download/nginx-1.19.3.tar.gz"
+  sha256 "91e5b74fa17879d2463294e93ad8f6ffc066696ae32ad0478ffe15ba0e9e8df0"
+  license "BSD-2-Clause"
   head "https://hg.nginx.org/nginx/", using: :hg
 
+  livecheck do
+    url :homepage
+    regex(%r{nginx[._-]v?(\d+(?:\.\d+)+)</a>\nmainline version has been released}i)
+  end
+
   bottle do
-    sha256 "0c70950aa5eb51b432ecd5bc9f5d13cb9b4e583b946b8068b1250fe7205831e6" => :catalina
-    sha256 "de38ebc4e7e3196289215508f30de98458fdfa3da752d516916dcff676115b75" => :mojave
-    sha256 "aa42ffce60ab7b3b330fe997634d34b88ef4ecd5e3b3a3195854ae2731ad321b" => :high_sierra
+    sha256 "4642d6fefcdda58a88085a85f44c8ab050006249107aea3865379d0b8c2f7663" => :catalina
+    sha256 "e1e69396a87602a769b12fc90a150b09354120c78d3d3eaeebe625e54ff4902e" => :mojave
+    sha256 "7725a0a0baf20219902c402b7057c80ef879fa5002cc653678bd5ddfae92e043" => :high_sierra
   end
 
   depends_on "openssl@1.1"

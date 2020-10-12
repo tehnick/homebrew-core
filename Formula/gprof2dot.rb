@@ -9,6 +9,10 @@ class Gprof2dot < Formula
   revision 1
   head "https://github.com/jrfonseca/gprof2dot.git"
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any_skip_relocation
     sha256 "974b8737cdc5d07b94c0292b27e015085ab8475757ea95b6cb42067fcafd5418" => :catalina
@@ -18,6 +22,10 @@ class Gprof2dot < Formula
 
   depends_on "graphviz"
   depends_on "python@3.8"
+
+  on_linux do
+    depends_on "libx11"
+  end
 
   def install
     virtualenv_install_with_resources

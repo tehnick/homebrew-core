@@ -4,22 +4,22 @@ class Snapcraft < Formula
   desc "Package any app for every Linux desktop, server, cloud or device"
   homepage "https://snapcraft.io/"
   url "https://github.com/snapcore/snapcraft.git",
-      tag:      "4.1.2",
-      revision: "e4e08797fb4e2d5110504d46bed39ee00382a653"
-  license "GPL-3.0"
+      tag:      "4.3",
+      revision: "262f118ad4199dd706697c275a4223d0b364028b"
+  license "GPL-3.0-only"
 
   bottle do
     cellar :any
-    sha256 "ebbe44bd4f0ec4315118a004bea1bba5af82fb5ccece3ac080bb5fd7fa7154c8" => :catalina
-    sha256 "a1d80e78457d57dd0439c2c669852126658996ab25fb75d5504adacfd12bf4a4" => :mojave
-    sha256 "7e12c282a312072be1e2f18fd44eb8b7ab9771572e5c7fadf4a06451860334c5" => :high_sierra
+    sha256 "221cf23a02d88eb570a3cceca242641d1f3ef0a4936e438e82405a163b7d58df" => :catalina
+    sha256 "f2f2f5e025ad7d29e85a19a673ea78fe72e8880f2165c116fb55a6d41ea48d1c" => :mojave
+    sha256 "5c39f7496a54b70560d57f5b8aacc79513a9612b44c51bc874096878a22b5edb" => :high_sierra
   end
 
   depends_on "libsodium"
   depends_on "libyaml"
   depends_on "lxc"
   depends_on "python@3.8"
-  depends_on "squashfs"
+  depends_on "snap"
   depends_on "xdelta"
 
   resource "attrs" do

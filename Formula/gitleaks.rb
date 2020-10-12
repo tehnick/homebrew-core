@@ -1,26 +1,27 @@
 class Gitleaks < Formula
   desc "Audit git repos for secrets"
   homepage "https://github.com/zricethezav/gitleaks"
-  url "https://github.com/zricethezav/gitleaks/archive/v5.0.1.tar.gz"
-  sha256 "ead9bdbf0205bb5d3d1c0c14cafcc1ed72a1ee7c0f9d26b3f7efb1f956fd242a"
+  url "https://github.com/zricethezav/gitleaks/archive/v6.1.2.tar.gz"
+  sha256 "43d53ed0fa716d47074f4640d1916af0d3dc635a77ce66ebb3167b47b88fb767"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3e6e9f6d0b69194e8040fd4282104ed79f2e463b20213846e6864bd938ea52eb" => :catalina
-    sha256 "4bd15ef5063c1c198e541b4b84542efad68472e6580c02abbe01df0f95d61535" => :mojave
-    sha256 "6a39d58473e54e86b4f76971f9f7744b31f3408ef803f9e7a970212c697f98c7" => :high_sierra
+    sha256 "98c0f659469c1a38dedd53d9748935f365e0a4e108d2ca7e3eab22bd34bb2059" => :catalina
+    sha256 "543be8f08244fc11c4a544b641122983f0fa4fc76891a47015dd56d2245a4dbb" => :mojave
+    sha256 "841c21bdd898d7e996be93cc9830ccce2c46f40db194a0d443391558539cbcf9" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    system "go", "build", "-ldflags", "-X github.com/zricethezav/gitleaks/version.Version=#{version}",
+    system "go", "build", "-ldflags", "-X github.com/zricethezav/gitleaks/v#{version.major}/version.Version=#{version}",
                  *std_go_args
   end
 
   test do
     assert_match "remote repository is empty",
       shell_output("#{bin}/gitleaks -r https://github.com/gitleakstest/emptyrepo.git", 2)
+    assert_equal version, shell_output("#{bin}/gitleaks --version")
   end
 end

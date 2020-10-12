@@ -1,11 +1,16 @@
 class Pypy < Formula
   desc "Highly performant implementation of Python 2 in Python"
   homepage "https://pypy.org/"
-  url "https://bitbucket.org/pypy/pypy/downloads/pypy2.7-v7.3.1-src.tar.bz2"
+  url "https://downloads.python.org/pypy/pypy2.7-v7.3.1-src.tar.bz2"
   sha256 "fa3771514c8a354969be9bd3b26d65a489c30e28f91d350e4ad2f4081a9c9321"
   license "MIT"
   revision 1
   head "https://foss.heptapod.net/pypy/pypy", using: :hg
+
+  livecheck do
+    url "https://downloads.python.org/pypy/"
+    regex(/href=.*?pypy2(?:\.\d+)*[._-]v?(\d+(?:\.\d+)+)-src\.t/i)
+  end
 
   bottle do
     cellar :any
@@ -30,7 +35,7 @@ class Pypy < Formula
   uses_from_macos "zlib"
 
   resource "bootstrap" do
-    url "https://bitbucket.org/pypy/pypy/downloads/pypy2.7-v7.3.0-osx64.tar.bz2"
+    url "https://downloads.python.org/pypy/pypy2.7-v7.3.0-osx64.tar.bz2"
     version "7.3.0"
     sha256 "ca7b056b243a6221ad04fa7fc8696e36a2fb858396999dcaa31dbbae53c54474"
   end

@@ -1,16 +1,19 @@
 class CodeServer < Formula
   desc "Access VS Code through the browser"
   homepage "https://github.com/cdr/code-server"
-  url "https://registry.npmjs.org/code-server/-/code-server-3.4.1.tgz"
-  sha256 "38f14f7e9307e4fea7eeeaabdcbd7ff414c41136337a04530692207263101a2a"
+  url "https://registry.npmjs.org/code-server/-/code-server-3.6.0.tgz"
+  sha256 "21bb3801d0c5f510d147fd30c2136e5f29cc1365ea7ddd9b9ecd578bd6302839"
   license "MIT"
-  revision 1
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e60052993a7053e4814d3ea9aa1b516b5ab7131c71dc524e2edd7abdf1fa7aee" => :catalina
-    sha256 "eda0ef4457730392ec9fbd0354ef3c25e67d6c658563876837c16cc994200b02" => :mojave
-    sha256 "f795b83b4a1333b0da1ef805257473937783aefecc0bb93c6e6ef36d83df07e9" => :high_sierra
+    sha256 "05ecc38e633a7da62943a68ef0daf1b385bd7596a81a8d199cd2d099eba55956" => :catalina
+    sha256 "451f3a58a7d4fe6f7dfb2cfda0485e4df7edfe0dffd8423c185a448bbc061a8f" => :mojave
+    sha256 "396c4ee64b8337c597587463b22e72e2d5b16ac0bb942d02878b9d5655afd002" => :high_sierra
   end
 
   depends_on "python@3.8" => :build
@@ -20,6 +23,8 @@ class CodeServer < Formula
   on_linux do
     depends_on "pkg-config" => :build
     depends_on "libsecret"
+    depends_on "libx11"
+    depends_on "libxkbfile"
   end
 
   def install
@@ -66,7 +71,7 @@ class CodeServer < Formula
 
   test do
     system bin/"code-server", "--extensions-dir=.", "--install-extension", "ms-python.python"
-    assert_equal "info  Using config file ~/.config/code-server/config.yaml\nms-python.python\n",
+    assert_equal "ms-python.python\n",
       shell_output("#{bin/"code-server"} --extensions-dir=. --list-extensions")
   end
 end

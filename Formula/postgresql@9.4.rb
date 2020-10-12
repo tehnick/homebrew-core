@@ -14,7 +14,7 @@ class PostgresqlAT94 < Formula
 
   keg_only :versioned_formula
 
-  deprecate! date: "2020-02-13"
+  deprecate! date: "2020-02-13", because: :versioned_formula
 
   depends_on "openssl@1.1"
   depends_on "readline"
@@ -88,7 +88,7 @@ class PostgresqlAT94 < Formula
       This formula has created a default database cluster with:
         initdb #{var}/postgres
       For more details, read:
-        https://www.postgresql.org/docs/#{version.to_s.slice(/\d+/)}/app-initdb.html
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

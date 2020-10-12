@@ -5,6 +5,11 @@ class Lbdb < Formula
   sha256 "b0cbc68abeb70be779b234f736dd7eb14bf3f7cd1a2ea41e636de1949da025bf"
   license "GPL-2.0"
 
+  livecheck do
+    url "https://www.spinnaker.de/lbdb/download/"
+    regex(/href=.*?lbdb[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
     cellar :any_skip_relocation
     sha256 "838c923b4c208ace533b34a2eba8b78c348bd3cc89fdbdb36c42a45b7e592f52" => :catalina
@@ -21,7 +26,6 @@ class Lbdb < Formula
   end
 
   test do
-    ver = version.to_s.split(".")
-    assert_match "#{ver[0]}.#{ver[1]}", shell_output("#{bin}/lbdbq -v")
+    assert_match version.major_minor.to_s, shell_output("#{bin}/lbdbq -v")
   end
 end

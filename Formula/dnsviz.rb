@@ -8,6 +8,10 @@ class Dnsviz < Formula
   license "GPL-2.0"
   revision 3
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any
     sha256 "06a261b8e0edd4d03bba5d44e2b1fb71ccf401aeae782f07153d3df980e86229" => :catalina
@@ -22,6 +26,11 @@ class Dnsviz < Formula
   depends_on "libsodium"
   depends_on "openssl@1.1"
   depends_on "python@3.8"
+
+  on_linux do
+    # Fix build error of m2crypto, see https://github.com/crocs-muni/roca/issues/1#issuecomment-336893096
+    depends_on "swig"
+  end
 
   resource "dnspython" do
     url "https://files.pythonhosted.org/packages/ec/c5/14bcd63cb6d06092a004793399ec395405edf97c2301dfdc146dfbd5beed/dnspython-1.16.0.zip"

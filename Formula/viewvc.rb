@@ -3,6 +3,7 @@ class Viewvc < Formula
   homepage "http://www.viewvc.org"
   url "https://github.com/viewvc/viewvc/releases/download/1.2.1/viewvc-1.2.1.tar.gz"
   sha256 "afbc2d35fc0469df90f5cc2e855a9e99865ae8c22bf21328cbafcb9578a23e49"
+  license "BSD-2-Clause"
 
   bottle do
     cellar :any_skip_relocation
@@ -13,7 +14,6 @@ class Viewvc < Formula
   end
 
   depends_on :macos # Due to Python 2 (https://github.com/viewvc/viewvc/issues/138)
-  depends_on "subversion"
 
   def install
     system "python", "./viewvc-install", "--prefix=#{libexec}", "--destdir="

@@ -1,13 +1,18 @@
 class PgpoolIi < Formula
   desc "PostgreSQL connection pool server"
   homepage "https://www.pgpool.net/mediawiki/index.php/Main_Page"
-  url "https://www.pgpool.net/mediawiki/images/pgpool-II-4.1.2.tar.gz"
-  sha256 "d13b587c1268fadb687adc1a2255cf573f9eaea511a9661955ceb7deb6821811"
+  url "https://www.pgpool.net/mediawiki/images/pgpool-II-4.1.4.tar.gz"
+  sha256 "b793d516e21653e08b821af4816f69db262d876d9876372e9aa4f4539e1b6bb5"
+
+  livecheck do
+    url "https://www.pgpool.net/mediawiki/index.php/Downloads"
+    regex(/href=.*?pgpool-II[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
-    sha256 "5f64f049dd3f0b8211dfda69c4099035e3dd5192907507329c5dc03b1deed3ac" => :catalina
-    sha256 "a7415fcbf87a371ceb7545b24946e198982aa8af29583506ff6ffaeb0730c92b" => :mojave
-    sha256 "d3a77fd114c9820e94ca5a16bfc450dffdc1960baaeeba7435eb03390d97f77b" => :high_sierra
+    sha256 "98fb748b5e21ef39138e3db09336cc8848d4149a478d29cd649743829174d374" => :catalina
+    sha256 "9b091f6ee580595ed7344fa1179d1cde7e192000e62c70410082ad45b80dcd53" => :mojave
+    sha256 "e50db96eddf72434629e5fd2e42ee7f262f74f694cbc0cd2f3e85b0f80790be6" => :high_sierra
   end
 
   depends_on "postgresql"

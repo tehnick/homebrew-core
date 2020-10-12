@@ -1,16 +1,21 @@
 class Mikutter < Formula
   desc "Extensible Twitter client"
   homepage "https://mikutter.hachune.net/"
-  url "https://mikutter.hachune.net/bin/mikutter-4.0.6.tar.gz"
-  sha256 "3ac0292aafbbd6a8f978091244ef20f3911ecb1c26a85e8e3c6ef86211f279cd"
+  url "https://mikutter.hachune.net/bin/mikutter-4.1.1.tar.gz"
+  sha256 "4cce3a4770a0d9a2691d21e3379fe616797e583a47273d69d1ec44f48b98836d"
   license "MIT"
   head "git://mikutter.hachune.net/mikutter.git", branch: "develop"
 
+  livecheck do
+    url "https://mikutter.hachune.net/download"
+    regex(/href=.*?mikutter.?v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
     cellar :any
-    sha256 "cb4bba033f7a9e68459cdb2bbb8a3a19a3d6d174784b227f4f2da1fba6978725" => :catalina
-    sha256 "59caaf25a9766b967d2388c2b3de3563fd5f02c645a4d477eec387003f8afe3e" => :mojave
-    sha256 "371302f304c78f0c79acef28bdb32d9cbb61030cde9e5f45f6d262a92d101167" => :high_sierra
+    sha256 "78bdaee50e892b26f88fa078435a7363971d22d5059b7b03ad4d98ba3e336b9a" => :catalina
+    sha256 "5e9faa3e6f38d9e77fd2eb4ffa8e342e2338e1bc41a954a6f3f6f5dc3fbd4c30" => :mojave
+    sha256 "8c9a8c31deae892a3d4a02e265aef0693aed749fb86a91788009fd586df2e68e" => :high_sierra
   end
 
   depends_on "gobject-introspection"
@@ -62,8 +67,8 @@ class Mikutter < Formula
   end
 
   resource "gettext" do
-    url "https://rubygems.org/gems/gettext-3.3.5.gem"
-    sha256 "955f115e1099ea705949c4e221164efdbbf07ec6e148131a777873c0f419bb04"
+    url "https://rubygems.org/gems/gettext-3.3.6.gem"
+    sha256 "ee6bbd1b2f833ee52d7797fa68acbfecc4726aec6b6280fd7eab92aa0190b413"
   end
 
   resource "gio2" do
@@ -112,8 +117,8 @@ class Mikutter < Formula
   end
 
   resource "moneta" do
-    url "https://rubygems.org/downloads/moneta-1.3.0.gem"
-    sha256 "38ffd4f10d3a2f48ad8362eaf63f619da89ca2b5d5a0bae2f8447ce4880f9590"
+    url "https://rubygems.org/downloads/moneta-1.4.0.gem"
+    sha256 "1e77130b3ada384fcd965f98428ec87ff41beec66b4928873045df024395289c"
   end
 
   resource "native-package-installer" do
@@ -122,8 +127,8 @@ class Mikutter < Formula
   end
 
   resource "nokogiri" do
-    url "https://rubygems.org/downloads/nokogiri-1.10.9.gem"
-    sha256 "d562108c5cdf7e9208c267107a0a54581d868689aefed9c5480898bb4033478a"
+    url "https://rubygems.org/downloads/nokogiri-1.10.10.gem"
+    sha256 "22ea03a328972467d7da06f4a7d5ac4f1f6410185efb55a4dae9cd222d30ae76"
   end
 
   resource "oauth" do
@@ -217,7 +222,7 @@ class Mikutter < Formula
     (lib/"mikutter").install "plugin"
     libexec.install Dir["*"]
 
-    ruby_series = Formula["ruby"].version.to_s.split(".")[0..1].join(".")
+    ruby_series = Formula["ruby"].any_installed_version.major_minor
     env = {
       DISABLE_BUNDLER_SETUP: "1",
       GEM_HOME:              HOMEBREW_PREFIX/"lib/mikutter/vendor/ruby/#{ruby_series}.0",

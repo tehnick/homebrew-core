@@ -15,7 +15,7 @@ class GoAT110 < Formula
 
   keg_only :versioned_formula
 
-  deprecate! date: "2019-02-25"
+  deprecate! date: "2019-02-25", because: :unsupported
 
   resource "gotools" do
     url "https://go.googlesource.com/tools.git",
@@ -49,7 +49,6 @@ class GoAT110 < Formula
 
     cd "go/src" do
       ENV["GOROOT_FINAL"] = libexec
-      ENV["GOOS"]         = "darwin"
       system "./make.bash", "--no-clean"
     end
 

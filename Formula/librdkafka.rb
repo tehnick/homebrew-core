@@ -1,10 +1,15 @@
 class Librdkafka < Formula
-  desc "The Apache Kafka C/C++ library"
+  desc "Apache Kafka C/C++ library"
   homepage "https://github.com/edenhill/librdkafka"
   url "https://github.com/edenhill/librdkafka/archive/v1.5.0.tar.gz"
   sha256 "f7fee59fdbf1286ec23ef0b35b2dfb41031c8727c90ced6435b8cf576f23a656"
   license "BSD-2-Clause"
   head "https://github.com/edenhill/librdkafka.git"
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     sha256 "de52443a4f2739cdf63dda80c8baf58bca86a5d836ceea9704d009b7977a3ee4" => :catalina

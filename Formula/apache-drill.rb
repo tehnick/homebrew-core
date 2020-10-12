@@ -6,6 +6,11 @@ class ApacheDrill < Formula
   sha256 "a3d2d544bcc32b915fb53fced0f982670bd6fe2abd764423e566a5f6b54debf1"
   license "Apache-2.0"
 
+  livecheck do
+    url "https://drill.apache.org/download/"
+    /href=.*?apache-drill[._-]v?(\d+(?:\.\d+)+)\.t/i
+  end
+
   bottle :unneeded
 
   depends_on java: "1.8"

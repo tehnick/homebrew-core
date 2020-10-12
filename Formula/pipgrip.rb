@@ -3,20 +3,24 @@ class Pipgrip < Formula
 
   desc "Lightweight pip dependency resolver"
   homepage "https://github.com/ddelange/pipgrip"
-  url "https://files.pythonhosted.org/packages/3f/d4/8abe6a21a78ed5ac2bcbb0afa52085912c74a0b5c635340875f8eca99159/pipgrip-0.5.1.tar.gz"
-  sha256 "78a97a5552e4a513f566c8118d8e1e1a52630603d4c93d9ded85536c8072d0b0"
+  url "https://files.pythonhosted.org/packages/23/ae/2fd700b44b86f4bfbb0943be60043e92a35c73e96f3b075ba295cf687d34/pipgrip-0.6.1.tar.gz"
+  sha256 "b2dcd453e509185fba95ba36c14955ed27c81f5ab8f620818a21b8d7c5909737"
   license "BSD-3-Clause"
   revision 1
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "8033801b62099eabda87b53160cdf0fa2aa9c0b688cb630cd3e135174f74ed9e" => :catalina
-    sha256 "3a1982b0830d683ad0b45a0af6b16e4acd622da580b39e5a4c47a77203646d52" => :mojave
-    sha256 "c07552ec4e5fe99e09b355d6e0714487afe752c6c4fe8e620d63f12b3977558d" => :high_sierra
+    sha256 "03e4cec7b8ab773febf3e1fc0fb16972f6ac2fd8a7585b4cbaff094d7befef46" => :catalina
+    sha256 "5cc8c1676b079f8b9fa7ca5f159086adc1a6eb7e23a1ab2975b83fb7de27ac26" => :mojave
+    sha256 "0046981ebb80c278a9ad46eddc05d0890575df55960238b3ebd81827fa551cba" => :high_sierra
   end
 
   depends_on "gcc"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
 
   resource "anytree" do
     url "https://files.pythonhosted.org/packages/d8/45/de59861abc8cb66e9e95c02b214be4d52900aa92ce34241a957dcf1d569d/anytree-2.8.0.tar.gz"
@@ -49,12 +53,12 @@ class Pipgrip < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, Formula["python@3.8"].opt_bin/"python3")
+    venv = virtualenv_create(libexec, Formula["python@3.9"].opt_bin/"python3")
     venv.pip_install resources
     venv.pip_install buildpath
 
     gcc_path = Formula["gcc"].opt_bin
-    gcc_version = Formula["gcc"].version.to_s.split(".").first
+    gcc_version = Formula["gcc"].any_installed_version.major
     (bin/"pipgrip").write_env_script(libexec/"bin/pipgrip",
                                      { CC: gcc_path/"gcc-#{gcc_version}", CXX: gcc_path/"g++-#{gcc_version}" })
   end

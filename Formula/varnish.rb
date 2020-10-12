@@ -1,14 +1,19 @@
 class Varnish < Formula
   desc "High-performance HTTP accelerator"
   homepage "https://www.varnish-cache.org/"
-  url "https://varnish-cache.org/_downloads/varnish-6.4.0.tgz"
-  sha256 "f636ba2d881b146f480fb52efefae468b36c2c3e6620d07460f9ccbe364a76c2"
+  url "https://varnish-cache.org/_downloads/varnish-6.5.1.tgz"
+  sha256 "11964c688f9852237c99c1e327d54dc487549ddb5f0f5aa7996e521333d7cdb5"
+  license "BSD-2-Clause"
+
+  livecheck do
+    url "https://varnish-cache.org/releases/"
+    regex(/href=.*?varnish[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
-    rebuild 1
-    sha256 "e603ccb2533b3580adad44c1e6899c8f057ee66ba27cee4d6d854b12e91f1dd8" => :catalina
-    sha256 "0c4a75a0195843add41833c4e74446f40e7caa3cd7a9f04f5f42c5000ab37ef2" => :mojave
-    sha256 "94bc1fde6d14d0b4966f81775b46f12b87c28f88f9324b9d5ae2ef679619a34d" => :high_sierra
+    sha256 "c965ba15a912c5ec2edda39dbea0dc407f6def32880ff0b36f562a181c551cf5" => :catalina
+    sha256 "b429c593e98a20172de524371ec8fbe562a1c3162bb6ca5af1a473211f14bfc5" => :mojave
+    sha256 "c91874d68b7c64aaaa8bbe0b55219c516362e66120f4a1c131fbfa1d1e6ef67c" => :high_sierra
   end
 
   depends_on "docutils" => :build

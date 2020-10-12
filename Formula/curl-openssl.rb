@@ -1,14 +1,15 @@
 class CurlOpenssl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server"
   homepage "https://curl.haxx.se/"
-  url "https://curl.haxx.se/download/curl-7.71.1.tar.bz2"
-  sha256 "9d52a4d80554f9b0d460ea2be5d7be99897a1a9f681ffafe739169afd6b4f224"
+  url "https://curl.haxx.se/download/curl-7.72.0.tar.bz2"
+  sha256 "ad91970864102a59765e20ce16216efc9d6ad381471f7accceceab7d905703ef"
   license "curl"
+  revision 1
 
   bottle do
-    sha256 "3eb7b47868af07e3b766a325a2576749dc2f10ea1ff7ff6ccca3be59d1345712" => :catalina
-    sha256 "1bb271e14654750ec19a61283af0865b7f3ea18c2310bf6c7fd235ff294986b4" => :mojave
-    sha256 "8706151f228258eb6a75d98a661f9ab498025261b56d4fe6b44d0b3cc9967d6a" => :high_sierra
+    sha256 "1a6a54a5b277d33f82c54861d084668edad7a6e5df88f15173d3abb5e6f2e954" => :catalina
+    sha256 "04a142f305941854e78bdcdbf570aabae8cee49052449938485bd7be7abd14ae" => :mojave
+    sha256 "408a987e5e52d4a043f62aeaeb006ccf28d5dca2a39b9f2d7419a4c8922ad477" => :high_sierra
   end
 
   head do
@@ -31,6 +32,7 @@ class CurlOpenssl < Formula
   depends_on "openldap"
   depends_on "openssl@1.1"
   depends_on "rtmpdump"
+  depends_on "zstd"
 
   def install
     system "./buildconf" if build.head?

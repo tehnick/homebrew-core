@@ -1,15 +1,15 @@
 class Findomain < Formula
   desc "Cross-platform subdomain enumerator"
   homepage "https://github.com/Edu4rdSHL/findomain"
-  url "https://github.com/Edu4rdSHL/findomain/archive/2.1.1.tar.gz"
-  sha256 "ff5f4cdf4b7eaf1401041916cb30a887fa76149711430e97c296a481c04d7f64"
-  license "GPL-3.0"
+  url "https://github.com/Edu4rdSHL/findomain/archive/2.1.4.tar.gz"
+  sha256 "e669e5297c3112ec4e256bef286028220dcb9d46cd8a31e6965cbbc3d2ae3199"
+  license "GPL-3.0-or-later"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8f95c04f667d692cd8d53901748fde2d68eb5d8b20ba0f48530f951b8c4431b6" => :catalina
-    sha256 "b50c42a2a094a014a434894139ca08aadf854e3b0539669c83198100d12de3f9" => :mojave
-    sha256 "dad27a046c9642474c9fab22d658abebd0e660ce9ba1130633db0dd7b54e2969" => :high_sierra
+    sha256 "738cfda36178883eb8083d531385150cba5213c1831af275121d4fe7f6b3d9fb" => :catalina
+    sha256 "0165c9c1915bc01105c4df30f8883e16ede8d48d49bc98735e85da90247864be" => :mojave
+    sha256 "3470286233010baffcff04f55ef25d5bc8662649a14e17832c69fc307857b84a" => :high_sierra
   end
 
   depends_on "rust" => :build

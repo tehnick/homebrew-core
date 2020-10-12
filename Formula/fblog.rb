@@ -1,16 +1,16 @@
 class Fblog < Formula
   desc "Small command-line JSON log viewer"
   homepage "https://github.com/brocode/fblog"
-  url "https://github.com/brocode/fblog/archive/v2.0.1.tar.gz"
-  sha256 "36a0dd58be51dda0dec9a87412010f94e4ada9519727c015ae8449dd91140778"
+  url "https://github.com/brocode/fblog/archive/v2.3.0.tar.gz"
+  sha256 "6933f9cb826449a456198581eeeff37ec257a33098748b514937106ff74f885d"
   license "WTFPL"
   head "https://github.com/brocode/fblog.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "fdef753a3f63feb70bcb2a37b14433a65353c83720e3d64131bcaacce17a7590" => :catalina
-    sha256 "99c727fc90cfb248e2d667d8906ee312cdbc34bb79fc35bd0f0fbc94e578e241" => :mojave
-    sha256 "163b953a575ee872f8c5f7f7c599e33274d3562b4e0202d1332baf279a4a3e8c" => :high_sierra
+    sha256 "18a0a07a3af24fa74b4590385f297441379005a0e4e3f6c79895b38c5cef6ccf" => :catalina
+    sha256 "b8da5a81c66d27b82d8e604444dd31807b4c567e73c8c80a84704df402e6ec56" => :mojave
+    sha256 "8e7bf6bf388b11ebcf78a0f6442b2dd2673ca7e99b93282f59a38103e2ee3293" => :high_sierra
   end
 
   depends_on "rust" => :build

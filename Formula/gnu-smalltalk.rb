@@ -1,5 +1,5 @@
 class GnuSmalltalk < Formula
-  desc "GNU Smalltalk interpreter and image"
+  desc "Implementation of the Smalltalk language"
   homepage "https://www.gnu.org/software/smalltalk/"
   url "https://ftp.gnu.org/gnu/smalltalk/smalltalk-3.2.5.tar.xz"
   mirror "https://ftpmirror.gnu.org/smalltalk/smalltalk-3.2.5.tar.xz"
@@ -7,6 +7,10 @@ class GnuSmalltalk < Formula
   license "GPL-2.0"
   revision 9
   head "https://github.com/gnu-smalltalk/smalltalk.git"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     sha256 "8a00e81f1a751efeec308de2bbf2e75a1173a636a29c27cec440c121208f0fe6" => :catalina

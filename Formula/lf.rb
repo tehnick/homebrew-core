@@ -1,15 +1,15 @@
 class Lf < Formula
   desc "Terminal file manager"
   homepage "https://godoc.org/github.com/gokcehan/lf"
-  url "https://github.com/gokcehan/lf/archive/r15.tar.gz"
-  sha256 "e389a3853ce02ffcab9de635cbe456e6fdc5c1696c9585614d80bb0fae88b27d"
+  url "https://github.com/gokcehan/lf/archive/r17.tar.gz"
+  sha256 "a6906f6c40de8cbd643d0dc6a7a25b83a6403f0e87a8352289189bea17123342"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "18284a4548720bcc4664a9b07b51d37b7c755c013a290be501ea8127cb96fb56" => :catalina
-    sha256 "7bf885e9a0e6fece97da83c2162ec8afab70716c41bd39de92e6ef71f9309bed" => :mojave
-    sha256 "6b33c66595717bd0401004d8dc2ffdb4f98a9bd5a818743e7e3ad5c853e77941" => :high_sierra
+    sha256 "577b07faf529ac6934b52a8c34453d76865938876b34ad8c860e14fbec5732b6" => :catalina
+    sha256 "7381c831dc9444b1b151d6b9c8bb8d4c6a8bf0030ebf6dee7fa0e34b00b5a78b" => :mojave
+    sha256 "6231de35fbdbc59be8ce3fb69cd5e87fee84dbfcb5aa81300835900109cc8161" => :high_sierra
   end
 
   depends_on "go" => :build

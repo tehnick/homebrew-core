@@ -1,5 +1,5 @@
 class Cling < Formula
-  desc "The cling C++ interpreter"
+  desc "C++ interpreter"
   homepage "https://root.cern.ch/cling"
   url "https://github.com/root-project/cling.git",
       tag:      "v0.6",
@@ -7,6 +7,11 @@ class Cling < Formula
   # You may license this software under one of the following licenses, marked
   # "UI/NCSAOSL" and "LGPL".
   license "LGPL-2.1"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any

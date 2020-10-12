@@ -3,9 +3,14 @@ class Duti < Formula
   homepage "https://github.com/moretension/duti/"
   url "https://github.com/moretension/duti/archive/duti-1.5.4.tar.gz"
   sha256 "3f8f599899a0c3b85549190417e4433502f97e332ce96cd8fa95c0a9adbe56de"
-  license "Unlicense"
+  license :public_domain
   revision 1
   head "https://github.com/moretension/duti.git"
+
+  livecheck do
+    url :head
+    regex(/^duti[._-]v?(\d+(?:[.-]\d+)+)$/i)
+  end
 
   bottle do
     cellar :any_skip_relocation

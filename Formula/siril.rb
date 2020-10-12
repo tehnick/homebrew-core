@@ -1,15 +1,15 @@
 class Siril < Formula
   desc "Astronomical image processing tool"
   homepage "https://www.siril.org"
-  url "https://free-astro.org/download/siril-0.9.12.tar.bz2"
-  sha256 "9fb7f8a10630ea028137e8f213727519ae9916ea1d88cd8d0cc87f336d8d53b1"
-  revision 8
+  url "https://free-astro.org/download/siril-0.99.6.tar.bz2"
+  sha256 "255dbffb72bb39b1d9d56ab948b4cad32d1458161b1d997cd84ada21f9a8499f"
+  license "GPL-3.0-or-later"
   head "https://gitlab.com/free-astro/siril.git"
 
   bottle do
-    sha256 "67b6fadc0395a67e3f6d9c62e5aa799943c88667fb314ecb7c7bf2fc5cf4df56" => :catalina
-    sha256 "e648058025e964763cec9bdac798cf2f22de519509369484e3ef9c3187c5fcca" => :mojave
-    sha256 "642afa82a18456cf54339bbb402d25805f88628c64e02f32eb35dbde4f98990f" => :high_sierra
+    sha256 "3e10bd0e65bf4ff0399380fc5c6b19d1a9495c57df54515e68b72c084ff89e57" => :catalina
+    sha256 "6a944291e017a9e547a57e5353cd7d386fef651f57da9abb08efb341e0b74f41" => :mojave
+    sha256 "c1c7b7ac925acbcb106eaaa1681eed2c561bf1c911424687b1d5583f6ed31371" => :high_sierra
   end
 
   depends_on "autoconf" => :build
@@ -19,6 +19,7 @@ class Siril < Formula
   depends_on "pkg-config" => :build
   depends_on "adwaita-icon-theme"
   depends_on "cfitsio"
+  depends_on "exiv2"
   depends_on "ffms2"
   depends_on "fftw"
   depends_on "gnuplot"
@@ -40,6 +41,7 @@ class Siril < Formula
     ENV.append_to_cflags "-I#{HOMEBREW_PREFIX}/include -Xpreprocessor -fopenmp -lomp"
 
     system "./autogen.sh", "--prefix=#{prefix}"
+    system "make"
     system "make", "install"
   end
 

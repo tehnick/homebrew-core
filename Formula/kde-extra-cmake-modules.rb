@@ -1,15 +1,20 @@
 class KdeExtraCmakeModules < Formula
   desc "Extra modules and scripts for CMake"
   homepage "https://api.kde.org/frameworks/extra-cmake-modules/html/index.html"
-  url "https://download.kde.org/stable/frameworks/5.72/extra-cmake-modules-5.72.0.tar.xz"
-  sha256 "077af496e208722365f095da59e02382b66f7498352c8666e903603062657940"
+  url "https://download.kde.org/stable/frameworks/5.75/extra-cmake-modules-5.75.0.tar.xz"
+  sha256 "878d47a901056d5303bf37414d787046e1d38fac2bd9f2f5ddd00a9dd6b9f4eb"
   head "https://invent.kde.org/frameworks/extra-cmake-modules.git"
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1a2fd1e6deea1346ffc02059938d0c90dda707ed1a48ae119d72eb7361a9eb31" => :catalina
-    sha256 "a8f67bf2d6cfbade9fb38ef67bb3236512caf1453462c4a7119bb7247279caf8" => :mojave
-    sha256 "1a2fd1e6deea1346ffc02059938d0c90dda707ed1a48ae119d72eb7361a9eb31" => :high_sierra
+    sha256 "195795d035962b2427418a19ab39d8ffc38d9705c0f1c1503a7002c3fe6f11a9" => :catalina
+    sha256 "5f6be7a137c07fd155de462cafded13ecfd76e66df519f4b74256adf9917cf1e" => :mojave
+    sha256 "097651b195e96057a039c13a07721ba9342168509eadd0bc1bc270d7ccd74d46" => :high_sierra
   end
 
   depends_on "cmake" => [:build, :test]

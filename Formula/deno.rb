@@ -1,38 +1,25 @@
 class Deno < Formula
   desc "Secure runtime for JavaScript and TypeScript"
   homepage "https://deno.land/"
-  url "https://github.com/denoland/deno/releases/download/v1.2.2/deno_src.tar.gz"
-  sha256 "ca07eb2ed220a69ef962fad886bea57cc8cf955780fd8723bde7a11937b69c06"
+  url "https://github.com/denoland/deno/releases/download/v1.4.6/deno_src.tar.gz"
+  sha256 "a99444a8021455237efb2e52dc608a7747693c8609a4911cad97e10de9d83756"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6ac9189e3c28c7b0279e74a4359a68acd868c9ecbccd7b42a1159954b48df74c" => :catalina
-    sha256 "592f019ccf3df01c60c3dd44aa57bdec505f072c322de02916860d0984d71ba9" => :mojave
-    sha256 "bc930d8500d52df925b57323689861e7aab2e5f190108c42ea73931f7b02d5ab" => :high_sierra
+    sha256 "80bb1cd9950693507e0b4c48d295f2079d41aa3a73a66009dbb553f34c755d73" => :catalina
+    sha256 "47170bfc7cf156b62a1b951e5dee187ee193b03147cab89c53518e0a64312099" => :mojave
+    sha256 "88e5f0b92835f7f5efdd9983b36f377f92f3efda52587dc4fbb40cd381c0b751" => :high_sierra
   end
 
   depends_on "llvm" => :build
-  depends_on "ninja" => :build
   depends_on "rust" => :build
   depends_on xcode: ["10.0", :build] # required by v8 7.9+
   depends_on :macos # Due to Python 2 (see https://github.com/denoland/deno/issues/2893)
 
   uses_from_macos "xz"
 
-  resource "gn" do
-    url "https://gn.googlesource.com/gn.git",
-      revision: "5ed3c9cc67b090d5e311e4bd2aba072173e82db9"
-  end
-
   def install
-    # Build gn from source (used as a build tool here)
-    (buildpath/"gn").install resource("gn")
-    cd "gn" do
-      system "python", "build/gen.py"
-      system "ninja", "-C", "out/", "gn"
-    end
-
     # env args for building a release build with our clang, ninja and gn
     ENV["GN"] = buildpath/"gn/out/gn"
     # build rusty_v8 from source

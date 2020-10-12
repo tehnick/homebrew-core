@@ -3,16 +3,20 @@ class AnimeDownloader < Formula
 
   desc "Download your favourite anime"
   homepage "https://github.com/vn-ki/anime-downloader"
-  url "https://files.pythonhosted.org/packages/8b/6d/cc82f9b74116d63fb48ca6fa1a6930526f469ba8b3cd00e063f231ae86f3/anime-downloader-4.4.2.tar.gz"
-  sha256 "26ab6ee62fee93676f82d2c279292fa538d71db18ceebd455e72864d11cf7b58"
+  url "https://files.pythonhosted.org/packages/75/ca/1a312247353743ce30d0e9d7a2482b2e41946fa1757ba5db91ab0755a8b5/anime-downloader-4.6.6.tar.gz"
+  sha256 "d0b69f104c0759405669338b19a17f8f4086c99944b3e1e51ad6ae6623c4a29a"
   license "Unlicense"
   head "https://github.com/vn-ki/anime-downloader.git"
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "177f382a2a1f88bf1db484e818ea50e6da18606778433d3c285850a68874a826" => :catalina
-    sha256 "eed94db37d3fe7c736c4fc88a5427c7678bfe6a4f7ce1b3182198b9f40fe6d1c" => :mojave
-    sha256 "54423f4ede0d4741f5ce5bff49a478dac131ab4e76640e7ba7e3dc67f5c4c301" => :high_sierra
+    sha256 "9b06603b48c10cf1fad5f9987d713720986cf7750583ab61ef8cba0ad0d2e87a" => :catalina
+    sha256 "552e13b784999316320d2cdfe26386fc8ffd0493ddcfa4b8120fe009c55172d9" => :mojave
+    sha256 "887d0894db7d4010f1d479ce7d30dbcc1193fb49b5d3e5ee059188227216997f" => :high_sierra
   end
 
   depends_on "aria2"
@@ -20,8 +24,8 @@ class AnimeDownloader < Formula
   depends_on "python@3.8"
 
   resource "beautifulsoup4" do
-    url "https://files.pythonhosted.org/packages/c6/62/8a2bef01214eeaa5a4489eca7104e152968729512ee33cb5fbbc37a896b7/beautifulsoup4-4.9.1.tar.gz"
-    sha256 "73cc4d115b96f79c7d77c1c7f7a0a8d4c57860d1041df407dd1aae7f07a77fd7"
+    url "https://files.pythonhosted.org/packages/6b/c3/d31704ae558dcca862e4ee8e8388f357af6c9d9acb0cad4ba0fbbd350d9a/beautifulsoup4-4.9.3.tar.gz"
+    sha256 "84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25"
   end
 
   resource "certifi" do
@@ -69,6 +73,11 @@ class AnimeDownloader < Formula
     sha256 "0e24171cf01021bc5dc17d6a9d4f33a048f09d62cc3f62541e95ef104588bda4"
   end
 
+  resource "pySmartDL" do
+    url "https://files.pythonhosted.org/packages/5a/4c/ed073b2373f115094a4a612431abe25b58e542bebd951557dcc881999ef9/pySmartDL-1.3.4.tar.gz"
+    sha256 "35275d1694f3474d33bdca93b27d3608265ffd42f5aeb28e56f38b906c0c35f4"
+  end
+
   resource "requests" do
     url "https://files.pythonhosted.org/packages/da/67/672b422d9daf07365259958912ba533a0ecab839d4084c487a5fe9a5405f/requests-2.24.0.tar.gz"
     sha256 "b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b"
@@ -99,8 +108,8 @@ class AnimeDownloader < Formula
   end
 
   test do
-    assert_match "anime, version #{version}", shell_output("#{bin}/anime --version")
+    assert_match "Download or watch your favourite anime", shell_output("#{bin}/anime --help 2>&1")
 
-    assert_match "Watch is deprecated in favour of adl", shell_output("#{bin}/anime watch 2>&1")
+    assert_equal "anime, version #{version}", shell_output("#{bin}/anime --version").chomp
   end
 end

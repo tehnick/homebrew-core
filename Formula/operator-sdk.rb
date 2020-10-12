@@ -2,16 +2,16 @@ class OperatorSdk < Formula
   desc "SDK for building Kubernetes applications"
   homepage "https://coreos.com/operators/"
   url "https://github.com/operator-framework/operator-sdk.git",
-      tag:      "v0.19.2",
-      revision: "4282ce9acdef6d7a1e9f90832db4dc5a212ae850"
+      tag:      "v1.0.1",
+      revision: "4169b318b578156ed56530f373d328276d040a1b"
   license "Apache-2.0"
   head "https://github.com/operator-framework/operator-sdk.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d42df09af8940d0631f4863c3ea98aa0a6a6a1d7b232da6485aaf3db681a69a0" => :catalina
-    sha256 "1ddc6ab31573162d302a51dbc3aefc9ab0525a70ae1d56871fc21b1a26cdc408" => :mojave
-    sha256 "45440738a87ef0ccfc1886cc99c3dbeaa6b72b931144602aa9d1b99065a015e6" => :high_sierra
+    sha256 "a052c0cdcce583e75ac76ae4401cb13ba8e9c6d26e1f1c26c9b1ce285fe97a19" => :catalina
+    sha256 "3a611f3c02f063cfdfb93efab0d80a3720ec08fd39d9a844b4651ce6df367561" => :mojave
+    sha256 "fe693789e064921691cfef0fe4f57c0000186f80476de0f84b804235b2293a91" => :high_sierra
   end
 
   depends_on "go"
@@ -30,20 +30,13 @@ class OperatorSdk < Formula
   end
 
   test do
-    # Use the offical golang module cache to prevent network flakes and allow
-    # this test to complete before timing out.
-    ENV["GOPROXY"] = "https://proxy.golang.org"
-
     if build.stable?
       version_output = shell_output("#{bin}/operator-sdk version")
       assert_match "version: \"v#{version}\"", version_output
       assert_match stable.specs[:revision], version_output
     end
 
-    # Create an example AppService operator. This exercises most of the various pieces
-    # of generation logic.
-    args = ["--type=ansible", "--api-version=app.example.com/v1alpha1", "--kind=AppService"]
-    system "#{bin}/operator-sdk", "new", "test", *args
-    assert_predicate testpath/"test/requirements.yml", :exist?
+    system bin/"operator-sdk", "init", "--domain=example.com", "--repo=example.com/example/example"
+    assert_predicate testpath/"bin/manager", :exist?
   end
 end

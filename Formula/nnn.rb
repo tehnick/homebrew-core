@@ -1,18 +1,20 @@
 class Nnn < Formula
   desc "Tiny, lightning fast, feature-packed file manager"
   homepage "https://github.com/jarun/nnn"
-  url "https://github.com/jarun/nnn/archive/v3.3.tar.gz"
-  sha256 "16b245cf984d81a7e35f1a6a6f52bede4810784f06074d69369f664efdf32aca"
+  url "https://github.com/jarun/nnn/archive/v3.4.tar.gz"
+  sha256 "7803ae6e974aeb4008507d9d1afbcca8d084a435f36ff636b459ca50414930a1"
   license "BSD-2-Clause"
   head "https://github.com/jarun/nnn.git"
 
   bottle do
     cellar :any
-    sha256 "0974658c7c0315c30083f3db92cc37b34bbc2600c4b80392c6fa0124eb96509a" => :catalina
-    sha256 "0fb61b265b7f5a99ce30b930141531b55d789959de46d625b209c2238529df33" => :mojave
-    sha256 "5c04648426900cf44dbf1207f0fd36f8a003e30a6362a6606ae7a9bb58a495b0" => :high_sierra
+    rebuild 1
+    sha256 "44109c19d7e9c4108538ed3fc5a75c3ae176cdecaf64d19d194ccf4802aa6354" => :catalina
+    sha256 "a8dd428c9cbdea23be4b13493edfe09583814adbdee2d49627812268481af7df" => :mojave
+    sha256 "e0d170451efa4edb22b8899577ee1bd0fb2f5cac90218fcc021f20514ef52ece" => :high_sierra
   end
 
+  depends_on "gnu-sed"
   depends_on "readline"
 
   uses_from_macos "ncurses"

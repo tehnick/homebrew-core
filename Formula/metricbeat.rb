@@ -2,20 +2,21 @@ class Metricbeat < Formula
   desc "Collect metrics from your systems and services"
   homepage "https://www.elastic.co/beats/metricbeat"
   url "https://github.com/elastic/beats.git",
-      tag:      "v7.8.1",
-      revision: "94f7632be5d56a7928595da79f4b829ffe123744"
+      tag:      "v7.9.2",
+      revision: "2ab907f5ccecf9fd82fe37105082e89fd871f684"
   license "Apache-2.0"
+  revision 1
   head "https://github.com/elastic/beats.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9a3e54c7d1f92dceb4873f028d315fd9b67c6a909de6abcd27fbbb6bb0975d7a" => :catalina
-    sha256 "a14b5e21029e28143e9a590dce4a2b2c96811749ded2187730c3d51b4960d5a0" => :mojave
-    sha256 "cf32b601d33207208e7b01da049379490d50a93494752520a793d1c0aae5bc6b" => :high_sierra
+    sha256 "4e2e08f1d2e79337d53a8ee197199a453358a7af3e3cddd53d5cfd449c9c8909" => :catalina
+    sha256 "0ac3e0e6d9b1a0191e29209b67ac87189657fb5446e3d4f0954a21ca0243efc6" => :mojave
+    sha256 "00911be1ebddb80bfaa884b1924b703c933784039c971f74b265d1e125e27075" => :high_sierra
   end
 
   depends_on "go" => :build
-  depends_on "python@3.8" => :build
+  depends_on "python@3.9" => :build
 
   def install
     # remove non open source files

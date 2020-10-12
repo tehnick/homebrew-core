@@ -2,15 +2,19 @@ class GobjectIntrospection < Formula
   include Language::Python::Shebang
 
   desc "Generate introspection data for GObject libraries"
-  homepage "https://wiki.gnome.org/Projects/GObjectIntrospection"
-  url "https://download.gnome.org/sources/gobject-introspection/1.64/gobject-introspection-1.64.1.tar.xz"
-  sha256 "80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7"
-  revision 2
+  homepage "https://gi.readthedocs.io/en/latest/"
+  url "https://download.gnome.org/sources/gobject-introspection/1.66/gobject-introspection-1.66.1.tar.xz"
+  sha256 "dd44a55ee5f426ea22b6b89624708f9e8d53f5cc94e5485c15c87cb30e06161d"
+  license all_of: ["GPL-2.0-or-later", "LGPL-2.0-or-later", "MIT"]
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
-    sha256 "4715d7cb549501fa75101266f6c49fe656666cb071a6e8f111b08cb3b74a2b15" => :catalina
-    sha256 "e6f0eacacdda25019941d42dd600c478f22de8c57a8975b2e26c4a5cfb8f367c" => :mojave
-    sha256 "b54f973af9b413e20a7b6485315da882f73e623c61f3573325a434d47e5b011a" => :high_sierra
+    sha256 "a1d5950231c23134f70e0547f86982224f2b6542972c67c2c83f066528a34d10" => :catalina
+    sha256 "eaa28c10334a54fdd30d6fb7be8b29d3b18e8f2a3402420e7a167a1a074962c6" => :mojave
+    sha256 "912cfa5998c4ba43182db75a41a4685e2fc72ae1cd57dd980f76baabec2eae85" => :high_sierra
   end
 
   depends_on "bison" => :build

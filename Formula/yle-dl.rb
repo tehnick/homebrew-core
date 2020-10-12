@@ -1,19 +1,20 @@
 class YleDl < Formula
   desc "Download Yle videos from the command-line"
   homepage "https://aajanki.github.io/yle-dl/index-en.html"
-  url "https://github.com/aajanki/yle-dl/archive/20200628.tar.gz"
-  sha256 "4b8ef130b80b0bcfe953d56aef640f09227e6e64486104c53bc8f5af79615e9f"
-  license "GPL-3.0"
+  url "https://github.com/aajanki/yle-dl/archive/20200807.tar.gz"
+  sha256 "9821e6cbe15a59aec78a0eff5fd63b0d5bb3eda9bab445812c213d73edb330fe"
+  license "GPL-3.0-or-later"
+  revision 1
   head "https://github.com/aajanki/yle-dl.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "513097c2d1d174c14eec82353155dca6efcded472ee4fce426c9c01f28821010" => :catalina
-    sha256 "63de53da03bec566091483b0cb3b362fa41c1111cfb25c0cc55836e40e016dd4" => :mojave
-    sha256 "7ba726d1b94eb47170aa85b1f173c68a2e52514127692467fbd47068085b32d7" => :high_sierra
+    sha256 "04394bbd1d8a737cfb105847bf6c059eea32fe5bb55ac806607a45ee9ccfcc3e" => :catalina
+    sha256 "2e928c32c8002e23bbc2169f25b990d83750e68fbba571c84314bd71dc070c9e" => :mojave
+    sha256 "fc6e5f73bffac11fb5d76f61b89b94adfda783fc25269abecdf858d755af537c" => :high_sierra
   end
 
-  depends_on "python@3.8"
+  depends_on "python@3.9"
   depends_on "rtmpdump"
 
   uses_from_macos "libxslt"

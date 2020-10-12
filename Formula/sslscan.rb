@@ -1,16 +1,21 @@
 class Sslscan < Formula
   desc "Test SSL/TLS enabled services to discover supported cipher suites"
   homepage "https://github.com/rbsec/sslscan"
-  url "https://github.com/rbsec/sslscan/archive/2.0.0.tar.gz"
-  sha256 "f582c4b1c9ff6cadde4a3130a3f721866faf6048f5b1cddd1f696dc5a6fb7921"
-  license "GPL-3.0"
+  url "https://github.com/rbsec/sslscan/archive/2.0.3.tar.gz"
+  sha256 "93c0aa6fccd5ca88f1b27a0c968f1fe060cdf9e16c2cc5bdd7f8159bb667a02f"
+  license "GPL-3.0-or-later"
   head "https://github.com/rbsec/sslscan.git"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)(?:-rbsec)?$/i)
+  end
 
   bottle do
     cellar :any
-    sha256 "0949543e58e7665068a56a31d977de39d2c092489a05766321ac8297296f79d9" => :catalina
-    sha256 "27b2d69702049d3663743745e5415196512c54c4a736a79d192c721cfa27597b" => :mojave
-    sha256 "369d750ed9b291f096efb2166475e5daeb0c0b0c4d9f438746b861a6c40de799" => :high_sierra
+    sha256 "98092566e87639eb3a52b036b2af36e44cba0ee567f66602ab35ca8c108d7cde" => :catalina
+    sha256 "68fa1a1553cdcdf604504728d8405861753fcf8d88f17f43bf8445bacdd1352f" => :mojave
+    sha256 "49fa7b58ca4c2703a490d43dde97d54ac5264597ed3c4445fd947bf850e2d5d9" => :high_sierra
   end
 
   depends_on "openssl@1.1"

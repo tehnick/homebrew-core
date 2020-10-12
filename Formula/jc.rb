@@ -3,18 +3,28 @@ class Jc < Formula
 
   desc "Serializes the output of command-line tools to structured JSON output"
   homepage "https://github.com/kellyjonbrazil/jc"
-  url "https://files.pythonhosted.org/packages/ef/95/d1b5aa0662572629110fb73c3730c4664040fbc2adc92f4e2d04ec789642/jc-1.13.1.tar.gz"
-  sha256 "0d743199ed58c3ce09f4171c97e5aaa7df91fc42bc18854a773f2e19041d9d1a"
+  url "https://files.pythonhosted.org/packages/e3/b9/7878a4f71c873c7d67f39615086f1c8315740534b25eddc1a4f75f314832/jc-1.13.4.tar.gz"
+  sha256 "45480ac3d399f70b57d8cc97a6795ea875a19863c55a56eae596c6e67303c5b8"
   license "MIT"
+  revision 1
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "282af3dc51df8a24f2f5a20e03d1a1368e0d750a1b4f70f4e3be895abed6b2c9" => :catalina
-    sha256 "0e12154e3caa1ea30d74673d2eadeaefa188b04dce3d116fedde0768e721ea03" => :mojave
-    sha256 "edc8b3d7355dc373ec362bb21eada2afe289657e32fd521ca3abee2216fa3bad" => :high_sierra
+    sha256 "313688f0f20b532ca13557cfc17646733742138f140b17453c7485a32f1f2048" => :catalina
+    sha256 "fe818b492817a0d857121ca5170ce693c141c796d4c4fd7b99f172fe5077a5ae" => :mojave
+    sha256 "bd3fe1005d4773d72ce992685c86fbe5114d3660638c26bb024fc0be45aec0e7" => :high_sierra
   end
 
-  depends_on "python@3.8"
+  depends_on "python@3.9"
+
+  resource "Pygments" do
+    url "https://files.pythonhosted.org/packages/6e/4d/4d2fe93a35dfba417311a4ff627489a947b01dc0cc377a3673c00cf7e4b2/Pygments-2.6.1.tar.gz"
+    sha256 "647344a061c249a3b74e230c739f434d7ea4d8b1d5f3721bc0f3558049b38f44"
+  end
 
   resource "ruamel.yaml" do
     url "https://files.pythonhosted.org/packages/16/8b/54a26c1031595e5edd0e616028b922d78d8ffba8bc775f0a4faeada846cc/ruamel.yaml-0.16.10.tar.gz"
@@ -29,11 +39,6 @@ class Jc < Formula
   resource "xmltodict" do
     url "https://files.pythonhosted.org/packages/58/40/0d783e14112e064127063fbf5d1fe1351723e5dfe9d6daad346a305f6c49/xmltodict-0.12.0.tar.gz"
     sha256 "50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21"
-  end
-
-  resource "Pygments" do
-    url "https://files.pythonhosted.org/packages/6e/4d/4d2fe93a35dfba417311a4ff627489a947b01dc0cc377a3673c00cf7e4b2/Pygments-2.6.1.tar.gz"
-    sha256 "647344a061c249a3b74e230c739f434d7ea4d8b1d5f3721bc0f3558049b38f44"
   end
 
   def install

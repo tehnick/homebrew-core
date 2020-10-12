@@ -1,15 +1,15 @@
 class Gau < Formula
   desc "Open Threat Exchange, Wayback Machine, and Common Crawl URL fetcher"
   homepage "https://github.com/lc/gau"
-  url "https://github.com/lc/gau/archive/v1.0.3.tar.gz"
-  sha256 "fc6e569dace151915474c81285b2ffb03c07968f25d8634a9e6bcaaf9d33d0b4"
+  url "https://github.com/lc/gau/archive/v1.0.5.tar.gz"
+  sha256 "06571649695da43ef49e19e77df7bf7e9720a942558f7c3b6fe12a62b2d6a2d6"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8ffc46be5edcc8803051755209a1071f31dac2a48664f617a1a195c4bf321e70" => :catalina
-    sha256 "2d56b62c7697629f246bc71edd4b0d809e8378a31aea8d623f73d2eebd33429c" => :mojave
-    sha256 "144d8075a2a90743bf0c52e94582e68b2d6868d4939a9662048e803d32bd173c" => :high_sierra
+    sha256 "efb1878aaef1eadaf81da84dd6044f1bba5d5f0eb0ddfdec17fa27886e3dd623" => :catalina
+    sha256 "d4657647a6b744e5dfbccde89061a3c9a204917cda75bf6ac95ef4c24950bbbd" => :mojave
+    sha256 "bc9e24e07cf5fe77a479e24243c520ac2063d7df95089383a5555b7b468dec5c" => :high_sierra
   end
 
   depends_on "go" => :build

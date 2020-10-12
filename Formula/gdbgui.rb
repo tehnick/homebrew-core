@@ -3,23 +3,27 @@ class Gdbgui < Formula
 
   desc "Modern, browser-based frontend to gdb (gnu debugger)"
   homepage "https://www.gdbgui.com/"
-  url "https://files.pythonhosted.org/packages/86/de/8ed396df4cdd1d8d103d90fe138fb0f5f20491e0316fb35dd8a4c6f2f8b1/gdbgui-0.13.2.1.tar.gz"
-  sha256 "305003b719cf5c850e027d75fffb8dd6c38da1f7999cd2ab22f6a27a48e4c57e"
-  license "GPL-3.0"
+  url "https://files.pythonhosted.org/packages/06/af/2953018117f73a9bcfd0939c7e801b36cff03590f1b52dd7451d8102a021/gdbgui-0.14.0.1.tar.gz"
+  sha256 "4f1482b3bafb04d1d1d0b0ac140bb89befdf5456482ed1533734cd5ab1ca0656"
+  license "GPL-3.0-only"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8cdc12a15e59b0803b5b5edb9b24c31ec57f7fdbffa957e7d3d87c69079645f1" => :catalina
-    sha256 "08573261e4fac10e85bef49e95c04fcaed34d612810497fac809cd81e660fe5e" => :mojave
-    sha256 "eb0fc3b2a948ec2b0d4454a5ba5dd8abad223379cfb205e6d1b525a8b5addfdf" => :high_sierra
+    sha256 "d653f45782d02d9d650d4eca51daabd17741f76555c122f498f9ba8e5663c179" => :catalina
+    sha256 "bb7b0fb4b1f2e1255981efd07e317001ca027bfc4deefb521d03d552b0d44e08" => :mojave
+    sha256 "2fd752f8a0cce2051757a58da5ea86a1d8b6ea141796464983adc9c7a376f755" => :high_sierra
   end
 
   depends_on "gdb"
   depends_on "python@3.8"
 
   resource "Brotli" do
-    url "https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635/Brotli-1.0.7.zip"
-    sha256 "0538dc1744fd17c314d2adc409ea7d1b779783b89fd95bcfb0c2acc93a6ea5a7"
+    url "https://files.pythonhosted.org/packages/2a/18/70c32fe9357f3eea18598b23aa9ed29b1711c3001835f7cf99a9818985d0/Brotli-1.0.9.zip"
+    sha256 "4d1b810aa0ed773f81dceda2cc7b403d01057458730e309856356d4ef4188438"
   end
 
   resource "click" do
@@ -88,18 +92,18 @@ class Gdbgui < Formula
   end
 
   resource "pygdbmi" do
-    url "https://files.pythonhosted.org/packages/b1/06/f60cce2f9acb5ac4278cb1eedb7bb1a7bb52777b7ae74cd222c0068302fd/pygdbmi-0.9.0.3.tar.gz"
-    sha256 "5bdf2f072e8f2f6471f19f8dcd87d6425c5d8069d47c0a5ffe8d0eff48cb171e"
+    url "https://files.pythonhosted.org/packages/30/01/9523d5ed7bccf7f94927b3dc7a616c9b4a8dfe57df89e67571d32d87717a/pygdbmi-0.10.0.0.tar.gz"
+    sha256 "0706b81404a77f78f8b51db43205e94a7ac8fd7ce87b6eac2681baadeff85826"
   end
 
   resource "Pygments" do
-    url "https://files.pythonhosted.org/packages/6e/4d/4d2fe93a35dfba417311a4ff627489a947b01dc0cc377a3673c00cf7e4b2/Pygments-2.6.1.tar.gz"
-    sha256 "647344a061c249a3b74e230c739f434d7ea4d8b1d5f3721bc0f3558049b38f44"
+    url "https://files.pythonhosted.org/packages/e2/07/25bd93c9c0175adfa5fb1513a20b25e7dd6c9a67c155e19b11b5f3662104/Pygments-2.7.1.tar.gz"
+    sha256 "926c3f319eda178d1bd90851e4317e6d8cdb5e292a3386aac9bd75eca29cf9c7"
   end
 
   resource "python-engineio" do
-    url "https://files.pythonhosted.org/packages/88/31/5b57e795c509f7312ea2b24ee23812981dbac616a5a8e41a2e48e5137ec7/python-engineio-3.13.1.tar.gz"
-    sha256 "133bdb5fb89f43a53f8612fb1ddbb3a453318713dea18a9ecf5346ed0c0f793c"
+    url "https://files.pythonhosted.org/packages/e7/f5/64651d4ef2fc8921de33c010a8531916a5bdabd87cd0da66ea6b56c52239/python-engineio-3.13.2.tar.gz"
+    sha256 "36b33c6aa702d9b6a7f527eec6387a2da1a9a24484ec2f086d76576413cef04b"
   end
 
   resource "python-socketio" do
@@ -118,7 +122,6 @@ class Gdbgui < Formula
   end
 
   def install
-    virtualenv_create(libexec, "python3")
     virtualenv_install_with_resources
   end
 
