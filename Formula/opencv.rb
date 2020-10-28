@@ -1,10 +1,9 @@
 class Opencv < Formula
   desc "Open source computer vision library"
   homepage "https://opencv.org/"
-  url "https://github.com/opencv/opencv/archive/4.4.0.tar.gz"
-  sha256 "bb95acd849e458be7f7024d17968568d1ccd2f0681d47fd60d34ffb4b8c52563"
-  # watch for license change to Apache-2.0 with next release
-  license "BSD-3-Clause"
+  url "https://github.com/opencv/opencv/archive/4.5.0.tar.gz"
+  sha256 "dde4bf8d6639a5d3fe34d5515eab4a15669ded609a1d622350c7ff20dace1907"
+  license "Apache-2.0"
   revision 2
 
   livecheck do
@@ -13,9 +12,9 @@ class Opencv < Formula
   end
 
   bottle do
-    sha256 "b9199ca20007959fff87ca117ca89588d19dcefb8f5166c53ef78217b3b0f886" => :catalina
-    sha256 "cdb1117c188d79f14197d1739fdf2d20aa4e873ba790a164f62c712afdd75f99" => :mojave
-    sha256 "86961a17c5defdf6c2c8311915ce4e9a374a81cd3f7968967ba60b7f76ab6b31" => :high_sierra
+    sha256 "7cf6c46a4c2881ca16519d6489f2a73744734b89a47186629b071a03db01bb76" => :catalina
+    sha256 "68cc25d849babb08301bc0c88d2188b10c5b1259d4340ee9ea8164b585f5947a" => :mojave
+    sha256 "6d653df7777cf59cfed5b9b7fd273afb895ff38b61eacdf1bf90f6780487a4a9" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -32,21 +31,14 @@ class Opencv < Formula
   depends_on "openblas"
   depends_on "openexr"
   depends_on "protobuf"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
   depends_on "tbb"
   depends_on "vtk"
   depends_on "webp"
 
   resource "contrib" do
-    url "https://github.com/opencv/opencv_contrib/archive/4.4.0.tar.gz"
-    sha256 "a69772f553b32427e09ffbfd0c8d5e5e47f7dab8b3ffc02851ffd7f912b76840"
-
-    # additional vtk 9 support, remove after next release
-    # upstream PR https://github.com/opencv/opencv_contrib/pull/2659
-    patch do
-      url "https://github.com/opencv/opencv_contrib/commit/aace65cc1269629f32874389b33e85fdb7819b02.diff?full_index=1"
-      sha256 "af98e588626cb79e5064995e6cf22f55e40518649cf3eed0d5bd6963f2a19e20"
-    end
+    url "https://github.com/opencv/opencv_contrib/archive/4.5.0.tar.gz"
+    sha256 "a65f1f0b98b2c720abbf122c502044d11f427a43212d85d8d2402d7a6339edda"
   end
 
   def install
@@ -93,7 +85,7 @@ class Opencv < Formula
       -DWITH_VTK=ON
       -DBUILD_opencv_python2=OFF
       -DBUILD_opencv_python3=ON
-      -DPYTHON3_EXECUTABLE=#{Formula["python@3.8"].opt_bin}/python3
+      -DPYTHON3_EXECUTABLE=#{Formula["python@3.9"].opt_bin}/python3
     ]
 
     # The compiler on older Mac OS cannot build some OpenCV files using AVX2
@@ -132,7 +124,7 @@ class Opencv < Formula
                     "-o", "test"
     assert_equal `./test`.strip, version.to_s
 
-    output = shell_output(Formula["python@3.8"].opt_bin/"python3 -c 'import cv2; print(cv2.__version__)'")
+    output = shell_output(Formula["python@3.9"].opt_bin/"python3 -c 'import cv2; print(cv2.__version__)'")
     assert_equal version.to_s, output.chomp
   end
 end

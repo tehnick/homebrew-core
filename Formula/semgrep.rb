@@ -4,8 +4,8 @@ class Semgrep < Formula
   desc "Easily detect and prevent bugs and anti-patterns in your codebase"
   homepage "https://semgrep.dev"
   url "https://github.com/returntocorp/semgrep.git",
-    tag:      "v0.27.0",
-    revision: "549bfa79f81939ac06e57a527b5f0d46c87c46ce"
+    tag:      "v0.29.0",
+    revision: "f398786cfc6ad152169ecc3b555dc60aacaad053"
   license "LGPL-2.1-only"
   head "https://github.com/returntocorp/semgrep.git", branch: "develop"
 
@@ -16,9 +16,9 @@ class Semgrep < Formula
 
   bottle do
     cellar :any
-    sha256 "2e5644c66e1c0f50600d4adc1e83da510a683c813b944127259b1888a43a0808" => :catalina
-    sha256 "716dd733e4a6e6dd782a42f9cfb6fad4f4ff18e8853d69520615fcd5abbf5672" => :mojave
-    sha256 "5a3aeb44c48cf457875e7370c942ca1a8a346f87c5ee432781b7725487940a9f" => :high_sierra
+    sha256 "6e71fa6f3463a8c1d0c37efdef52e0ca1f8d34219bdee54e3efbccf4d8ced1d2" => :catalina
+    sha256 "68c988eca9a06ebff7f0961ac3ce88f168270bdb93684988ecb4eb4f68008689" => :mojave
+    sha256 "950317bef3848dda5a7567952ca45328c45369468f0781a843c5dfa6c453b187" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -27,7 +27,7 @@ class Semgrep < Formula
   depends_on "ocaml" => :build
   depends_on "opam" => :build
   depends_on "pkg-config" => :build
-  depends_on "python@3.8"
+  depends_on "python@3.9"
 
   resource "attrs" do
     url "https://files.pythonhosted.org/packages/81/d0/641b698d05f0eaea4df4f9cebaff573d7a5276228ef6b7541240fe02f3ad/attrs-20.2.0.tar.gz"
@@ -136,6 +136,14 @@ class Semgrep < Formula
 
       system "opam", "exec", "--", "make", "setup"
 
+      # Install spacegrep
+      cd "spacegrep" do
+        system "opam", "install", "--deps-only", "-y", "."
+        system "opam", "exec", "--", "make"
+        system "opam", "exec", "--", "make", "install"
+        bin.install "_build/default/src/bin/Space_main.exe" => "spacegrep"
+      end
+
       # Install tree-sitter
       cd "ocaml-tree-sitter" do
         cd "tree-sitter" do
@@ -150,13 +158,13 @@ class Semgrep < Formula
         system "opam", "install", "--deps-only", "-y", "."
         system "opam", "exec", "--", "make", "all"
         system "opam", "exec", "--", "make", "install"
-        bin.install "_build/default/bin/Main.exe" => "semgrep-core"
+        bin.install "_build/default/cli/Main.exe" => "semgrep-core"
       end
     end
 
     python_path = "semgrep"
     cd python_path do
-      venv = virtualenv_create(libexec, Formula["python@3.8"].bin/"python3.8")
+      venv = virtualenv_create(libexec, Formula["python@3.9"].bin/"python3.9")
       venv.pip_install resources
       venv.pip_install_and_link buildpath/python_path
     end

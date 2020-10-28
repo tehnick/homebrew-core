@@ -3,22 +3,23 @@ class Asciidoc < Formula
 
   desc "Formatter/translator for text files to numerous formats. Includes a2x"
   homepage "https://asciidoc.org/"
-  url "https://github.com/asciidoc/asciidoc-py3/archive/9.0.2.tar.gz"
-  sha256 "ea73425151f56f278433e442f8b5085599765fa120574db65e6d053eb52927e2"
+  url "https://github.com/asciidoc/asciidoc-py3/archive/9.0.3.tar.gz"
+  sha256 "c0de1dcf111a200bf85bd81f67bc18778f839e55d761d6c7320095985524853a"
   license "GPL-2.0"
+  revision 1
   head "https://github.com/asciidoc/asciidoc-py3.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1a03ae32bc7bdbc1eecca5fa6bbe6dd6ec3e95a62e40943d159b51b790c4d613" => :catalina
-    sha256 "1a03ae32bc7bdbc1eecca5fa6bbe6dd6ec3e95a62e40943d159b51b790c4d613" => :mojave
-    sha256 "1a03ae32bc7bdbc1eecca5fa6bbe6dd6ec3e95a62e40943d159b51b790c4d613" => :high_sierra
+    sha256 "60e64a526922ddf394597e47b5d541a4a09fccf77b5287a499fd20fc93dedcae" => :catalina
+    sha256 "6cf0f9cf32246aafcc067d53fa9ffd523daf980199e41071888d75da322072c5" => :mojave
+    sha256 "6ed5c44ae27f4fb32d37e3fe49922723ba5476b5f976a2c343268927119a09a5" => :high_sierra
   end
 
   depends_on "autoconf" => :build
   depends_on "docbook-xsl" => :build
   depends_on "docbook"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
   depends_on "source-highlight"
 
   uses_from_macos "libxml2" => :build

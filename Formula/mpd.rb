@@ -1,15 +1,16 @@
 class Mpd < Formula
   desc "Music Player Daemon"
   homepage "https://www.musicpd.org/"
-  url "https://www.musicpd.org/download/mpd/0.22/mpd-0.22.tar.xz"
-  sha256 "7de742d925d01bf52685cc6cbb31fdeb671e4992a448720897ef706e57e39076"
+  url "https://www.musicpd.org/download/mpd/0.22/mpd-0.22.1.tar.xz"
+  sha256 "408464093d09c73ceecafc201defcbaba2193cb30ad0aaf1241459a410fecaf3"
   license "GPL-2.0-or-later"
+  revision 1
   head "https://github.com/MusicPlayerDaemon/MPD.git"
 
   bottle do
     cellar :any
-    sha256 "d357d1f78ddae648b2609afaa4199595c0e74c57a4567142a3696ae41a875015" => :catalina
-    sha256 "93a07c91613b8b2b6d29584f904205ae579964453a7da055a47f6d544f06dd24" => :mojave
+    sha256 "ba5eecd4766207c3d355f2a57e6e5c38b16b90cd6789d938197c5689d7158468" => :catalina
+    sha256 "057c598dc5e6a0938cf9118aa3433e52f80a0b5a709374e462a81ef79d2aeeaf" => :mojave
   end
 
   depends_on "boost" => :build

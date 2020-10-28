@@ -1,8 +1,8 @@
 class Micronaut < Formula
   desc "Modern JVM-based framework for building modular microservices"
   homepage "https://micronaut.io/"
-  url "https://github.com/micronaut-projects/micronaut-starter/archive/v2.1.0.tar.gz"
-  sha256 "4ecb873b8bba327a33c9d9bd75d86ad6a8a44dbf1573ef6cd5b9a658b3799c35"
+  url "https://github.com/micronaut-projects/micronaut-starter/archive/v2.1.2.tar.gz"
+  sha256 "a124ff3b6b7bccad95d1322452c5770bcfdc484b866dd95100e9cf9648807ccf"
   license "Apache-2.0"
 
   livecheck do
@@ -12,9 +12,9 @@ class Micronaut < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "addf570e7c77ad32a21be919cfc16de1b6d0cfedcc53653444d7b36f4f3c606e" => :catalina
-    sha256 "bff621b112273752400376c30bf5b6c07e48d7a9c75e1e1de0f2949e3867471f" => :mojave
-    sha256 "5e16cca4c6f940351caace915b56b26bde335365ec79148a9f4cf90ccbd046ac" => :high_sierra
+    sha256 "20f614ab1f26c0d1678fc35e070b982ad1ae87f7428e919073bc27471398be85" => :catalina
+    sha256 "2813a542b0901b90ce8e80efd655d5932d26954448794b22119ab1b92677fe3a" => :mojave
+    sha256 "b9516aa1f963eab49a19a8feb7e1c93e3ac4645520fac0cb0993c183b751a73c" => :high_sierra
   end
 
   depends_on "gradle" => :build

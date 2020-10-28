@@ -4,18 +4,18 @@ class Mpv < Formula
   url "https://github.com/mpv-player/mpv/archive/v0.32.0.tar.gz"
   sha256 "9163f64832226d22e24bbc4874ebd6ac02372cd717bef15c28a0aa858c5fe592"
   license "GPL-2.0"
-  revision 5
+  revision 7
   head "https://github.com/mpv-player/mpv.git"
 
   bottle do
-    sha256 "b5ee75305e024dda4255af1c113e22c9dcafa7d3c3979f90ddf99a042335a1f2" => :catalina
-    sha256 "10dc99da93819fb90252d5e28fc89cbefaa670274fec72f87f6c4d64876142b0" => :mojave
-    sha256 "59ed6368c7afcd763040459c00f0bc985ee1df86fcd0857279ff5fede14c30fc" => :high_sierra
+    sha256 "9720dcedb3fa39665f87a29862e56cbdcfb952fd795557011f1ae5e542d84a7f" => :catalina
+    sha256 "339c2c2ccb0639d5dfdc1ff5375e82003070678bbd4924701fc185949db813b1" => :mojave
+    sha256 "7438165a58a103dfbf330b63f4404e7e8e5c43d2af86eab32963a63c0a89a775" => :high_sierra
   end
 
   depends_on "docutils" => :build
   depends_on "pkg-config" => :build
-  depends_on "python@3.8" => :build
+  depends_on "python@3.9" => :build
   depends_on xcode: :build
 
   depends_on "ffmpeg"
@@ -54,9 +54,9 @@ class Mpv < Formula
       --lua=51deb
     ]
 
-    system Formula["python@3.8"].opt_bin/"python3", "bootstrap.py"
-    system Formula["python@3.8"].opt_bin/"python3", "waf", "configure", *args
-    system Formula["python@3.8"].opt_bin/"python3", "waf", "install"
+    system Formula["python@3.9"].opt_bin/"python3", "bootstrap.py"
+    system Formula["python@3.9"].opt_bin/"python3", "waf", "configure", *args
+    system Formula["python@3.9"].opt_bin/"python3", "waf", "install"
   end
 
   test do

@@ -3,8 +3,8 @@ require "language/node"
 class Emscripten < Formula
   desc "LLVM bytecode to JavaScript compiler"
   homepage "https://emscripten.org/"
-  url "https://github.com/emscripten-core/emscripten/archive/2.0.5.tar.gz"
-  sha256 "35377ca91921c29b44d78a2de4c98a70b3eba31ae95d6ac843ea5cb361a857fc"
+  url "https://github.com/emscripten-core/emscripten/archive/2.0.7.tar.gz"
+  sha256 "ffe4a1e6b6cb223bfcb2f8ca28d39b23c4ae7102b36f69f40669739762d91445"
   # Emscripten is available under 2 licenses, the MIT license and the
   # University of Illinois/NCSA Open Source License.
   license "MIT"
@@ -17,16 +17,15 @@ class Emscripten < Formula
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "bc614abf0032ef9cafa7fed38525951c579a135051b04f7f76eb8f174e74ad52" => :catalina
-    sha256 "c0fd4df4c536d467539315eac3374655e660301da1193b6fdd6180edf145e352" => :mojave
-    sha256 "6d6a5fcea2398a13d4c85032b8fa2f60d7551153b1248b83274b3b3ec18e3860" => :high_sierra
+    sha256 "d05b18f81aa0f662cab367bd63ccd067689703f07241e2b943f9a41733b9eea2" => :catalina
+    sha256 "3e6350b3f279113ab851151a682be8e8f21efa3ab8619dc4b016e027e91b9675" => :mojave
+    sha256 "3a5c2864d6376a71f74c400cba04bcfe4b043760ba8b4f7d5382e0a104e49934" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "binaryen"
   depends_on "node"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
   depends_on "yuicompressor"
 
   # emscripten needs argument '-fignore-exceptions', which is only available
@@ -127,7 +126,7 @@ class Emscripten < Formula
 
     %w[em++ em-config emar emcc emcmake emconfigure emlink.py emmake
        emranlib emrun emscons].each do |emscript|
-      (bin/emscript).write_env_script libexec/emscript, PYTHON: Formula["python@3.8"].opt_bin/"python3"
+      (bin/emscript).write_env_script libexec/emscript, PYTHON: Formula["python@3.9"].opt_bin/"python3"
     end
   end
 

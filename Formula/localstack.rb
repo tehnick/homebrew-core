@@ -3,29 +3,28 @@ class Localstack < Formula
 
   desc "Fully functional local AWS cloud stack"
   homepage "https://github.com/localstack/localstack"
-  url "https://files.pythonhosted.org/packages/c1/ed/9c7caa9d68bc80aaa9bb7f84f225d15ff28fa42c4314befe9b92fa430dd0/localstack-0.11.5.tar.gz"
-  sha256 "f3280a21aab8d6e99c139b331ca716240201f4d6e60acbe55a52d4993c326c62"
+  url "https://files.pythonhosted.org/packages/25/b7/01aa3732a152ea3eb2f7e5ba6c500734abf0cdf596699816ef753db8c118/localstack-0.12.1.tar.gz"
+  sha256 "8d364fcccd25e897c5d42e7fb99b2a0120e511d530e5f8c9872d56e33ca3b72c"
   license "Apache-2.0"
-  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "925f7c1abb391ad6ee80b4718a5c9276f3af4315add48ace76c22c32caf6b112" => :catalina
-    sha256 "43f726bb6fafb0c90cf23509207b7cb89dd4bbd778a2534612f72c0ef66f0b93" => :mojave
-    sha256 "5fa84c9b8617b9e045fcb9faaa1cfcd6e42b1a324ad61d657e61aa0a4ca0e26f" => :high_sierra
+    sha256 "da98d8375901d274c3f7041c0566b7effd694c3292be35f272c9f4d1806f491a" => :catalina
+    sha256 "9942cb521c3431894e5dbcd86eaae50867834835b115ac1b901d55d11b92ce8f" => :mojave
+    sha256 "1fe1e28d2882093a7cc6fa2f701ea3c099943b700a8e7aed507cf8d027dd4ea7" => :high_sierra
   end
 
   depends_on "docker" => :test
   depends_on "python@3.9"
 
   resource "boto3" do
-    url "https://files.pythonhosted.org/packages/34/cf/6d11d4ec66f4c290fb58e9ce04441681714c3b8c76a35fe2d97a3ab423d0/boto3-1.14.63.tar.gz"
-    sha256 "25c716b7c01d4664027afc6a6418a06459e311a610c7fd39a030a1ced1b72ce4"
+    url "https://files.pythonhosted.org/packages/19/3d/08a8b5f43c9303ffd3282f3659a6f7ed2c81157bdae9d7fccc0b577eea12/boto3-1.16.4.tar.gz"
+    sha256 "8611d07488bb36b509d9a79a4ab593cf1c96f9c0d177733007568cbfa1079914"
   end
 
   resource "botocore" do
-    url "https://files.pythonhosted.org/packages/41/3d/360ccf3612644b661c55fde8959e6a1597ce589d1fad0b62c351d2623a4f/botocore-1.17.63.tar.gz"
-    sha256 "40f13f6c9c29c307a9dc5982739e537ddce55b29787b90c3447b507e3283bcd6"
+    url "https://files.pythonhosted.org/packages/1e/4f/24abb8dbfe3d4a4ebfcedf9d966fde75d3e0e3026148e95e4667e2545709/botocore-1.19.4.tar.gz"
+    sha256 "c78fe2fb4790e9f06dc40a28402893f12088c4aa88b739475827d9674972f1c4"
   end
 
   resource "certifi" do
@@ -53,11 +52,6 @@ class Localstack < Formula
     sha256 "49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"
   end
 
-  resource "docutils" do
-    url "https://files.pythonhosted.org/packages/93/22/953e071b589b0b1fee420ab06a0d15e5aa0c7470eb9966d60393ce58ad61/docutils-0.15.2.tar.gz"
-    sha256 "a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"
-  end
-
   resource "idna" do
     url "https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70/idna-2.10.tar.gz"
     sha256 "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"
@@ -69,13 +63,13 @@ class Localstack < Formula
   end
 
   resource "localstack-client" do
-    url "https://files.pythonhosted.org/packages/50/08/da5053d16ea13a312f25a51801c4e5025906e55e4168371744aa10c1786d/localstack-client-1.4.tar.gz"
-    sha256 "890698778fc83bf54b44258bc0ae72501109e783f6cb82b8c55cd0028340cefb"
+    url "https://files.pythonhosted.org/packages/08/2e/529afb53f3c20419709c36f51b4004215432bca04029619cb04c5c2b24b5/localstack-client-1.6.tar.gz"
+    sha256 "262a94c48c9992ff8114ebb8bae0ac81667d7256cf7bd0fb6d9955a75c580cb8"
   end
 
   resource "localstack-ext" do
-    url "https://files.pythonhosted.org/packages/bb/f6/87232408eb89f5d947ee6c2d2be42d9ebaefd30323578ccefec4df9d4103/localstack-ext-0.11.41.tar.gz"
-    sha256 "fcdfd058f14c206eb2562e7afa71fc608346bf1f0a06ab593101920d535a2e06"
+    url "https://files.pythonhosted.org/packages/63/d0/68d38e712e166b487d8ec34288e1451f211d7ab5d6a489b2d05b60f41cd0/localstack-ext-0.11.43.6.tar.gz"
+    sha256 "65a74045918b9ec6de25a0dcf5d1f322b7ae00e09e047485c80962389cd1c499"
   end
 
   resource "pyaes" do
@@ -104,8 +98,8 @@ class Localstack < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0/urllib3-1.25.10.tar.gz"
-    sha256 "91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a"
+    url "https://files.pythonhosted.org/packages/76/d9/bbbafc76b18da706451fa91bc2ebe21c0daf8868ef3c30b869ac7cb7f01d/urllib3-1.25.11.tar.gz"
+    sha256 "8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2"
   end
 
   def install
