@@ -2,7 +2,7 @@ class Httpie < Formula
   include Language::Python::Virtualenv
 
   desc "User-friendly cURL replacement (command-line HTTP client)"
-  homepage "https://httpie.org/"
+  homepage "https://httpie.io/"
   url "https://files.pythonhosted.org/packages/b4/d4/712645808103f2d15c281b9eacd184c88754ef7e9a322d9a30ba343fd341/httpie-2.3.0.tar.gz"
   sha256 "d540571991d07329d217c31bf1ff95fd217957da2aa2def09bcfa0c0fca0cf96"
   license "BSD-3-Clause"
@@ -14,9 +14,11 @@ class Httpie < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8ad26c0e0abe38df42d1a8c6186ab24d47df7c2ed5ff1b724b1e7a8298373b56" => :catalina
-    sha256 "5a9a6fa461460a772df7f8497aa19edbe03a2e94f3bd6b1146b26106b4536710" => :mojave
-    sha256 "6be62d232fc0be554f54c7e3b5027dbf9af354a78a3c21e6be48ce824ab0b706" => :high_sierra
+    rebuild 1
+    sha256 "bdffeff349595ed3c528ed791d568e308b0877246b49e05e867143ba3415a70f" => :big_sur
+    sha256 "ba0627d70f0ee49c64677f5554881ebd56371f47d45196b6564680089ce69152" => :catalina
+    sha256 "0b87901e88bdcf53c55c5138677087b4621c5aaf1fca67b53b730d5a2fd5a40a" => :mojave
+    sha256 "87e7348b6fb40fd8e4f7597937952469601962189e62d321b8cb4fa421e035ef" => :high_sierra
   end
 
   depends_on "python@3.9"
@@ -66,7 +68,7 @@ class Httpie < Formula
   end
 
   test do
-    raw_url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/master/Formula/httpie.rb"
+    raw_url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/HEAD/Formula/httpie.rb"
     assert_match "PYTHONPATH", shell_output("#{bin}/http --ignore-stdin #{raw_url}")
   end
 end

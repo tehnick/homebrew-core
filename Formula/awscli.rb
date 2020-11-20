@@ -3,15 +3,16 @@ class Awscli < Formula
 
   desc "Official Amazon AWS command-line interface"
   homepage "https://aws.amazon.com/cli/"
-  url "https://github.com/aws/aws-cli/archive/2.0.60.tar.gz"
-  sha256 "4b50e804a19b7b029b9fc882f7c9355db59ef64fa9a9a371e094be0ce6c8b98e"
+  url "https://github.com/aws/aws-cli/archive/2.1.1.tar.gz"
+  sha256 "650bc1dd125dbb040917d5285f380abe8966369a7c6dd7f0cfc76e7cc18814b2"
   license "Apache-2.0"
   head "https://github.com/aws/aws-cli.git", branch: "v2"
 
   bottle do
-    sha256 "697ef228251fe34faa0e3c6febafd672fe86a17218c4737b5c08f9f5be71a09f" => :catalina
-    sha256 "c175e175ef6318e14b1f7d6ad9c3081240d7ef10639cb4ffe72f750ec400511c" => :mojave
-    sha256 "22dd655a1f7682c38848d6a7e4dd291f3f9edc5bb595365104f421ac32ca1aeb" => :high_sierra
+    sha256 "c421b3c811189cb1133e2880fd07336ef7c1871c8376b8fe4b2127f2d05fc386" => :big_sur
+    sha256 "fcd558b100a42b5401932845ce7588b6f70be411a34684a243355bf5dae8dcc8" => :catalina
+    sha256 "4e6ae917c968791d0f8cc4dfce4c4d7ae1782121929497120302638ae2638e11" => :mojave
+    sha256 "bdfa90c8a378d555a18fd56a35feb8a9458bc7826f51140ad3ddb5d834054773" => :high_sierra
   end
 
   depends_on "python@3.9"

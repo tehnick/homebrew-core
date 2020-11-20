@@ -1,8 +1,8 @@
 class Fnm < Formula
   desc "Fast and simple Node.js version manager"
   homepage "https://fnm.vercel.app"
-  url "https://github.com/Schniz/fnm/archive/v1.22.4.tar.gz"
-  sha256 "36db29208285d94e271809fc9ae8df9e5e51bcb1dbfc3fa7a2d3e5daeb873204"
+  url "https://github.com/Schniz/fnm/archive/v1.22.8.tar.gz"
+  sha256 "d294f1bd9f6fa75d53c5ba12283ca63a09812d4e3631aa314d781e50e8c9aec3"
   license "GPL-3.0-only"
   head "https://github.com/Schniz/fnm.git"
 
@@ -13,9 +13,10 @@ class Fnm < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6fcc2543c804fb12bdc67c97ed36e614d194b633ba167e1429ea3eb1c5ee2db7" => :catalina
-    sha256 "ec18cec1cf9b7c66a2d536649a73ac8951a6d092808fbf44d446aa40f9fa548b" => :mojave
-    sha256 "856837b496e77c6dfd5dd9b59382de0e93ea2f1a73617557a4edd1cada394958" => :high_sierra
+    sha256 "15e957f33a7474f9b41463f9de587db55fc2ac2c8ed7a9d120c108207376b763" => :big_sur
+    sha256 "785aedf913a65e97029e2bed1c3e52a686d3707245183dbee84056ef6057d3da" => :catalina
+    sha256 "8622fde031ee84e1ecf498250962b2be3972b9f161999e15ea64f50299b7e597" => :mojave
+    sha256 "fb445426396192450f9b99ab43e798fa3dc18432ad25990d7b1c2ba5163783ad" => :high_sierra
   end
 
   depends_on "rust" => :build

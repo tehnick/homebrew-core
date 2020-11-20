@@ -2,16 +2,16 @@ class YoutubeDl < Formula
   include Language::Python::Virtualenv
 
   desc "Download YouTube videos from the command-line"
-  homepage "https://yt-dl.org"
-  url "https://files.pythonhosted.org/packages/12/8b/51cae2929739d637fdfbc706b2d5f8925b5710d8f408b5319a07ea45fe99/youtube_dl-2020.9.20.tar.gz"
-  sha256 "67fb9bfa30f5b8f06227c478a8a6ed04af1f97ad4e81dd7e2ce518df3e275391"
+  homepage "https://youtube-dl.org/"
+  url "https://files.pythonhosted.org/packages/7d/27/ffd9f9555f8543a00233bf32e61ee4540358b5ce77b64e6ff72ca1eb90d6/youtube_dl-2020.11.19.tar.gz"
+  sha256 "2d6adbf7643467fa448939ebe6bebb002071b11dadf545909ca973f101b2584c"
   license "Unlicense"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6553843d76f95feeb9a488b2a14cb8374b313f02bd72b18d75cbbd2270fe11ee" => :catalina
-    sha256 "8a6f47c7bf197a9cb40e08d130ce6ac9530d2c77f4ecd92f838e19abe23f2c5a" => :mojave
-    sha256 "7b797964bed458c4271ad917373155a9be574afc174bfdda14b73a77fb16cbc5" => :high_sierra
+    sha256 "ab39ad3bf8b1d5c55f84bf2c1fde0ba8d41f50fe0ed1913ca0825ec92b9faee3" => :big_sur
+    sha256 "34333494e19cfa8e739c3a085126ba0554e057c26aa7f9d7c1a6b021bcd9b634" => :catalina
+    sha256 "4004d4789fa6b72447e852c8064292b5b14ae11a2d01b10b2be99e0d8de1f075" => :mojave
   end
 
   depends_on "python@3.9"

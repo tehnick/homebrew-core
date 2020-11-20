@@ -13,6 +13,8 @@ class Rclone < Formula
     sha256 "cea1a5bf6e0346731ba8357e313ae6eb3633e14400c2e9e67bd5a3f8524721f6" => :high_sierra
   end
 
+  deprecate! because: "requires FUSE"
+
   depends_on "go" => :build
 
   def install

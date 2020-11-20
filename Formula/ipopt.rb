@@ -4,28 +4,35 @@ class Ipopt < Formula
   url "https://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.3.tgz"
   sha256 "86354b36c691e6cd6b8049218519923ab0ce8a6f0a432c2c0de605191f2d4a1c"
   license "EPL-1.0"
+  revision 1
   head "https://github.com/coin-or/Ipopt.git"
 
   bottle do
     cellar :any
-    sha256 "47c2e9f9dc0c2d8a036a53798200e81cf3b57fb0c2d51b1d683a413733682f88" => :catalina
-    sha256 "726c7eb34ddb1fe7c7351b46ef192c928e9012c422d76f500620da89a2e122ad" => :mojave
-    sha256 "35c7649979bf83847b28ba4a205cc1caaab1551a7a445e8661e347eb8672f1de" => :high_sierra
+    sha256 "c5456fca281c86e78db399f960b2e657e6c8b8d8a1da4d8b799ad14a0c63ff65" => :big_sur
+    sha256 "8f0881c3022f0fbba7821e99a766b0fabeeb9551909e44b8fb9436da91329382" => :catalina
+    sha256 "d87262af5ab808ba7f5d51491035ce28fcb68c25cea07231b5d32d12a61602ef" => :mojave
   end
 
+  depends_on "openjdk" => :build
   depends_on "pkg-config" => [:build, :test]
   depends_on "gcc"
   depends_on "openblas"
 
   resource "mumps" do
     url "http://mumps.enseeiht.fr/MUMPS_5.3.5.tar.gz"
-    sha256 "9cf89fcb5232560e807b7b1cc2adb7d0c280cbdfd3aa480de1d0b431a87187d3"
+    sha256 "e5d665fdb7043043f0799ae3dbe3b37e5b200d1ab7a6f7b2a4e463fd89507fa4"
 
     # MUMPS does not provide a Makefile.inc customized for macOS.
     patch do
       url "https://raw.githubusercontent.com/Homebrew/formula-patches/ab96a8b8e510a8a022808a9be77174179ac79e85/ipopt/mumps-makefile-inc-generic-seq.patch"
       sha256 "0c570ee41299073ec2232ad089d8ee10a2010e6dfc9edc28f66912dae6999d75"
     end
+  end
+
+  resource "test" do
+    url "https://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.3.tgz"
+    sha256 "86354b36c691e6cd6b8049218519923ab0ce8a6f0a432c2c0de605191f2d4a1c"
   end
 
   def install
@@ -57,8 +64,8 @@ class Ipopt < Formula
       "--enable-shared",
       "--prefix=#{prefix}",
       "--with-blas=-L#{Formula["openblas"].opt_lib} -lopenblas",
-      "--with-mumps-incdir=#{buildpath}/mumps_include",
-      "--with-mumps-lib=-L#{lib} -ldmumps -lmpiseq -lmumps_common -lopenblas -lpord",
+      "--with-mumps-cflags=-I#{buildpath}/mumps_include",
+      "--with-mumps-lflags=-L#{lib} -ldmumps -lmpiseq -lmumps_common -lopenblas -lpord",
     ]
 
     system "./configure", *args
@@ -69,20 +76,9 @@ class Ipopt < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<~EOS
-      #include <cassert>
-      #include <IpIpoptApplication.hpp>
-      #include <IpReturnCodes.hpp>
-      #include <IpSmartPtr.hpp>
-      int main() {
-        Ipopt::SmartPtr<Ipopt::IpoptApplication> app = IpoptApplicationFactory();
-        const Ipopt::ApplicationReturnStatus status = app->Initialize();
-        assert(status == Ipopt::Solve_Succeeded);
-        return 0;
-      }
-    EOS
+    testpath.install resource("test")
     pkg_config_flags = `pkg-config --cflags --libs ipopt`.chomp.split
-    system ENV.cxx, "test.cpp", *pkg_config_flags
+    system ENV.cxx, "examples/hs071_cpp/hs071_main.cpp", "examples/hs071_cpp/hs071_nlp.cpp", *pkg_config_flags
     system "./a.out"
   end
 end

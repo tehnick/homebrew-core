@@ -1,10 +1,9 @@
 class Numpy < Formula
   desc "Package for scientific computing with Python"
   homepage "https://www.numpy.org/"
-  url "https://files.pythonhosted.org/packages/bf/e8/15aea783ea72e2d4e51e3ec365e8dc4a1a32c9e5eb3a6d695b0d58e67cdd/numpy-1.19.2.zip"
-  sha256 "0d310730e1e793527065ad7dde736197b705d0e4c9999775f212b03c44a8484c"
+  url "https://files.pythonhosted.org/packages/c5/63/a48648ebc57711348420670bb074998f79828291f68aebfff1642be212ec/numpy-1.19.4.zip"
+  sha256 "141ec3a3300ab89c7f2b0775289954d193cc8edb621ea05f99db9cb181530512"
   license "BSD-3-Clause"
-  revision 1
   head "https://github.com/numpy/numpy.git"
 
   livecheck do
@@ -13,9 +12,10 @@ class Numpy < Formula
 
   bottle do
     cellar :any
-    sha256 "34dbdfd8fb469e4d718e4b1dd8b6803a2151adbed9c041fa7b156674d989535e" => :catalina
-    sha256 "6e01c47196d9fb1306aae5c43bea96db6d4b9926046514c6ceccfc9078f8008e" => :mojave
-    sha256 "49007933f1dcf4ffff02f0dc10aea54578fa229a1dd0b640fb35cdc5ef1d5a4c" => :high_sierra
+    sha256 "980ff2b2a656a9bd8583d8ac53d79149db57c4e0ebc0787c7339ffff61196651" => :big_sur
+    sha256 "a9316c2fbc6289f359a8379f667d5c7db067f86c2be153d40cd400ab03fe83a5" => :catalina
+    sha256 "a01c9eac38f92f3079f860dada4f49543cb40ecbc42a62f3adf022529fb990bc" => :mojave
+    sha256 "5884958d5903b9a8e5b47a81f0dc9ad5435873b472d3709b6956998356c8c353" => :high_sierra
   end
 
   depends_on "cython" => :build

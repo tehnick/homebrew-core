@@ -8,6 +8,7 @@ class Bat < Formula
   bottle do
     cellar :any_skip_relocation
     rebuild 1
+    sha256 "6f581a2481e58669cd3fe742a6d35f361e45d2110fe29fbd5bc4fdf982427ca7" => :big_sur
     sha256 "4bd522806fe7f6908245788ea041cf0eae32d012c883e57ad1ab137ca7d34fda" => :catalina
     sha256 "406537250c9d3c7ea2bfa64ff7cd102c86f9204a5cc731ebe5ce7c6f11e41320" => :mojave
     sha256 "10f22366b885e9a10d47f21de5c658dcb8189301cee8722974294a5451c0d80d" => :high_sierra
@@ -19,7 +20,6 @@ class Bat < Formula
 
   def install
     ENV["SHELL_COMPLETIONS_DIR"] = buildpath
-    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
     system "cargo", "install", *std_cargo_args
 
     assets_dir = Dir["target/release/build/bat-*/out/assets"].first

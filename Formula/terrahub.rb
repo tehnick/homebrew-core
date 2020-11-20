@@ -3,8 +3,8 @@ require "language/node"
 class Terrahub < Formula
   desc "Terraform automation and orchestration tool"
   homepage "https://docs.terrahub.io"
-  url "https://registry.npmjs.org/terrahub/-/terrahub-0.4.37.tgz"
-  sha256 "906ef5496beab6fecbf0751cfb50685b34d3f7135555d54a8400a2debf9ca432"
+  url "https://registry.npmjs.org/terrahub/-/terrahub-0.4.39.tgz"
+  sha256 "559a25536bf1088c7626fec4242a261653b6e928c8124153f23798e9f8867de7"
   license "MPL-2.0"
 
   livecheck do
@@ -13,9 +13,10 @@ class Terrahub < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "37f2d7a60a4cc51210cc298930a4f4a4e1d13ef3f60154a8a65221816624b7f4" => :catalina
-    sha256 "c7a53ffafc8f3f814e966b82ec7dcb03f79c2f37cf3f54154742616c76c138d5" => :mojave
-    sha256 "96bee4d4fa04e31ec85463e2751333afe0d329a2839f5f84c46cc61ff389ed80" => :high_sierra
+    sha256 "3f54c95e01bf455fdcfa9d611b5ffb2107883713d57bd417a9acbdbd9cdfd84b" => :big_sur
+    sha256 "8d3ec469e865ec84a5df634b424bd6553d51593f28fb1bbca8edf34298917429" => :catalina
+    sha256 "7f8910ea70fb61f12c60228d8a36034383fd1365bdec96e32bdba7dd03675857" => :mojave
+    sha256 "3995a9a171cecd49b7a954cf1d6ea1977ca52511b54855be34a81735b19359d7" => :high_sierra
   end
 
   depends_on "node"

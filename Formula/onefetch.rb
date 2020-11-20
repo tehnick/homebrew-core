@@ -1,15 +1,16 @@
 class Onefetch < Formula
   desc "Git repository summary on your terminal"
   homepage "https://github.com/o2sh/onefetch"
-  url "https://github.com/o2sh/onefetch/archive/v2.5.0.tar.gz"
-  sha256 "1f4d34f70fc38d453f875c40852c535a5c5b011563262209976ecaf028a664c6"
+  url "https://github.com/o2sh/onefetch/archive/v2.7.1.tar.gz"
+  sha256 "ac2129ecc0ac1bf5ee9bf8a6511f3cfe9b53c873860745346c060ecc8f902848"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "27171a15aba067cb38280669e653ab1f0f2e11543dc561d780317129edeeb4c4" => :catalina
-    sha256 "266e070dc4d1fdabd9516d03d9d489f6daf901e28aa7a4852e381d1286756be2" => :mojave
-    sha256 "7200468a5be454fb189fd21423dd748c9a662f9ae00befa308a17bd176f83229" => :high_sierra
+    sha256 "6a128d6c69bbdf45527b7831b8f2bbd3da01aac885568100a42eac0ece1876fd" => :big_sur
+    sha256 "89abea778eedc4f1eaf6fd6e470dd33dfb5c783065086e26055df047da187acd" => :catalina
+    sha256 "984119bd82140f66accea4d58794080ed9bb0bf56704da2c8187e45e288cd785" => :mojave
+    sha256 "62fab402b370f85fe536c49739b32b9d4c19d7edeaa6fe7f9417485492f63892" => :high_sierra
   end
 
   depends_on "rust" => :build

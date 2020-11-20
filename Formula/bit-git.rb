@@ -1,15 +1,17 @@
 class BitGit < Formula
   desc "Bit is a modern Git CLI"
   homepage "https://github.com/chriswalz/bit"
-  url "https://github.com/chriswalz/bit/archive/v0.8.1.tar.gz"
-  sha256 "80f19e249356f6adc46071bbf2a01f139c0af9997bc3e323eb62952863d7cf8b"
+  url "https://github.com/chriswalz/bit/archive/v0.9.11.tar.gz"
+  sha256 "a6d7f31d92007725b18f6203c7b9c8f9eaaa49e22f807ad683473d7388350681"
   license "Apache-2.0"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "85b8409f9012bfda02a17d27605063b4aa8eabe2a38522ae56325b8f4c423f15" => :catalina
-    sha256 "d4c25d968475239933582206f9733164286f60b1c1d6a6229da15c954080077b" => :mojave
-    sha256 "494b39c9402126019107c13b8e31a61b7354be7d42b58bb91e45574bb7c9d213" => :high_sierra
+    sha256 "10fe23fbb229098ef6548909184ff2173f6f55831f01a9555d91c2c7ec6808a2" => :big_sur
+    sha256 "627db9ab99558d5515cc6de83dd6d79fea1fb6dffc4541baa0aa181f24de1732" => :catalina
+    sha256 "43dfd72b27f1e48b105c5175da4993dedc809438644a3b9401b1d567c2b1325d" => :mojave
+    sha256 "23c7ec23e0d0da58e0b2da1d48fb740727765981c414269f9f11637e813e111c" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -17,7 +19,7 @@ class BitGit < Formula
   conflicts_with "bit", because: "both install `bit` binaries"
 
   def install
-    system "go", "build", *std_go_args
+    system "go", "build", *std_go_args, "-ldflags", "-X main.version=v#{version}"
     bin.install_symlink "bit-git" => "bit"
   end
 

@@ -1,16 +1,16 @@
 class Libxcb < Formula
   desc "X.Org: Interface to the X Window System protocol"
   homepage "https://www.x.org/"
-  url "https://xcb.freedesktop.org/dist/libxcb-1.13.1.tar.bz2"
-  sha256 "a89fb7af7a11f43d2ce84a844a4b38df688c092bf4b67683aef179cdf2a647c4"
+  url "https://xcb.freedesktop.org/dist/libxcb-1.14.tar.gz"
+  sha256 "2c7fcddd1da34d9b238c9caeda20d3bd7486456fc50b3cc6567185dbd5b0ad02"
   license "MIT"
-  revision 1
 
   bottle do
     cellar :any
-    sha256 "8d62bcf36239e430333af2204b1546606444c77c09b48c8c08e06b0528426545" => :catalina
-    sha256 "86e8405269ea3972dfc2fb9fde8c1da709c4be85346906eaf018b0603257d509" => :mojave
-    sha256 "e4c9db5bee37ecf410e8ee49aff2eafd1ec3b10c52a44e7af444788068110839" => :high_sierra
+    sha256 "7d5c969ae5d67cba138c36d0ec758ef383763d58a615e1f0d9d8cc86c1c6d16d" => :big_sur
+    sha256 "8775b3a19f927b57ca4077211b25898c6481318ff1cddb3098c61903ae832b1f" => :catalina
+    sha256 "8a13efa25000a0695280f5465186f7511e9083685a49560d0dc5d7cc837a1cfa" => :mojave
+    sha256 "e56b657f223ac78f4f600fe057dd8ab12303be5f4f0f5b61eb94443d10fb4cf4" => :high_sierra
   end
 
   depends_on "pkg-config" => :build

@@ -3,7 +3,7 @@ class MysqlAT56 < Formula
   homepage "https://dev.mysql.com/doc/refman/5.6/en/"
   url "https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.50.tar.gz"
   sha256 "efc48d8160a66b50fc498bb42ea730c3b6f30f036b709a7070d356edd645923e"
-  license "GPL-2.0"
+  license "GPL-2.0-only"
 
   livecheck do
     url "https://dev.mysql.com/downloads/mysql/5.6.html"
@@ -11,6 +11,7 @@ class MysqlAT56 < Formula
   end
 
   bottle do
+    sha256 "3d08d88b48c5fd5cf08e13ae01107a28cffd3fd5ef5469793cca599fd40f94c1" => :big_sur
     sha256 "1e392a56a5d37169764852a15cbda9794358cd2e198601b35bd2e5d178f5fa5a" => :catalina
     sha256 "2ee2ab2a4ee0d8007c588ba956b584a19273ca89bc3a63643fedeba4ce385792" => :mojave
     sha256 "156677c64acb688c490d1369093ff6cd329c0f19b7ee1229aabd337ce9f25abc" => :high_sierra

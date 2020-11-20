@@ -1,15 +1,16 @@
 class Deno < Formula
   desc "Secure runtime for JavaScript and TypeScript"
   homepage "https://deno.land/"
-  url "https://github.com/denoland/deno/releases/download/v1.5.0/deno_src.tar.gz"
-  sha256 "ca6ff399d3f00586dd90e4578016f8efc5a728eb9cd600463f031d085019fe0e"
+  url "https://github.com/denoland/deno/releases/download/v1.5.3/deno_src.tar.gz"
+  sha256 "a85d6bf67e3dc0adaf87fe785351a34a0331571970f8229b652175a884bc9599"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "30796553060442b3420e0c8a6e549c5d50c75c28204af5b85bbd0e70d03578f4" => :catalina
-    sha256 "9d723a16d07f43acae93ff622bdc553ff169b7249813662f2aa1949eceafe820" => :mojave
-    sha256 "1187e58c2d8d9ea663929ca692817f424d46f22f84e7e6b2225243b56618ac49" => :high_sierra
+    sha256 "190465b6a68bae086d5ae26d97e9b293a4be7a246eb2ada4aac4c5d94f681435" => :big_sur
+    sha256 "8095e1d9e273f8ce1adac4c0b1693b1df6faa129d5296c5b82804671bf1eac66" => :catalina
+    sha256 "87f6302f877d9c74ea3ad828cf24d2a52dcb1bb2ce1d7c9aa2ad76b2b2316a09" => :mojave
+    sha256 "247cda1c657ebe3995be4ad958631f61b9270d16abe76fecb1e5a10870ac917c" => :high_sierra
   end
 
   depends_on "llvm" => :build

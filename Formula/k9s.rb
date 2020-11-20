@@ -2,15 +2,16 @@ class K9s < Formula
   desc "Kubernetes CLI To Manage Your Clusters In Style!"
   homepage "https://k9scli.io/"
   url "https://github.com/derailed/k9s.git",
-      tag:      "v0.22.1",
-      revision: "2e04a846e668f67af207a1030a310b5e2c864231"
+      tag:      "v0.23.10",
+      revision: "a952806ebaa316e2c7d0949ad605fb4c944f2cd0"
   license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "4782d3c54244169d37b869cfa0d4cc1a89ee6e7f60f01909f1b2978573009e16" => :catalina
-    sha256 "038eefd009c0438ec93da9ef6fe6ab3c410ec72d11d388501bbec8a9429e9e71" => :mojave
-    sha256 "359d268507759d846acfbb73645e892e1fd9081c35b965a80087e1372dcc424c" => :high_sierra
+    sha256 "bfa14ecb2f6f551fd27aa711f726ca63adea703586e12471939c0532e71edd4a" => :big_sur
+    sha256 "1221af992cb95a512f9e749462c41f174f01fd7bde86fd6f18797f70e17a0e9a" => :catalina
+    sha256 "ff4bb8ba72cae9b95ebf1a09a0eb5cf3a3d78786f7370c2d115027971f4b2902" => :mojave
+    sha256 "82609c06825c9b1228487f55a8a5628cb19a3f538f95b82aa000fc0e1d0a9190" => :high_sierra
   end
 
   depends_on "go" => :build

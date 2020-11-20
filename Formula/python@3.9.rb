@@ -12,6 +12,7 @@ class PythonAT39 < Formula
   end
 
   bottle do
+    sha256 "bd4ebe03f4c8371c87b2e2db46d5a8ebe0d3f2940f64d8228b901048f1dd9290" => :big_sur
     sha256 "fb4e0fa1e5bd0801809e88ee99df2640974bb3953e0ebfe56541ff1ba2fd4865" => :catalina
     sha256 "77254b7bca66680c41db33e78d40bef288924fb142deb73648ce67255c6dda83" => :mojave
     sha256 "2e1dec264883dd4ee263a89ff41c5bb6579bbf68982ca40652bb8131d1f51e66" => :high_sierra
@@ -54,6 +55,7 @@ class PythonAT39 < Formula
   link_overwrite "bin/wheel3"
   link_overwrite "share/man/man1/python3.1"
   link_overwrite "lib/pkgconfig/python3.pc"
+  link_overwrite "lib/pkgconfig/python3-embed.pc"
   link_overwrite "Frameworks/Python.framework/Headers"
   link_overwrite "Frameworks/Python.framework/Python"
   link_overwrite "Frameworks/Python.framework/Resources"
@@ -72,6 +74,16 @@ class PythonAT39 < Formula
   resource "wheel" do
     url "https://files.pythonhosted.org/packages/83/72/611c121b6bd15479cb62f1a425b2e3372e121b324228df28e64cc28b01c2/wheel-0.35.1.tar.gz"
     sha256 "99a22d87add3f634ff917310a3d87e499f19e663413a52eb9232c447aa646c9f"
+  end
+
+  # Remove this block when upstream adds arm64 and Big Sur compatibility
+  if MacOS.version >= :big_sur
+    # Upstream PRs #20171, #21114, #21224 and #21249
+    # Backport of https://github.com/python/cpython/pull/22855
+    patch do
+      url "https://raw.githubusercontent.com/Homebrew/formula-patches/33a9d63f/python/arm64-3.9.patch"
+      sha256 "167e328cf68e9ec142f483fda9fafbb903be9a47dee2826614fdc24b2fbe6e06"
+    end
   end
 
   def install

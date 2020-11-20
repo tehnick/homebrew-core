@@ -1,8 +1,8 @@
 class Abcmidi < Formula
   desc "Converts abc music notation files to MIDI files"
   homepage "https://ifdo.ca/~seymour/runabc/top.html"
-  url "https://ifdo.ca/~seymour/runabc/abcMIDI-2020.10.27.zip"
-  sha256 "5e93cb0257f5966d669808b7df7c21ef307912804bfa5048685ec7eb72c207ac"
+  url "https://ifdo.ca/~seymour/runabc/abcMIDI-2020.11.07.zip"
+  sha256 "60dacfc3debc54587048fe3a91c05c33d514532e20445a78f01663768311eb2a"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -12,9 +12,10 @@ class Abcmidi < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2b013148c153f0dee49557daad99ecd5b70771c077739a129b23625f81fb7ee0" => :catalina
-    sha256 "916f79557e947f91d39b9aeeefa1bdd034532da46d817174d197cdd07b8fbb52" => :mojave
-    sha256 "184b1d4290470a4756acf100df93c50435e5b55837c9456ce587f614ac981ae3" => :high_sierra
+    sha256 "61f25dced3545688bf5c9e9e47b2b0be3bf2f6e6c808cab9df2c02352b8de023" => :big_sur
+    sha256 "95a8b89c8bfb987fcade3a4f5ab86040921bb72cc21cb63ea76a092d726aa82b" => :catalina
+    sha256 "3815dd9eb4ff1de2fc2c183855e0a7eb143edb10cf915a37eea88d73ae3b4b22" => :mojave
+    sha256 "83258be364124a742a60c70f0a19a5c9fd3a8a1e77d53415eb51eb8d419cda4d" => :high_sierra
   end
 
   def install
@@ -22,12 +23,6 @@ class Abcmidi < Formula
     # the tarball. On case-sensitive file-systems, the "makefile" file won't
     # be overridden and will be chosen over the "Makefile" file.
     rm "makefile"
-
-    # Fix the build issue (remove in the next release)
-    inreplace "drawtune.c", "printtext(left, v->place->item, &textfont);",
-                            "printtext(left, v->place->item.voidptr, &textfont);"
-    inreplace "drawtune.c", "printtext(centre, v->place->item, &textfont);",
-                            "printtext(centre, v->place->item.voidptr, &textfont);"
 
     system "./configure", "--disable-debug",
                           "--prefix=#{prefix}",

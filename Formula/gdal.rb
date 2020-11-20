@@ -1,8 +1,8 @@
 class Gdal < Formula
   desc "Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://download.osgeo.org/gdal/3.1.4/gdal-3.1.4.tar.xz"
-  sha256 "7b82486f71c71cec61f9b237116212ce18ef6b90f068cbbf9f7de4fc50b576a8"
+  url "https://download.osgeo.org/gdal/3.2.0/gdal-3.2.0.tar.xz"
+  sha256 "b051f852600ffdf07e337a7f15673da23f9201a9dbb482bd513756a3e5a196a6"
   license "MIT"
 
   livecheck do
@@ -11,9 +11,10 @@ class Gdal < Formula
   end
 
   bottle do
-    sha256 "750223129c54f7cbe092637d2b5ff99d3795ecd83eb748ba5510b0853919cd62" => :catalina
-    sha256 "3ba9cd5ff3acd29c9960f25c1825482895a3973d0f6d422e853f57c9104968d8" => :mojave
-    sha256 "f2bba26bb444d0bcf4ac2cfccf4ef66d9f1543fe8095bece8dbe5ff0bcec1ca6" => :high_sierra
+    sha256 "fb1c58e1f7a06f89a744e4f55cce483cb9cc7fddb2bbf747e1665eafd5066855" => :big_sur
+    sha256 "2a74c66bb4dd479b809bcaee9b2ed31afbadb26d2fed57cbb96bf81420d50265" => :catalina
+    sha256 "1d0bd96e0edf8f85bbadc47a12a3b3f71f3d1b1458f904df5eb3c6223ef4f479" => :mojave
+    sha256 "d00526a862cae5b405f2cee3d2dfab285d4cdfcfa921e9ac7bdeeb5bcf61fe9d" => :high_sierra
   end
 
   head do
@@ -165,7 +166,7 @@ class Gdal < Formula
     # basic tests to see if third-party dylibs are loading OK
     system "#{bin}/gdalinfo", "--formats"
     system "#{bin}/ogrinfo", "--formats"
-
-    system Formula["python@3.9"].opt_bin/"python3", "-c", "import gdal"
+    # Changed Python package name from "gdal" to "osgeo.gdal" in 3.2.0.
+    system Formula["python@3.9"].opt_bin/"python3", "-c", "import osgeo.gdal"
   end
 end

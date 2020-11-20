@@ -5,8 +5,8 @@ class FfmpegAT28 < Formula
   sha256 "d0734fec613fe12bee0b5a84f917779b854c1ede7882793f618490e6bbf0c148"
   # None of these parts are used by default, you have to explicitly pass `--enable-gpl`
   # to configure to activate them. In this case, FFmpeg's license changes to GPL v2+.
-  license "GPL-2.0"
-  revision 1
+  license "GPL-2.0-or-later"
+  revision 4
 
   livecheck do
     url "https://ffmpeg.org/download.html"
@@ -14,9 +14,9 @@ class FfmpegAT28 < Formula
   end
 
   bottle do
-    sha256 "10bd2318a120a3e299573331c095f5f969870628975cea93b09fc4dd5b521b60" => :catalina
-    sha256 "31a5c6c0821b56290abbff2e3a55e513795acfe2abec45f03affc9a0f2c53cb0" => :mojave
-    sha256 "d9333d5a5e2b7614a47c395072c2166601f07d661b921bea2450651c915f4602" => :high_sierra
+    sha256 "27699b594d60d0956024149eb2c275e55d06f4e184837bf94b118d1b94058e2c" => :big_sur
+    sha256 "05ee349f50b124d6a1086e252e7525a0ff82a37a4770e55e3170c55dfa52f73a" => :catalina
+    sha256 "7ea539da2ed55ae2a26019bb0c41478fbc6b72c1e96e5d6a02cbb6a1c1a92d77" => :mojave
   end
 
   keg_only :versioned_formula
@@ -83,6 +83,8 @@ class FfmpegAT28 < Formula
       --enable-libspeex
       --enable-opencl
       --disable-indev=jack
+      --disable-libxcb
+      --disable-xlib
     ]
 
     # A bug in a dispatch header on 10.10, included via CoreFoundation,

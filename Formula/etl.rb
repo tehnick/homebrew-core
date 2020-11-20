@@ -2,6 +2,7 @@ class Etl < Formula
   desc "Extensible Template Library"
   homepage "https://synfig.org"
   url "https://downloads.sourceforge.net/project/synfig/releases/1.2.2/source/ETL-1.2.2.tar.gz"
+  mirror "https://github.com/synfig/synfig/releases/download/v1.2.2/source-ETL-1.2.2.tar.gz"
   sha256 "0dc19c5a6c9e964054ca3af6dacd6ab0c198d78071cfab2aebac178afe454d8b"
   license "GPL-3.0"
 
@@ -12,6 +13,7 @@ class Etl < Formula
 
   bottle do
     cellar :any_skip_relocation
+    sha256 "4901ffbc8efbd0794fa4d50e9b7f471e95b4655ca5ad82d68204227c8de004d4" => :big_sur
     sha256 "1ff4de15ba9b82ef2afe44be648f1c42031d7bc4e9e1538e3e1951cfa353ecaa" => :catalina
     sha256 "b775dfeb3634c3b4ff3828239250394328b5c971e472cb775a0590d94bcdc6f8" => :mojave
     sha256 "b775dfeb3634c3b4ff3828239250394328b5c971e472cb775a0590d94bcdc6f8" => :high_sierra

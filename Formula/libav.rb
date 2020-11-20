@@ -4,7 +4,7 @@ class Libav < Formula
   url "https://libav.org/releases/libav-12.3.tar.xz"
   sha256 "6893cdbd7bc4b62f5d8fd6593c8e0a62babb53e323fbc7124db3658d04ab443b"
   license "GPL-2.0"
-  revision 5
+  revision 7
   head "https://git.libav.org/libav.git"
 
   livecheck do
@@ -14,9 +14,10 @@ class Libav < Formula
 
   bottle do
     cellar :any
-    sha256 "04178aaa961117837638b449cf8d6ec094ed584573b44ceb2ffb61d877d1a868" => :catalina
-    sha256 "5068d9505c525ce5a0016f284f5cf24ea49a10daffdd1bb3eb8dc45fe47fb0a6" => :mojave
-    sha256 "f19b2998d836a4723f60a41d484cf0226c15f8aae593fb85596af63e22361c3f" => :high_sierra
+    sha256 "bc4f13de926046fac2512ef7924600b196ef0d4da72e2f32bed6541aeb471786" => :big_sur
+    sha256 "5c69b6c9b6a43ecb3db3e5cb4a610cfd50afdca964cbacbd30622fb89241aaaf" => :catalina
+    sha256 "30f9831bae193d6a9716e8e3aed399dfd8d62189079d91b5c4dfb893904a213f" => :mojave
+    sha256 "02fa538e8c123a074967d4b4c8e122c167761d4c6425ed5061a1d15cf47945a7" => :high_sierra
   end
 
   depends_on "pkg-config" => :build

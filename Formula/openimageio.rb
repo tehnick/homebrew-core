@@ -1,11 +1,11 @@
 class Openimageio < Formula
   desc "Library for reading, processing and writing images"
   homepage "https://openimageio.org/"
-  url "https://github.com/OpenImageIO/oiio/archive/Release-2.1.18.1.tar.gz"
-  version "2.1.18"
-  sha256 "e2cf54f5b28e18fc88e76e1703f2e39bf144c88378334527e4a1246974659a85"
+  url "https://github.com/OpenImageIO/oiio/archive/Release-2.2.7.0.tar.gz"
+  version "2.2.7"
+  sha256 "857ac83798d6d2bda5d4d11a90618ff19486da2e5a4c4ff022c5976b5746fe8c"
   license "BSD-3-Clause"
-  revision 4
+  revision 1
   head "https://github.com/OpenImageIO/oiio.git"
 
   livecheck do
@@ -14,9 +14,10 @@ class Openimageio < Formula
   end
 
   bottle do
-    sha256 "58a7e8a3c3203de3b43061fb402a93715657be05532ed37520561399d5b4c2ad" => :catalina
-    sha256 "1151e45b06a05602ede35309323be229b6d0819a26de3d0e2052b8a4cb52750e" => :mojave
-    sha256 "7602e1fa13c77da432a6a83e64f43e0d5d52a4ba34ead1e5290be6fc3f817f92" => :high_sierra
+    sha256 "fcd03015832924e928fd3d3a8ca16c17389e95c062c11829e6630745df2d6fb1" => :big_sur
+    sha256 "1c95f07642c9c4ec91b19f6eb449b251c9f2ae82164561c84e4eb311d286730c" => :catalina
+    sha256 "97a22718f49ac48a5ebe1663e9fb2bbfbe13b2513dfa2eb0aeb68040d84cc500" => :mojave
+    sha256 "ba66d98bd371b1af625beb52269129ab904cc56927b3d50b1a9ccbe8afe2e074" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -34,6 +35,7 @@ class Openimageio < Formula
   depends_on "libtiff"
   depends_on "opencolorio"
   depends_on "openexr"
+  depends_on "pybind11"
   depends_on "python@3.9"
   depends_on "webp"
 

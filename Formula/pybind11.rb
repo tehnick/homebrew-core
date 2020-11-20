@@ -1,23 +1,27 @@
 class Pybind11 < Formula
   desc "Seamless operability between C++11 and Python"
   homepage "https://github.com/pybind/pybind11"
-  url "https://github.com/pybind/pybind11/archive/v2.6.0.tar.gz"
-  sha256 "90b705137b69ee3b5fc655eaca66d0dc9862ea1759226f7ccd3098425ae69571"
+  url "https://github.com/pybind/pybind11/archive/v2.6.1.tar.gz"
+  sha256 "cdbe326d357f18b83d10322ba202d69f11b2f49e2d87ade0dc2be0c5c34f8e2a"
   license "BSD-3-Clause"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "e13f81335fd6c3ac5d5e2e179e98b95e572f6c597576168b39ff38cd4284e274" => :catalina
-    sha256 "38d34b6db4344e234ac0d3974478e41e412402e77fa05b29a4f09481b78680d0" => :mojave
-    sha256 "87e2009160c3929c4ff0b6629f08885f93349f55e0a2f17ccc06d8196c068795" => :high_sierra
+    sha256 "2f8d6a8a4ec4e2d35ed5926f56d49e0a3c1a3a853f16f1fe266e4cb25673a2c9" => :big_sur
+    sha256 "a65ec879104470206955784e0715d9188fd2f3848dcd88714e094313ab8305de" => :catalina
+    sha256 "122967134526009627cf8648d4181f4a7e06688d5b74ffa0a2767abeeb54e091" => :mojave
+    sha256 "2128187d3a45fbb3dfe2426b8e974ad15a07942a17ae07c09a52f07482b11bdf" => :high_sierra
   end
 
   depends_on "cmake" => :build
-  depends_on "python@3.9"
+  depends_on "python@3.9" => :test
 
   def install
-    system "cmake", ".", "-DPYBIND11_TEST=OFF", *std_cmake_args
-    system "make", "install"
+    system "cmake", "-S", ".", "-B", "build",
+           "-DPYBIND11_TEST=OFF",
+           "-DPYBIND11_NOPYTHON=ON",
+           *std_cmake_args
+    system "cmake", "--install", "build"
   end
 
   test do
@@ -28,10 +32,9 @@ class Pybind11 < Formula
           return i + j;
       }
       namespace py = pybind11;
-      PYBIND11_PLUGIN(example) {
-          py::module m("example", "pybind11 example plugin");
+      PYBIND11_MODULE(example, m) {
+          m.doc() = "pybind11 example plugin";
           m.def("add", &add, "A function which adds two numbers");
-          return m.ptr();
       }
     EOS
 

@@ -10,15 +10,17 @@ class PandocCiteproc < Formula
   license "BSD-3-Clause"
   head "https://github.com/jgm/pandoc-citeproc.git"
 
-  livecheck do
-    url :stable
-  end
-
   bottle do
     sha256 "518ed9646d3a165b413a4222d87d5148130891fc2505f2e71e20e05507131992" => :catalina
     sha256 "fbbe846a5843e8e0de7d7bafa3ff3af2600c4fbb8ee2e50a05286ac02de52f6e" => :mojave
     sha256 "dfd25614701ee6cfdbe4ec0d6e67a9e54f6c08ded7f8b3de65f1db621fdc72dc" => :high_sierra
   end
+
+  # https://github.com/jgm/pandoc-citeproc/commit/473378e588c40a6c3cb3b24330431b89cf4f81b4
+  # This package is no longer maintained.
+  # Pandoc now uses the [citeproc](https://github.com/jgm/citeproc)
+  # library, and no external filter is needed.
+  deprecate! date: "2020-10-09", because: :deprecated_upstream
 
   depends_on "cabal-install" => :build
   depends_on "ghc@8.8" => :build

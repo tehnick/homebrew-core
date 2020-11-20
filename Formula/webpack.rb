@@ -4,8 +4,8 @@ require "json"
 class Webpack < Formula
   desc "Bundler for JavaScript and friends"
   homepage "https://webpack.js.org/"
-  url "https://registry.npmjs.org/webpack/-/webpack-5.2.0.tgz"
-  sha256 "196111df2ca36ccc9987cf005b998ffeced769554ba9a2c90306b876106017fb"
+  url "https://registry.npmjs.org/webpack/-/webpack-5.5.1.tgz"
+  sha256 "fac3fae7126d20588953c4136d370cecb5941d2b43e152e522412f0d337224fa"
   license "MIT"
   head "https://github.com/webpack/webpack.git"
 
@@ -15,26 +15,30 @@ class Webpack < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "caa836df8ea5188309e441a697757d4f77fe69aa9ff6164961e91371b5aa83ea" => :catalina
-    sha256 "4c09d2fc4f72f9b7aea87850f09c5892bf39267a208e13597aad01e19d315a0d" => :mojave
-    sha256 "e6c6e700b9b82c307998f8911c6ae6fc404228bd9396e670ffa6891b5504d270" => :high_sierra
+    sha256 "2e39313d8b381a8332945d1d8d6b88a9d04865652a6343e0f8e00478513fd1ab" => :big_sur
+    sha256 "c9c6ba21fa31210e1f0ece54802ffdd4e7bf17ba3934ce22999166f12fdae639" => :catalina
+    sha256 "c48e13d57c4a4115b06269255c2d4f99a7d6a91f01159738cbc9fb8fb2d54dea" => :mojave
   end
 
   depends_on "node"
 
   resource "webpack-cli" do
-    url "https://registry.npmjs.org/webpack-cli/-/webpack-cli-4.0.0.tgz"
-    sha256 "ba846e71caddbf5a48b090f23f8ce91df6c771c72e324d1fb2b9eda6e2af1a7a"
+    url "https://registry.npmjs.org/webpack-cli/-/webpack-cli-4.2.0.tgz"
+    sha256 "09ca2de6deee939a4a2f8edf206a776caafb6fe3590ed1a8310a3e3b69ad4a18"
   end
 
   def install
     (buildpath/"node_modules/webpack").install Dir["*"]
     buildpath.install resource("webpack-cli")
 
+    cd buildpath/"node_modules/webpack" do
+      system "npm", "install", *Language::Node.local_npm_install_args, "--production", "--legacy-peer-deps"
+    end
+
     # declare webpack as a bundledDependency of webpack-cli
     pkg_json = JSON.parse(IO.read("package.json"))
     pkg_json["dependencies"]["webpack"] = version
-    pkg_json["bundledDependencies"] = ["webpack"]
+    pkg_json["bundleDependencies"] = ["webpack"]
     IO.write("package.json", JSON.pretty_generate(pkg_json))
 
     system "npm", "install", *Language::Node.std_npm_install_args(libexec)

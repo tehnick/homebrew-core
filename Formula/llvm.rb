@@ -37,6 +37,7 @@ class Llvm < Formula
 
   bottle do
     cellar :any
+    sha256 "a2030fcb7618c193ad81c0af98a62a2549ce9af16eab7b41b55801a643fce9d4" => :big_sur
     sha256 "313e4f27bc61f4a7afe193288c0fb98a8c96efe89edf82990ae1b79d584196c5" => :catalina
     sha256 "0d9e7f09db772677467075f5fe8440130cd08b3019ed73ca4afa7b2f307d962e" => :mojave
     sha256 "d3c239a222cf92151616f98ab2ff28ec40d9eee3d395a55d23c12a374a2e0977" => :high_sierra
@@ -62,17 +63,23 @@ class Llvm < Formula
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
 
+  # Upstream ARM patch for OpenMP runtime, remove in next version
+  # https://reviews.llvm.org/D91002
+  # https://bugs.llvm.org/show_bug.cgi?id=47609
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/6166a68c/llvm/openmp_arm.patch"
+    sha256 "70fe3836b423e593688cd1cc7a3d76ee6406e64b9909f1a2f780c6f018f89b1e"
+  end
+
   def install
     projects = %w[
       clang
       clang-tools-extra
       lld
       lldb
+      openmp
       polly
     ]
-    # OpenMP currently fails to build on ARM
-    # https://github.com/Homebrew/brew/issues/7857#issuecomment-661484670
-    projects << "openmp" unless Hardware::CPU.arm?
     runtimes = %w[
       compiler-rt
       libcxx
