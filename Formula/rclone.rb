@@ -1,29 +1,33 @@
 class Rclone < Formula
   desc "Rsync for cloud storage"
   homepage "https://rclone.org/"
-  url "https://github.com/rclone/rclone/archive/v1.53.2.tar.gz"
-  sha256 "63c499cef3b216aa657b70ac8217b69f6b1925781d4d8881054194664462d4f1"
+  url "https://github.com/rclone/rclone/archive/v1.53.3.tar.gz"
+  sha256 "46fb317057ada21add1fa683a004e1ad5b2a1523c381f59b40ed1b18f2856ad0"
   license "MIT"
   head "https://github.com/rclone/rclone.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3b50cc675b356f43b62f4f5a8acef082a56163ddf1dfdf03a4f360ee6969cdfe" => :catalina
-    sha256 "a59703acea34bb4bff3fcd878af83d425a993fc1012b35b7a4210066e6279eab" => :mojave
-    sha256 "cea1a5bf6e0346731ba8357e313ae6eb3633e14400c2e9e67bd5a3f8524721f6" => :high_sierra
+    sha256 "932c69d40360abe58bd2fc91db3ee38112058d2f447a527ffa84c95ba0135637" => :big_sur
+    sha256 "4e8eef33e6affb52e81c9d75b7c9ee7f32ae30e1bb6ceb9e46f697c8251dc145" => :catalina
+    sha256 "6a33202f0e09d695e130694f36c7b7a1c4137f884c8da5eff80e737f8b061c7d" => :mojave
   end
-
-  deprecate! because: "requires FUSE"
 
   depends_on "go" => :build
 
   def install
-    system "go", "build", "-tags", "cmount", *std_go_args
+    system "go", "build", "-tags", "brew", *std_go_args
     man1.install "rclone.1"
     system bin/"rclone", "genautocomplete", "bash", "rclone.bash"
     system bin/"rclone", "genautocomplete", "zsh", "_rclone"
     bash_completion.install "rclone.bash" => "rclone"
     zsh_completion.install "_rclone"
+  end
+
+  def caveats
+    <<~EOS
+      Homebrew's installation does not include the `mount` subcommand.
+    EOS
   end
 
   test do

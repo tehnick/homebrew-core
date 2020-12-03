@@ -1,10 +1,10 @@
 class Syncthing < Formula
   desc "Open source continuous file synchronization application"
   homepage "https://syncthing.net/"
-  url "https://github.com/syncthing/syncthing/archive/v1.11.1.tar.gz"
-  sha256 "741d339dad6335f9a2fb9259a1b57c82896d9363d92a5c9ac2573068bf1859b7"
+  url "https://github.com/syncthing/syncthing/archive/v1.12.0.tar.gz"
+  sha256 "38782a448868a4bcbb4b9761b467e3c059b4b0f9896b432090526940f28117c7"
   license "MPL-2.0"
-  head "https://github.com/syncthing/syncthing.git"
+  head "https://github.com/syncthing/syncthing.git", branch: "main"
 
   livecheck do
     url :head
@@ -13,16 +13,16 @@ class Syncthing < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "627965240b489b03b07301aa9ffc77045197f28381238f006982a5d81ab8080b" => :big_sur
-    sha256 "43077fa79e38331f19fd2431e58a10bcb5d791b6a4c3d1ec489df17cce3eba12" => :catalina
-    sha256 "ffa720e14275a8d83021a036daa82b296ab12afb85c3314264fb2704231fa989" => :mojave
-    sha256 "364de7dbc68d5793a44df36b0e6cdc73037d80436c97574d3601e05817d6b028" => :high_sierra
+    sha256 "d5804f9a459dd71dd369e77a48908ece40cc35eed2b07aab2363b9cadad7a7ff" => :big_sur
+    sha256 "a26ccea6025a9b053ec010c2c6bfff38352e1384faca334483e5f5ad2c0e090f" => :catalina
+    sha256 "773451a4a5678859ee336410e88e3af7aae5dbd91d4fb4038138b4525eca32ae" => :mojave
   end
 
   depends_on "go" => :build
 
   def install
-    system "go", "run", "build.go", "--version", "v#{version}", "--no-upgrade", "tar"
+    build_version = build.head? ? "v0.0.0-#{version}" : "v#{version}"
+    system "go", "run", "build.go", "--version", build_version, "--no-upgrade", "tar"
     bin.install "syncthing"
 
     man1.install Dir["man/*.1"]
@@ -65,7 +65,8 @@ class Syncthing < Formula
   end
 
   test do
-    assert_match "syncthing v#{version} ", shell_output("#{bin}/syncthing --version")
+    build_version = build.head? ? "v0.0.0-#{version}" : "v#{version}"
+    assert_match "syncthing #{build_version} ", shell_output("#{bin}/syncthing --version")
     system bin/"syncthing", "-generate", "./"
   end
 end

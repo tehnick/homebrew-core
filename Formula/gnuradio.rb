@@ -6,14 +6,13 @@ class Gnuradio < Formula
   url "https://github.com/gnuradio/gnuradio/releases/download/v3.8.2.0/gnuradio-3.8.2.0.tar.gz"
   sha256 "3e293541a9ac8d78660762bae8b80c0f6195b3494e1c50c01a9fd79cc60bb624"
   license "GPL-3.0-or-later"
-  revision 3
+  revision 5
   head "https://github.com/gnuradio/gnuradio.git"
 
   bottle do
-    sha256 "97f50b66151e119d2c3661704202e74eea76adeef22c8b2a07eea0354b33cae3" => :big_sur
-    sha256 "b97dbe61c3b4730a96b4f5aeb19370a44e64a3c1e52b1bceaba83ce46c95bfe3" => :catalina
-    sha256 "33a6d4c3c5f974f46f382f0686a4cc6fbee8ae17f14fd1e71676210e1826ffff" => :mojave
-    sha256 "0cf32fbe1213a83d6f339c2179dc67af138a237efe7fb2c7c82106613dbd8971" => :high_sierra
+    sha256 "2f3c3ae2289b3b8fbf257262513938a87ef4ac6a7558154e50455eb70885658e" => :big_sur
+    sha256 "3dd8a6c9199df4c7bf6024e76abc018ce41e0bab72728f536199c95722d3e378" => :catalina
+    sha256 "69326109c6cfca69ac1019e9b417bb5bc5171d7f66adc36f26fbe41b4c3c3017" => :mojave
   end
 
   depends_on "cmake" => :build
@@ -141,9 +140,27 @@ class Gnuradio < Formula
     mv Dir[lib/"python#{xy}/dist-packages/*"], lib/"python#{xy}/site-packages/"
     rm_rf lib/"python#{xy}/dist-packages"
 
+    # Create a directory for Homebrew to put .pth files pointing to GNU Radio
+    # plugins installed by other packages. An automatically-loaded module adds
+    # this directory to the package search path.
+    plugin_pth_dir = etc/"gnuradio/plugins.d"
+    mkdir plugin_pth_dir
+
     site_packages = lib/"python#{xy}/site-packages"
-    pth_contents = "import site; site.addsitedir('#{site_packages}')\n"
-    (venv_root/"lib/python#{xy}/site-packages/homebrew-gnuradio.pth").write pth_contents
+    venv_site_packages = venv_root/"lib/python#{xy}/site-packages"
+
+    (venv_site_packages/"homebrew_gr_plugins.py").write <<~EOS
+      import site
+      site.addsitedir("#{plugin_pth_dir}")
+    EOS
+
+    pth_contents = "#{site_packages}\nimport homebrew_gr_plugins\n"
+    (venv_site_packages/"homebrew-gnuradio.pth").write pth_contents
+
+    # Patch the grc config to change the search directory for blocks
+    inreplace etc/"gnuradio/conf.d/grc.conf" do |s|
+      s.gsub! share.to_s, "#{HOMEBREW_PREFIX}/share"
+    end
 
     rm bin.children.reject(&:executable?)
   end

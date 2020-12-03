@@ -3,15 +3,16 @@ class Checkov < Formula
 
   desc "Prevent cloud misconfigurations during build-time for IaC tools"
   homepage "https://www.checkov.io/"
-  url "https://files.pythonhosted.org/packages/fb/5c/3797d4d4b7f2211c2089a4e6f52025ebeaeb7dbf25ecdd3e48fc7716f1e0/checkov-1.0.632.tar.gz"
-  sha256 "a9ae7f03ab22a8ccbac223c77450d72ccc7e051f6c3bda7715f6e266cbcf10a9"
+  # checkov should only be updated every 15 releases on multiples of 15
+  url "https://files.pythonhosted.org/packages/ab/9f/cc4a2c4efa56213102e2bb6a6c0848aa3fb78d2d00be6dcae3bb1e89efcc/checkov-1.0.645.tar.gz"
+  sha256 "7a9eb5bccb85720088123c3fc6afd386cf4d528818c7fecaf5c081b0e5ac272f"
   license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2b8ec07a356c6dc0ec28070553b3155df9628ff97cd19018c942077d5d2ad89d" => :big_sur
-    sha256 "8a35a618022b5341df98ccd0cf1e1c967474aa436b783e7af5b3c48836d00db0" => :catalina
-    sha256 "d13802725777fd985a6c9f6c74224d8dcaa7a579ae8138be549ae2c05eb22a3a" => :mojave
+    sha256 "dec42a7d6ab7df727325a97df88df01a45188bdac13a7bf13856f160514a311c" => :big_sur
+    sha256 "ae1de183452c92260eacd267e384ac09ecc78c425d13c341a2ca5e28e5659c56" => :catalina
+    sha256 "0e4f275f259e9db1641d4d1e7f876409d5c92bb96acf9043fe2d0f857544e581" => :mojave
   end
 
   depends_on "python@3.9"
@@ -44,6 +45,11 @@ class Checkov < Formula
   resource "colorama" do
     url "https://files.pythonhosted.org/packages/82/75/f2a4c0c94c85e2693c229142eb448840fba0f9230111faa889d1f541d12d/colorama-0.4.3.tar.gz"
     sha256 "e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"
+  end
+
+  resource "deep_merge" do
+    url "https://files.pythonhosted.org/packages/a5/25/aa35c20acd8a4f515f9e4c8dee4c7731446234101a6dae0c34cf498bb342/deep_merge-0.0.4.tar.gz"
+    sha256 "b54415f90934c42e334114e2864cb4d4e7335b34ad396e35ad8610c96065a47e"
   end
 
   resource "docopt" do
@@ -91,6 +97,16 @@ class Checkov < Formula
     sha256 "26215ebb157e6fb2ee74319aa4445b9f3b7e456e26be215ce19fdaaa901c20a4"
   end
 
+  resource "packaging" do
+    url "https://files.pythonhosted.org/packages/55/fd/fc1aca9cf51ed2f2c11748fa797370027babd82f87829c7a8e6dbe720145/packaging-20.4.tar.gz"
+    sha256 "4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8"
+  end
+
+  resource "pyparsing" do
+    url "https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210/pyparsing-2.4.7.tar.gz"
+    sha256 "c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"
+  end
+
   resource "python-dateutil" do
     url "https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0/python-dateutil-2.8.1.tar.gz"
     sha256 "73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"
@@ -109,6 +125,11 @@ class Checkov < Formula
   resource "s3transfer" do
     url "https://files.pythonhosted.org/packages/50/de/2b688c062107942486c81a739383b1432a72717d9a85a6a1a692f003c70c/s3transfer-0.3.3.tar.gz"
     sha256 "921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db"
+  end
+
+  resource "semantic-version" do
+    url "https://files.pythonhosted.org/packages/d4/52/3be868c7ed1f408cb822bc92ce17ffe4e97d11c42caafce0589f05844dd0/semantic_version-2.8.5.tar.gz"
+    sha256 "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54"
   end
 
   resource "six" do
@@ -148,12 +169,6 @@ class Checkov < Formula
 
   def install
     virtualenv_install_with_resources
-  end
-
-  def caveats
-    <<~EOS
-      cloudformation java and go plugins are installed, but the Go and Java are not bundled with the installation.
-    EOS
   end
 
   test do

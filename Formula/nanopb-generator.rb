@@ -1,10 +1,9 @@
 class NanopbGenerator < Formula
   desc "C library for encoding and decoding Protocol Buffer messages"
   homepage "https://jpa.kapsi.fi/nanopb/docs/index.html"
-  url "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.3.tar.gz"
-  sha256 "91b4be33691dc1532d94b56f308743b8a07d209126b7fe21f98f8fdadd8edb95"
+  url "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.4.tar.gz"
+  sha256 "56fb6efb17824f09fd64c509cc6bbe0f44919137f8143a8613e1194cd4782374"
   license "Zlib"
-  revision 1
 
   livecheck do
     url "https://jpa.kapsi.fi/nanopb/download/"
@@ -13,9 +12,9 @@ class NanopbGenerator < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "bb5fdfea277280c189f98dbbd39d644e110a6a62bd11584d2e3bea174857cdf1" => :catalina
-    sha256 "ec63479e9cf31542c7bb34d2b1b17ae674412e1052a78957831200d5160b088a" => :mojave
-    sha256 "92184e5d0af8a845db7b7633d4db5967d201b7efd8af5615c31867fea38cd2df" => :high_sierra
+    sha256 "e21886b97c90e974ad0703192f26ebd46b434dd0c5628d2c212a2281bc10b093" => :big_sur
+    sha256 "6e8adb5331cae1497b14da6367cfbfc4b2231d06738c58402ab978f76834cbd9" => :catalina
+    sha256 "e64b44fbf7a8dc521871cc366962195eaa9d73db5da8d138ff1b71f4a6d92ccd" => :mojave
   end
 
   depends_on "protobuf"

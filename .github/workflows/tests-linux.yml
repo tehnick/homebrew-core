@@ -15,6 +15,7 @@ on:
       - "Formula/libnfnetlink.rb"
       - "Formula/libpciaccess.rb"
       - "Formula/libseccomp.rb"
+      - "Formula/libtirpc.rb"
       - "Formula/linux-headers.rb"
       - "Formula/strace.rb"
 jobs:
@@ -36,3 +37,9 @@ jobs:
           mkdir ~/bottles
           cd ~/bottles
           brew test-bot --only-formulae
+
+      - name: Output brew test-bot --only-formulae failures
+        if: always()
+        run: |
+          cat ~/bottles/steps_output.txt
+          rm ~/bottles/steps_output.txt

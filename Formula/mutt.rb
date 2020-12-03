@@ -10,8 +10,8 @@
 class Mutt < Formula
   desc "Mongrel of mail user agents (part elm, pine, mush, mh, etc.)"
   homepage "http://www.mutt.org/"
-  url "https://bitbucket.org/mutt/mutt/downloads/mutt-2.0.1.tar.gz"
-  sha256 "0cf5fdea5616f655b101de3b5ed45412bc2cc721d517466ca6c645a829b021db"
+  url "https://bitbucket.org/mutt/mutt/downloads/mutt-2.0.2.tar.gz"
+  sha256 "471218babe97968a45704f1e1e17523c4620ad1f92bae4143a4c9749ab1411c8"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -19,10 +19,10 @@ class Mutt < Formula
   end
 
   bottle do
-    sha256 "964bb11f7da8e0f2d1c9f56483064a27335859d1c45b6a52f1284a8ee904627d" => :big_sur
-    sha256 "0b5e6b1874323b4d4b62f838db2d6cc24673f04414493b5e5c50244472999ebb" => :catalina
-    sha256 "118b9075e2e69ad39771c8a50d345751a744b3175ac65f623313340bdb5e4db1" => :mojave
-    sha256 "31aec409f6afe88981dc096038b3f4e6c253d07f23b524faa1ba086db2db30a0" => :high_sierra
+    rebuild 1
+    sha256 "1a8a48a030eb372b8328060ca0c31d81d932de779a0dd193bf96dd8473a45c06" => :big_sur
+    sha256 "9ae8dc31b42c56775c4c8decb1bc76203fee06343dfb1f86f4dd2c4e3cecb3d1" => :catalina
+    sha256 "12c141f1ac03d7d47fe3a98207e13da22cbad9de1cb1ddeedd03bd2762b0d070" => :mojave
   end
 
   head do
@@ -40,6 +40,7 @@ class Mutt < Formula
   depends_on "tokyo-cabinet"
 
   uses_from_macos "bzip2"
+  uses_from_macos "krb5"
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
 

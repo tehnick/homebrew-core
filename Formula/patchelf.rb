@@ -4,7 +4,7 @@ class Patchelf < Formula
   url "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
   sha256 "699a31cf52211cf5ad6e35a8801eb637bc7f3c43117140426400d67b7babd792"
   license "GPL-3.0-or-later"
-  revision 1
+  revision 3
   head "https://github.com/NixOS/patchelf.git"
 
   livecheck do
@@ -13,9 +13,10 @@ class Patchelf < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "76fbad0cfce574922838b776de79999a9092ea00dc2d878762f2e20956a5df98" => :big_sur
-    sha256 "4bdb98927df64e1af3fa765d9171dd39021093e0c5b89bfec8426af39e8ca8a2" => :catalina
-    sha256 "b43f892846c58349425c2c061561e90fb74d065abeaa1c93c62ec2176bdc289d" => :mojave
+    sha256 "d83931e807f58c62f0b321b9523d16de6602415f0e19b3702d072b4dec382cb6" => :big_sur
+    sha256 "344c4459a5b03099308520eb7ef906242bca77f08ac1660ac61b74ccd7871b1c" => :catalina
+    sha256 "906cd9171c62947d8133b990bbc15ad7803bb5623f5b72332fa792a01c9634ac" => :mojave
+    sha256 "a73b17a4a11801b06958235f32423bd735be9a9bf126b43499c552f2c9ac489f" => :x86_64_linux
   end
 
   resource "helloworld" do

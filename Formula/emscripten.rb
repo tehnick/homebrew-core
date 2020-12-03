@@ -8,6 +8,7 @@ class Emscripten < Formula
   # Emscripten is available under 2 licenses, the MIT license and the
   # University of Illinois/NCSA Open Source License.
   license "MIT"
+  revision 1
   head "https://github.com/emscripten-core/emscripten.git"
 
   livecheck do
@@ -17,10 +18,10 @@ class Emscripten < Formula
 
   bottle do
     cellar :any
-    sha256 "ac39c8c200538d5369a5b8dcadeaefe1e293863f2946c55cc8ee0cd6f753994b" => :big_sur
-    sha256 "d05b18f81aa0f662cab367bd63ccd067689703f07241e2b943f9a41733b9eea2" => :catalina
-    sha256 "3e6350b3f279113ab851151a682be8e8f21efa3ab8619dc4b016e027e91b9675" => :mojave
-    sha256 "3a5c2864d6376a71f74c400cba04bcfe4b043760ba8b4f7d5382e0a104e49934" => :high_sierra
+    rebuild 1
+    sha256 "74cbecaf2f9f83f4ae76d2905cd5266a11e187f591161e0d628a68530e5f345b" => :big_sur
+    sha256 "8ad2dd50d3df5d2627cfbbe5bdc239e7fbd791d5a8194971a2ce1ddad267936c" => :catalina
+    sha256 "8db88573ea1504a100714b1c59b76fc9c7b77d0b49177cbffb0fb28fc01981e5" => :mojave
   end
 
   depends_on "cmake" => :build
@@ -29,11 +30,15 @@ class Emscripten < Formula
   depends_on "python@3.9"
   depends_on "yuicompressor"
 
-  # emscripten needs argument '-fignore-exceptions', which is only available
-  # starting in llvm >= 12
+  # emscripten needs argument '-fignore-exceptions', which is only available in llvm >= 12
+  # To find the correct llvm revision, find a corresponding commit at:
+  # https://github.com/emscripten-core/emsdk/blob/master/emscripten-releases-tags.txt
+  # Then take this commit and go to:
+  # https://chromium.googlesource.com/emscripten-releases/+/<commit>/DEPS
+  # Then use the listed llvm_project_revision for the resource below.
   resource "llvm" do
-    url "https://github.com/llvm/llvm-project/archive/llvmorg-12-init.tar.gz"
-    sha256 "a8f00b95f81722009bdcc2cc07235fad752e5f539006621ad055023fe0d58987"
+    url "https://github.com/llvm/llvm-project.git",
+        revision: "25a8881b724abf7251a9278e72224af7e82cb9c2"
   end
 
   def install
@@ -44,22 +49,17 @@ class Emscripten < Formula
     # repository.
     libexec.install Dir["*"]
 
+    # emscripten needs an llvm build with the following executables:
+    # https://github.com/emscripten-core/emscripten/blob/#{version}/docs/packaging.md#dependencies
     resource("llvm").stage do
       projects = %w[
         clang
-        clang-tools-extra
         lld
-        lldb
-        polly
       ]
-      # OpenMP currently fails to build on ARM
-      # https://github.com/Homebrew/brew/issues/7857#issuecomment-661484670
-      projects << "openmp" unless Hardware::CPU.arm?
-      runtimes = %w[
-        compiler-rt
-        libcxx
-        libcxxabi
-        libunwind
+
+      targets = %w[
+        host
+        WebAssembly
       ]
 
       llvmpath = Pathname.pwd/"llvm"
@@ -77,30 +77,12 @@ class Emscripten < Formula
       args = std_cmake_args.reject { |s| s["CMAKE_INSTALL_PREFIX"] } + %W[
         -DCMAKE_INSTALL_PREFIX=#{libexec}/llvm
         -DLLVM_ENABLE_PROJECTS=#{projects.join(";")}
-        -DLLVM_ENABLE_RUNTIMES=#{runtimes.join(";")}
-        -DLLVM_POLLY_LINK_INTO_TOOLS=ON
-        -DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON
+        -DLLVM_TARGETS_TO_BUILD=#{targets.join(";")}
         -DLLVM_LINK_LLVM_DYLIB=ON
-        -DLLVM_BUILD_LLVM_C_DYLIB=ON
-        -DLLVM_ENABLE_EH=ON
-        -DLLVM_ENABLE_FFI=ON
-        -DLLVM_ENABLE_LIBCXX=ON
-        -DLLVM_ENABLE_RTTI=ON
-        -DLLVM_INCLUDE_DOCS=OFF
+        -DLLVM_BUILD_LLVM_DYLIB=ON
+        -DLLVM_INCLUDE_EXAMPLES=OFF
         -DLLVM_INCLUDE_TESTS=OFF
-        -DLLVM_INSTALL_UTILS=ON
-        -DLLVM_ENABLE_Z3_SOLVER=OFF
-        -DLLVM_OPTIMIZED_TABLEGEN=ON
-        -DLLVM_TARGETS_TO_BUILD=all
-        -DFFI_INCLUDE_DIR=#{Formula["libffi"].opt_lib}/libffi-#{Formula["libffi"].version}/include
-        -DFFI_LIBRARY_DIR=#{Formula["libffi"].opt_lib}
-        -DLLVM_CREATE_XCODE_TOOLCHAIN=#{MacOS::Xcode.installed? ? "ON" : "OFF"}
-        -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
-        -DLLDB_ENABLE_PYTHON=OFF
-        -DLLDB_ENABLE_LUA=OFF
-        -DLLDB_ENABLE_LZMA=OFF
-        -DLIBOMP_INSTALL_ALIASES=OFF
-        -DCLANG_INCLUDE_TESTS=OFF
+        -DLLVM_INSTALL_UTILS=OFF
       ]
 
       sdk = MacOS.sdk_path_if_needed
@@ -114,9 +96,8 @@ class Emscripten < Formula
 
       mkdir llvmpath/"build" do
         system "cmake", "-G", "Unix Makefiles", "..", *args
-        system "make"
-        system "make", "install"
-        system "make", "install-xcode-toolchain" if MacOS::Xcode.installed?
+        system "cmake", "--build", "."
+        system "cmake", "--build", ".", "--target", "install"
       end
     end
 

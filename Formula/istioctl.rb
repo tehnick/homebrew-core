@@ -1,24 +1,25 @@
 class Istioctl < Formula
   desc "Istio configuration command-line utility"
-  homepage "https://github.com/istio/istio"
+  homepage "https://istio.io/"
   url "https://github.com/istio/istio.git",
-      tag:      "1.7.4",
-      revision: "4ce531ff1823a3abb9f42fa9d35523b0436e2d04"
+      tag:      "1.8.0",
+      revision: "c87a4c874df27e37a3e6c25fa3d1ef6279685d23"
   license "Apache-2.0"
   head "https://github.com/istio/istio.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d47871fc967f98fa67a3b05187438c0695376102cdfc0ff6fca22fd9215d6574" => :big_sur
-    sha256 "ad04447c6efaa1d6737cca6e30786284a4a67e5c23d3f1651fe72d6d0e073687" => :catalina
-    sha256 "24788010e30202c5da8c2172f8e56a193c6c75912b76f280d4037ad07d52a412" => :mojave
-    sha256 "9e8356bca3cd45c820422efd52ed7961dab34d64a8ab10a56f4bf5ca38e1ff5e" => :high_sierra
+    rebuild 1
+    sha256 "13412f071699e9cd6cd6c326283762b310788826751834f94c6a739a98ca39bf" => :big_sur
+    sha256 "4054c9d31253d0de7150b9c28fd29151d18345a6bb94f07843c138521c9f1a3e" => :catalina
+    sha256 "c097dc572691619571e769d6a98f005a6b89c37d2aeb247d0af4c1db5dc0ae99" => :mojave
   end
 
   depends_on "go" => :build
   depends_on "go-bindata" => :build
 
   def install
+    ENV["VERSION"] = version.to_s
     ENV["TAG"] = version.to_s
     ENV["ISTIO_VERSION"] = version.to_s
     ENV["HUB"] = "docker.io/istio"
@@ -33,6 +34,6 @@ class Istioctl < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/istioctl version --remote=false")
+    assert_equal version.to_s, shell_output("#{bin}/istioctl version --remote=false").strip
   end
 end

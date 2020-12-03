@@ -3,21 +3,24 @@ class YoutubeDl < Formula
 
   desc "Download YouTube videos from the command-line"
   homepage "https://youtube-dl.org/"
-  url "https://files.pythonhosted.org/packages/7d/27/ffd9f9555f8543a00233bf32e61ee4540358b5ce77b64e6ff72ca1eb90d6/youtube_dl-2020.11.19.tar.gz"
-  sha256 "2d6adbf7643467fa448939ebe6bebb002071b11dadf545909ca973f101b2584c"
+  url "https://files.pythonhosted.org/packages/fa/3c/f05e5649c81bcc5796ba913a5654a0305bc3a89982727b6fed295baddc2c/youtube_dl-2020.12.2.tar.gz"
+  sha256 "bc82acb0b59b25b822fad85bef0cbe78e5754ca532e3bd6899fe06386e2b8e7c"
   license "Unlicense"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ab39ad3bf8b1d5c55f84bf2c1fde0ba8d41f50fe0ed1913ca0825ec92b9faee3" => :big_sur
-    sha256 "34333494e19cfa8e739c3a085126ba0554e057c26aa7f9d7c1a6b021bcd9b634" => :catalina
-    sha256 "4004d4789fa6b72447e852c8064292b5b14ae11a2d01b10b2be99e0d8de1f075" => :mojave
+    sha256 "80cb5e1fbd2eab25218d5e0553846a8a546a7d720ebcf266fce1f1fe35dca7c0" => :big_sur
+    sha256 "85fda57614d3729b1bf746ea4241b8e1d5461ac71edda102c8ef60ce437213ae" => :catalina
+    sha256 "d15b8ddfb9a0e3ed0ea65fa6a348865bf8fcb6f014996d00d10f1077c1d90dc3" => :mojave
   end
 
   depends_on "python@3.9"
 
   def install
     virtualenv_install_with_resources
+    man1.install_symlink libexec/"share/man/man1/youtube-dl.1" => "youtube-dl.1"
+    bash_completion.install libexec/"etc/bash_completion.d/youtube-dl.bash-completion"
+    fish_completion.install libexec/"etc/fish/completions/youtube-dl.fish"
   end
 
   test do

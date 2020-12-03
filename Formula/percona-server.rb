@@ -10,6 +10,7 @@ class PerconaServer < Formula
   end
 
   bottle do
+    sha256 "5535a89eb4f89c579f4f904e4f0831277bfb75f8dc22db41f85a556076347f9b" => :big_sur
     sha256 "c6ad05c52e82f419f65a46bd627c784fec43dfb8545e68fb4939995fb5fefed2" => :catalina
     sha256 "cae8782ea16aa5fdfebe4ccac3189d2e7fbdc0d6290c0b8fda6ab46792f956eb" => :mojave
     sha256 "30719045c2ee376f8cf269e12fcd307f7d0313338b59b6e1c24861207177b287" => :high_sierra
@@ -25,8 +26,8 @@ class PerconaServer < Formula
 
   conflicts_with "mariadb", "mysql",
     because: "percona, mariadb, and mysql install the same binaries"
-  conflicts_with "protobuf",
-    because: "both install libprotobuf(-lite) libraries"
+  conflicts_with "protobuf", because: "both install libprotobuf(-lite) libraries"
+  conflicts_with "percona-xtrabackup", because: "both install comp_err.1 man page"
 
   # https://bugs.mysql.com/bug.php?id=86711
   # https://github.com/Homebrew/homebrew-core/pull/20538

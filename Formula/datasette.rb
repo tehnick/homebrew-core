@@ -1,10 +1,11 @@
 class Datasette < Formula
   include Language::Python::Virtualenv
   desc "Open source multi-tool for exploring and publishing data"
-  homepage "https://datasette.readthedocs.io/"
-  url "https://files.pythonhosted.org/packages/10/97/200b5374474b3ac3a520424431c9d03bc14ac1c9515abbe1216e041a9045/datasette-0.51.1.tar.gz"
-  sha256 "383c93bd7a2926dbe19e0c42d96963801c95399f5f8529e609cf9339879ca0f0"
+  homepage "https://docs.datasette.io/en/stable/"
+  url "https://files.pythonhosted.org/packages/bd/c5/0648fe3d6bd980095f71608330ff59e7977a825a0f540fbe82fa90bba1c4/datasette-0.52.1.tar.gz"
+  sha256 "fcb1b6fc55e304b6b4dad625e0638825185ab1f14534ab7dd8ff047bc24b24ff"
   license "Apache-2.0"
+  head "https://github.com/simonw/datasette.git"
 
   livecheck do
     url :stable
@@ -12,10 +13,9 @@ class Datasette < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a8cdc9f75a7a9d4bc79357b9bcece95eed296244c2fd673f7f1ca05325c886e8" => :big_sur
-    sha256 "70b6ddb80917022e662b9f4e02390158d9cff60aa8ff47b3af7010c19083747c" => :catalina
-    sha256 "686813ea31a4d41c047087f1ad3355b620c1bebcc1175bfd7dfb68c17558e63c" => :mojave
-    sha256 "a94aed991bdb495292e37d2f4020bc1361a528262b7f21a1ca0a240f2d180304" => :high_sierra
+    sha256 "8ef7389910b272739244f765123d4573a2ef26364255fcc37103e203c61dd8fe" => :big_sur
+    sha256 "8b21a7e42fa5b8d1beea47beb9eb07bacfa88d567196d1e003d4a2b2c1dfc4fa" => :catalina
+    sha256 "16519a2bcd7f895c1379b16809f7d0728dd3c75612ab4b2a7f14b625c5327202" => :mojave
   end
 
   depends_on "python@3.9"
@@ -31,13 +31,13 @@ class Datasette < Formula
   end
 
   resource "asgiref" do
-    url "https://files.pythonhosted.org/packages/3e/34/fb6c2b2b858d27cdc6703e26e304d56e2300c33719b9407eae54a6b80423/asgiref-3.3.0.tar.gz"
-    sha256 "cd88907ecaec59d78e4ac00ea665b03e571cb37e3a0e37b3702af1a9e86c365a"
+    url "https://files.pythonhosted.org/packages/e9/d1/096b5b0b411a1a53c294a508fdc51542de77bc193df5c8230ff9445e4ff3/asgiref-3.3.1.tar.gz"
+    sha256 "7162a3cb30ab0609f1a4c95938fd73e8604f63bdba516a7f7d64b83ff09478f0"
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/40/a7/ded59fa294b85ca206082306bba75469a38ea1c7d44ea7e1d64f5443d67a/certifi-2020.6.20.tar.gz"
-    sha256 "5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3"
+    url "https://files.pythonhosted.org/packages/e6/de/879cf857ae6f890dfa23c3d6239814c5471936b618c8fb0c8732ad5da885/certifi-2020.11.8.tar.gz"
+    sha256 "f05def092c44fbf25834a51509ef6e631dc19765ab8a57b4e7ab85531f0a9cf4"
   end
 
   resource "click" do
@@ -56,8 +56,8 @@ class Datasette < Formula
   end
 
   resource "httpcore" do
-    url "https://files.pythonhosted.org/packages/42/c8/25a57dcc665cfbc1ad67ff7a10912e5bc01375345c91cd41bfd7fd92c874/httpcore-0.12.0.tar.gz"
-    sha256 "2526a38f31ac5967d38b7f593b5d8c4bd3fa82c21400402f866ba3312946acbf"
+    url "https://files.pythonhosted.org/packages/9f/32/0001b9ebc116f78df57428cc9971e9dd518baa3b5b754d7685866837051e/httpcore-0.12.2.tar.gz"
+    sha256 "dd1d762d4f7c2702149d06be2597c35fb154c5eff9789a8c5823fbcf4d2978d6"
   end
 
   resource "httpx" do
@@ -101,8 +101,8 @@ class Datasette < Formula
   end
 
   resource "packaging" do
-    url "https://files.pythonhosted.org/packages/55/fd/fc1aca9cf51ed2f2c11748fa797370027babd82f87829c7a8e6dbe720145/packaging-20.4.tar.gz"
-    sha256 "4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8"
+    url "https://files.pythonhosted.org/packages/16/7c/33ae3aa02eb10ca726b21aa88d338e3f619c674e4fb8544eb352330d880a/packaging-20.7.tar.gz"
+    sha256 "05af3bb85d320377db281cf254ab050e1a7ebcbf5410685a9a407e18a1f81236"
   end
 
   resource "Pint" do
@@ -151,8 +151,8 @@ class Datasette < Formula
   end
 
   resource "uvicorn" do
-    url "https://files.pythonhosted.org/packages/1d/f9/cf632de3d5b68634ca82fd37489aea772919a0f42b45033ac845fa17ef24/uvicorn-0.12.2.tar.gz"
-    sha256 "8ff7495c74b8286a341526ff9efa3988ebab9a4b2f561c7438c3cb420992d7dd"
+    url "https://files.pythonhosted.org/packages/89/e8/75ea123f733aefac57d43b37cb81f24f16e5d71d3f9cf7cf25c0f5a9a274/uvicorn-0.12.3.tar.gz"
+    sha256 "5836edaf4d278fe67ba0298c0537bdb6398cf359eb644f79e6500ca1aad232b3"
   end
 
   def install

@@ -1,8 +1,8 @@
 class CodeServer < Formula
   desc "Access VS Code through the browser"
   homepage "https://github.com/cdr/code-server"
-  url "https://registry.npmjs.org/code-server/-/code-server-3.7.1.tgz"
-  sha256 "fc90852aae295e5b2ad79da723e4f4bc1a1b04bf116f3003fc5b197f140669b2"
+  url "https://registry.npmjs.org/code-server/-/code-server-3.7.4.tgz"
+  sha256 "6ac859268c5d3f7bebe5624c60fb8ecf2acabfd32b14cc4bd604c11f60a2e2c7"
   license "MIT"
 
   livecheck do
@@ -11,9 +11,9 @@ class CodeServer < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7258f4dfdaa8f98d54beaa13299cabea1ebacbed2cc59f56af5702af4c979d04" => :big_sur
-    sha256 "d79a3752d00ee43aa4fd9351520e2d2a542a4c0eb1e731768980581e54ec1909" => :catalina
-    sha256 "5c91db6c3555972b50af12b2ace3a589828d9df769d77b49b02751ce62170ac4" => :mojave
+    sha256 "52371fd8a9a4781362a3312bd8cd74a9c94e539d2891d9df8b483db19744c335" => :big_sur
+    sha256 "bfb6e272fb8cb24550ebbb053e09e087dfecde627855595883a089b024f5cd75" => :catalina
+    sha256 "deb034592f8582e2281b35b4854dfe0baaec82319e65e996cdcafce0d27eb0fa" => :mojave
   end
 
   depends_on "python@3.9" => :build

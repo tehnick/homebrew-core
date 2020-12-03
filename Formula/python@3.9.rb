@@ -4,7 +4,7 @@ class PythonAT39 < Formula
   url "https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tar.xz"
   sha256 "9c73e63c99855709b9be0b3cc9e5b072cb60f37311e8c4e50f15576a0bf82854"
   license "Python-2.0"
-  revision 1
+  revision 4
 
   livecheck do
     url "https://www.python.org/ftp/python/"
@@ -12,10 +12,9 @@ class PythonAT39 < Formula
   end
 
   bottle do
-    sha256 "bd4ebe03f4c8371c87b2e2db46d5a8ebe0d3f2940f64d8228b901048f1dd9290" => :big_sur
-    sha256 "fb4e0fa1e5bd0801809e88ee99df2640974bb3953e0ebfe56541ff1ba2fd4865" => :catalina
-    sha256 "77254b7bca66680c41db33e78d40bef288924fb142deb73648ce67255c6dda83" => :mojave
-    sha256 "2e1dec264883dd4ee263a89ff41c5bb6579bbf68982ca40652bb8131d1f51e66" => :high_sierra
+    sha256 "3a0add51dbe29a79d3154f97b3bb87f0e79c65ae0dad34d90875cce2448ba843" => :big_sur
+    sha256 "fcebe4564d8550e6a808369f9ed768fbc524a09afb69616f6dc2501862d4573e" => :catalina
+    sha256 "bab2b74ac729140c84bab507aef775e3f048c6c627f1e45a7eb40a0d59a54339" => :mojave
   end
 
   # setuptools remembers the build flags python is built with and uses them to
@@ -67,8 +66,8 @@ class PythonAT39 < Formula
   end
 
   resource "pip" do
-    url "https://files.pythonhosted.org/packages/0b/f5/be8e741434a4bf4ce5dbc235aa28ed0666178ea8986ddc10d035023744e6/pip-20.2.4.tar.gz"
-    sha256 "85c99a857ea0fb0aedf23833d9be5c40cf253fe24443f0829c7b472e23c364a1"
+    url "https://files.pythonhosted.org/packages/03/41/6da553f689d530bc2c337d2c496a40dc9c0fdc6481e5df1f3ee3b8574479/pip-20.3.tar.gz"
+    sha256 "9ae7ca6656eac22d2a9b49d024fc24e00f68f4c4d4db673d2d9b525c3dea6e0e"
   end
 
   resource "wheel" do
@@ -83,6 +82,13 @@ class PythonAT39 < Formula
     patch do
       url "https://raw.githubusercontent.com/Homebrew/formula-patches/33a9d63f/python/arm64-3.9.patch"
       sha256 "167e328cf68e9ec142f483fda9fafbb903be9a47dee2826614fdc24b2fbe6e06"
+    end
+
+    # Further patch for Big Sur, remove in 3.9.2
+    # https://github.com/python/cpython/pull/23556
+    patch do
+      url "https://github.com/fxcoudert/cpython/commit/6511bf56.patch?full_index=1"
+      sha256 "3a34fea8a133305bc337d67acfacc36dc8f9d47a808dd592f5b0cd8c9c9384d2"
     end
   end
 
@@ -306,9 +312,9 @@ class PythonAT39 < Formula
           # site_packages; prefer the shorter paths
           long_prefix = re.compile(r'#{rack}/[0-9\._abrc]+/Frameworks/Python\.framework/Versions/#{xy}/lib/python#{xy}/site-packages')
           sys.path = [long_prefix.sub('#{HOMEBREW_PREFIX/"lib/python#{xy}/site-packages"}', p) for p in sys.path]
-          # Set the sys.executable to use the opt_prefix, unless explicitly set
-          # with PYTHONEXECUTABLE:
-          if 'PYTHONEXECUTABLE' not in os.environ:
+          # Set the sys.executable to use the opt_prefix. Only do this if PYTHONEXECUTABLE is not
+          # explicitly set and we are not in a virtualenv:
+          if 'PYTHONEXECUTABLE' not in os.environ and sys.prefix == sys.base_prefix:
               sys.executable = '#{opt_bin}/python#{xy}'
     EOS
   end

@@ -1,15 +1,15 @@
 class Kumactl < Formula
   desc "Kuma control plane command-line utility"
   homepage "https://kuma.io/"
-  url "https://github.com/kumahq/kuma/archive/1.0.0.tar.gz"
-  sha256 "bc174a0b7fd4bc2f092e62dddffd964b1ec252440b3c331a781497601fa91796"
+  url "https://github.com/kumahq/kuma/archive/1.0.2.tar.gz"
+  sha256 "14db4d8874474749547ec6fd69c902f55f6d8d90cc5fc9ed21a6f4ad3f1d0592"
   license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "b955f427a76e3cbaabed3a14a697b3554d3e36d06d6d8250e1fdd8d335efbf39" => :big_sur
-    sha256 "fd63799dcf686c38fdcbffffd55c82aa8e2628deb56f56c0080d2f5ba17351f8" => :catalina
-    sha256 "932dc6e0d7ff70078f86d3fd846b3d275fa3b4966b0d424dbc1ed1d79cdfabab" => :mojave
+    sha256 "a55d874d7aa932d9e2c1d61a6a12acbedbece0ee5346bb917a1e0775a12ec875" => :big_sur
+    sha256 "e344208f0e29650d9dd51f11b30abb9de7160664412209bd941c0485d3673b97" => :catalina
+    sha256 "e310ea84ccbdb1114e20758cd01fd7c190d0f1dae030ec3e094d5de7c950b108" => :mojave
   end
 
   depends_on "go" => :build
